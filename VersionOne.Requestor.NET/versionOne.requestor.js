@@ -98,6 +98,13 @@ VersionOneRequestor.prototype.setup = function () {
     $("#reset").click(function () {
         that.resetForm();
     });
+
+/*
+    $(document).on('pagebeforechange', function(event, ui) {
+        console.log(event);
+        console.log(ui);
+    });
+*/
 };
 
 VersionOneRequestor.prototype.createStory = function () {
