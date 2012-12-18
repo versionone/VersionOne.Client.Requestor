@@ -2,25 +2,38 @@
 <head>    
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <link rel="stylesheet" href="jquery.mobile-1.2.0.min.css" />
-    <link rel="stylesheet" href="VersionOne.Requestor.css" />
+    <link rel="stylesheet" href="versionOne.requestor.css" />
     <script type="text/javascript" src="jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="jquery.mobile-1.2.0.min.js"></script>
     <script type="text/javascript" src="jquery.validVal-4.2.5-packed.js"></script>
     <script type="text/javascript" src="jquery.validVal-customValidations.js"></script>
     <script type="text/javascript" src="jsrender.js"></script>
-    <script type="text/javascript" src="VersionOne.Requestor.js"></script>
+    <script type="text/javascript" src="versionOne.requestor.js"></script>
+    <script type="text/javascript">
+$(document).ready(function () {
+    // var host = "http://platform-dev";
+    // var service = "http://platform-dev/CustomerTest/rest-1.v1/Data/";
+    var host = "http://localhost/VersionOne.Web/";
+    var service = host + "rest-1.v1/Data/";
+    var serviceGateway = "http://localhost/v1requestor";
+    var versionOneAuth = "admin:admin";
+
+    var useServiceGateway = true;
+
+    var v1requestor = new VersionOneRequestor(useServiceGateway, 
+        host, service, serviceGateway, versionOneAuth);
+});
+    </script>
 </head>    
 <body>
 <div data-role="page" id="p1" data-theme="b"> 
-    <div data-role="header" style="text-align:center" data-theme="e">
-        VersionOne Requestor
-    </div> 
-    
+    <div data-role="header" style="text-align:center" data-theme="e">VersionOne Requestor</div>
+
     <div data-role="content">    
 
-        <div id="requestFormDiv">
-    <form id="requestForm"></form> 
-        </div>
+    <div id="requestFormDiv">
+        <form id="requestForm"></form> 
+    </div>
         
     <fieldset class="ui-grid-a">
          <div class="ui-block-a"><a href="#create" data-role="button" id="run" data-icon="plus" data-mini="true">Submit</a></div>
@@ -42,8 +55,8 @@
                 {{else}}
                     <input type="text" {{:autofocus}} value="{{:def}}" id="{{:name}}" class="inputField ui-block-a" {{if required == true}}placeholder="{{:placeholder}} (required)" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}}  />
                 {{/if}}
-        </div>
-            <div>&nbsp;</div>
+                </div>
+                <div>&nbsp;</div>
             {{/for}}
         </div>
     </script>
@@ -55,9 +68,8 @@
             <hr />        
         </div>
     </script>    
-    </div> 
     
-    <div  data-role="footer" data-theme="e">
+    <div data-role="footer" data-theme="e">
      <fieldset class="ui-grid-a">
          <div class="ui-block-a"><a href="#current" data-role="button" data-icon="arrow-r">All Requests</a></div>
          <div class="ui-block-b"><a href="#new" data-role="button" data-icon="plus">New Request</a></div>

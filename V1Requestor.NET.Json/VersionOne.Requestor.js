@@ -1,23 +1,9 @@
-// var host = "http://platform-dev";
-// var service = "http://platform-dev/CustomerTest/rest-1.v1/Data/";
-var hostBase = "http://localhost/VersionOne.Web/";
-var serviceHostUrl = hostBase + "rest-1.v1/Data/";
-
-var backendServiceBrokerUrl = "http://localhost/v1requestor";
-var backendVersionOneAuth = "admin:admin";
-
-var hasBackendBrokerService = true;
-
-$(document).ready(function () {
-    var v1requestor = new VersionOneRequestor(hasBackendBrokerService, 
-        backendServiceBrokerUrl,
-        backendVersionOneAuth);
-});
-
-function VersionOneRequestor (hasBackend, serviceBrokerUrl, versionOneAuth) {
+function VersionOneRequestor (hasBackend, host, service, serviceGateway, versionOneAuth) {
     this.hasBackend = hasBackend;
+    this.host = host;
+    this.serice = service;
     this.versionOneAuth = versionOneAuth;
-    this.serviceBrokerUrl = serviceBrokerUrl;
+    this.serviceGateway = serviceGateway;
     this.config();
     this.initializeThenSetup();
 }
@@ -29,9 +15,9 @@ VersionOneRequestor.prototype.config = function () {
     this.config = {
         projectName: projectName,
         projectScopeId: null,
-        host: hostBase,
-        service: serviceHostUrl,
-        backendServiceHost: this.serviceBrokerUrl,
+        host: this.host,
+        service: this.service,
+        serviceGateway: this.serviceGateway,
         contentType: contentType,
         queryOpts: {
             acceptFormat: contentType
@@ -96,7 +82,7 @@ VersionOneRequestor.prototype.initializeThenSetup = function () {
 
 VersionOneRequestor.prototype.setup = function () {
     if (this.hasBackend) {
-        this.config.host = this.config.backendServiceHost;
+        this.config.host = this.config.serviceGateway;
         this.config.service = this.config.host + "/";
     }
 
