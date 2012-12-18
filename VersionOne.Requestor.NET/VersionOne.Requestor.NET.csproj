@@ -51,12 +51,6 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.DirectoryServices" />
-    <Reference Include="VersionOne.SDK.APIClient">
-      <HintPath>..\packages\VersionOne.SDK.APIClient.12.3.80.0\lib\net40\VersionOne.SDK.APIClient.dll</HintPath>
-    </Reference>
-    <Reference Include="VersionOne.SDK.ObjectModel">
-      <HintPath>..\packages\VersionOne.SDK.ObjectModel.12.3.145.0\lib\net40\VersionOne.SDK.ObjectModel.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\RequestController.cs" />
