@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Web;
@@ -10,10 +11,28 @@ namespace V1Requestor.NET.Json.Controllers
 {
     public class RequestController : Controller
     {
-        public static string ProjectScopeIdRef = "Scope:0";
+        public string ServiceHostUrl
+        {
+            get { return ConfigurationManager.AppSettings["ServiceHostUrl"]; }
+        }
+
+        public string VersionOneUserName
+        {
+            get { return ConfigurationManager.AppSettings["VersionOneUserName"]; }
+        }
+
+        public string VersionOnePassword
+        {
+            get { return ConfigurationManager.AppSettings["VersionOnePassword"]; }
+        }
+
+        public string ProjectScopeIdRef
+        {
+            get { return ConfigurationManager.AppSettings["ProjectScopeIdRef"]; }
+        }
 
         [HttpPost]
-        public ContentResult Create(FormCollection form)
+        public ContentResult Index(FormCollection form)
         {
             var acceptFormat = Request.QueryString["acceptFormat"];
             if (string.IsNullOrWhiteSpace(acceptFormat))
@@ -26,7 +45,7 @@ namespace V1Requestor.NET.Json.Controllers
                 // Add the project idref now
                 SetProjectScopeIdRef(requestDto);
 
-                var serviceUrl = "http://localhost/VersionOne.Web/rest-1.v1/Data/Request?acceptFormat=" +
+                var serviceUrl = ServiceHostUrl + "Request?acceptFormat=" +
                                  HttpUtility.UrlEncode(acceptFormat);
 
                 var client = GetConfiguredWebClient();
@@ -68,62 +87,11 @@ namespace V1Requestor.NET.Json.Controllers
             var client = new WebClient();
             client.Headers.Add("Accept", contentType);
             client.Headers.Add("Content-Type", contentType);
+            var auth = VersionOneUserName + ":" + VersionOnePassword;
             client.Headers.Add("Authorization", "Basic " +
-                Convert.ToBase64String(Encoding.ASCII.GetBytes("admin:admin")));
+                Convert.ToBase64String(Encoding.ASCII.GetBytes(auth)));
             
             return client;
         }
     }
 }
-
-////
-//// GET: /Request/Edit/5
-
-//public ActionResult Edit(int id)
-//{
-//    return View();
-//}
-
-////
-//// POST: /Request/Edit/5
-
-//[HttpPost]
-//public ActionResult Edit(int id, FormCollection collection)
-//{
-//    try
-//    {
-//        // TODO: Add update logic here
-
-//        return RedirectToAction("Index");
-//    }
-//    catch
-//    {
-//        return View();
-//    }
-//}
-
-////
-//// GET: /Request/Delete/5
-
-//public ActionResult Delete(int id)
-//{
-//    return View();
-//}
-
-////
-//// POST: /Request/Delete/5
-
-//[HttpPost]
-//public ActionResult Delete(int id, FormCollection collection)
-//{
-//    try
-//    {
-//        // TODO: Add delete logic here
-
-//        return RedirectToAction("Index");
-//    }
-//    catch
-//    {
-//        return View();
-//    }
-//}
