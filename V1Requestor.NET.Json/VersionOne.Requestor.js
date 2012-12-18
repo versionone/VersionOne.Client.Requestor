@@ -131,24 +131,24 @@ VersionOneRequestor.prototype.createStory = function () {
     if (!this.hasBackend) {
         request.headers = this.config.headers;
     }
-    return $.ajax(request).done(function (data) {
-        var item;
+    return $.ajax(request).done(function(data) {
         console.log(data);
+        var item;
         item = $("<div></div>");
         item.html($("#requestItemTemplate").render(data));
         return $("#output").prepend(item);
-    });
+    }).fail(function(ex) { console.log(ex); });
 };
 
-VersionOneRequestor.prototype.createDto = function() {
+VersionOneRequestor.prototype.createDto = function () {
     var data = $("#requestForm").trigger("submitForm");
-    if ( ! data) {
-        return[true, null];
+    if (!data) {
+        return [true, null];
     }
     var attributes;
     attributes = {};
     var hasError = false;
-    $("#requestForm .inputField").each(function() {
+    $("#requestForm .inputField").each(function () {
         var el;
         el = $(this);
         var id = el.attr("id");
@@ -167,7 +167,8 @@ VersionOneRequestor.prototype.createDto = function() {
             idref: this.config.projectScopeId
         }
     };
-    return[hasError, attributes];
+    console.log(attributes);
+    return [hasError, attributes];
 };
     
 VersionOneRequestor.prototype.clearErrors = function() {

@@ -84,6 +84,12 @@ namespace V1Requestor.NET.Json.Controllers
         {
             var contentType = Request.ContentType;
 
+            var splits = contentType.Split(';');
+            if (splits.Length > 0)
+            {
+                contentType = splits[0];
+            }
+
             var client = new WebClient();
             client.Headers.Add("Accept", contentType);
             client.Headers.Add("Content-Type", contentType);
