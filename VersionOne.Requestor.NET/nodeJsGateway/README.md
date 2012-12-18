@@ -1,6 +1,6 @@
 # Installing the Node.JS Sever Gateway
 
-First, install Node.JS from http://nodejs.org/
+First, install Node.js from http://nodejs.org/
 
 Then, from inside this folder, type `npm install`. This should install express and request inside a folder named `node_modules`
 
