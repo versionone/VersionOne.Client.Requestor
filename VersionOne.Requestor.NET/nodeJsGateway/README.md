@@ -1,4 +1,4 @@
-# Installing the Node.JS Sever Gateway
+# Installing the Node.js Sever Gateway
 
 First, install Node.js from http://nodejs.org/
 
