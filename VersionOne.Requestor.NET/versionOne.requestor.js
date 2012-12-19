@@ -108,12 +108,9 @@ VersionOneRequestor.prototype.setup = function () {
     // Populate the all requests list
     this.loadAllRequests();    
 
-/*
     $(document).on('pagebeforechange', function(event, ui) {
-        console.log(event);
-        console.log(ui);
+        console.log(ui.toPage["0"].id);
     });
-*/
 };
 
 VersionOneRequestor.prototype.loadAllRequests = function () {
@@ -126,12 +123,16 @@ VersionOneRequestor.prototype.loadAllRequests = function () {
     if (!this.useServiceGateway) {
         request.headers = this.config.headers;
     }
+    var that = this;
     $.ajax(request).done(function(data) {
         console.log(data);
         for(var i = 0; i < data.length; i++) {
             var item = data[i];
             var templ = $("<li></li>");
             templ.html($("#requestItemTemplate").render(item));
+            var link = templ.children(".requestItem").bind("click", function() {
+                that.editRequest($(this).attr("data-href"));
+            });
             $("#requests").append(templ);
         }        
         $("#requests").listview("refresh");
@@ -141,6 +142,21 @@ VersionOneRequestor.prototype.loadAllRequests = function () {
 VersionOneRequestor.prototype.getRequestUrl = function() {
     var url = this.config.service + "Request" + "?" + $.param(this.config.queryOpts);
     return url;
+};
+
+VersionOneRequestor.prototype.editRequest = function(href) {
+    var url = this.config.host + href + "?" + $.param(this.config.queryOpts);
+    var request = { url: url };
+    if (!this.useServiceGateway) {
+        request.headers = this.config.headers;
+    }
+    $.ajax(request).done(function(data) {
+        console.log(data);
+        $.mobile.changePage("#new");
+        $("#Name").val(data.Name);
+        $("#RequestedBy").val(data.RequestedBy);
+        $("#Description").val(data.Description);
+    }).fail(function(ex) { console.log(ex); });
 };
 
 VersionOneRequestor.prototype.createStory = function () {

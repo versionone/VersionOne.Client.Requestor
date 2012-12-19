@@ -13,8 +13,8 @@
 $(document).ready(function () {
     // var host = "http://platform-dev";
     // var service = "http://platform-dev/CustomerTest/rest-1.v1/Data/";
-    var host = "http://localhost/VersionOne.Web/";
-    var service = host + "rest-1.v1/Data/";
+    var host = "http://localhost";
+    var service = host + "/VersionOne.Web/rest-1.v1/Data/";
     var serviceGateway = "http://localhost/v1requestor";
     var versionOneAuth = "admin:admin";
 
@@ -87,7 +87,7 @@ $(document).ready(function () {
 </script>
         
 <script id="requestItemTemplate" type="text/x-jquery-tmpl">
-    <a class='requestItem' data-assetid='{{:_links.self.id}}' href="#">
+    <a class='requestItem' data-assetid='{{:_links.self.id}}' data-href='{{:_links.self.href}}' href='#'>
         <span>{{:Name}}</span>
         <span style="font-size:80%">by {{:RequestedBy}}</span>
     </a>
