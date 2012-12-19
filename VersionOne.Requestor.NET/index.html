@@ -18,7 +18,7 @@ $(document).ready(function () {
     var serviceGateway = "http://localhost/v1requestor";
     var versionOneAuth = "admin:admin";
 
-    var useServiceGateway = true;
+    var useServiceGateway = false;
 
     var v1requestor = new VersionOneRequestor(useServiceGateway, 
         host, service, serviceGateway, versionOneAuth);
@@ -26,6 +26,23 @@ $(document).ready(function () {
     </script>
 </head>    
 <body>
+
+<div data-role="page" id="all">
+    <div data-role="header" style="text-align:center" data-theme="e">VersionOne Requestor</div>
+    
+    <div data-role="content">
+        <ul data-role="listview" data-filter="true" data-inset="true" id="requests" data-theme="e">
+        </ul>
+    </div>
+    
+    <div data-role="footer" data-theme="e">
+        <fieldset class="ui-grid-a">
+            <div class="ui-block-a"><a href="#all" data-role="button" data-icon="arrow-r">All Requests</a></div>
+            <div class="ui-block-b"><a href="#new" data-role="button" data-icon="plus">New Request</a></div>
+        </fieldset>
+    </div>    
+</div>
+
 <div data-role="page" id="new" data-theme="b"> 
     <div data-role="header" style="text-align:center" data-theme="e">VersionOne Requestor</div>
 
@@ -43,48 +60,38 @@ $(document).ready(function () {
     <br/>
     <hr/>
     
-    <div id="output"></div>
-     
-    <script id="fieldsTemplate" type="text/x-jquery-tmpl">
-        <div id="fields">        
-            {{for fields}}
-                <label for="{{:name}}">{{:label}}: </label>
-                <div>            
-                {{if type == "textarea" }}
-                <textarea id="{{:name}}" class="inputField ui-block-a" {{if required == true}}placeholder="Required" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}} />
-                {{else}}
-                    <input type="text" {{:autofocus}} value="{{:def}}" id="{{:name}}" class="inputField ui-block-a" {{if required == true}}placeholder="{{:placeholder}} (required)" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}}  />
-                {{/if}}
-                </div>
-                <div>&nbsp;</div>
-            {{/for}}
-        </div>
-    </script>
-        
-    <script id="requestItemTemplate" type="text/x-jquery-tmpl">
-        <div class='requestItem' data-assetid='{{:_links.self.id}}'>
-            <span>{{:Name}}</span>
-            <div>{{:Description}}</div>
-            <hr />        
-        </div>
-    </script>    
+    <div id="output"></div>        
     
     <div data-role="footer" data-theme="e">
-     <fieldset class="ui-grid-a">
-         <div class="ui-block-a"><a href="#all" data-role="button" data-icon="arrow-r">All Requests</a></div>
-         <div class="ui-block-b"><a href="#new" data-role="button" data-icon="plus">New Request</a></div>
-    </fieldset>
+        <fieldset class="ui-grid-a">
+            <div class="ui-block-a"><a href="#all" data-role="button" data-icon="arrow-r">All Requests</a></div>
+            <div class="ui-block-b"><a href="#new" data-role="button" data-icon="plus">New Request</a></div>
+        </fieldset>
     </div> 
-</div>
+</div>​
 
-<div data-role="page" id="all">
-    <div data-role="header" style="text-align:center" data-theme="e">VersionOne Requestor</div>
-    
-    <div data-role="content">
-        
+<script id="fieldsTemplate" type="text/x-jquery-tmpl">
+    <div id="fields">        
+        {{for fields}}
+            <label for="{{:name}}">{{:label}}: </label>
+            <div>            
+            {{if type == "textarea" }}
+            <textarea id="{{:name}}" class="inputField ui-block-a" {{if required == true}}placeholder="Required" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}} />
+            {{else}}
+                <input type="text" {{:autofocus}} value="{{:def}}" id="{{:name}}" class="inputField ui-block-a" {{if required == true}}placeholder="{{:placeholder}} (required)" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}}  />
+            {{/if}}
+            </div>
+            <div>&nbsp;</div>
+        {{/for}}
     </div>
-    
-    <div data-role="footer"><h4>Footer</h4></div>
-</div> ​
+</script>
+        
+<script id="requestItemTemplate" type="text/x-jquery-tmpl">
+    <a class='requestItem' data-assetid='{{:_links.self.id}}' href="#">
+        <span>{{:Name}}</span>
+        <span style="font-size:80%">by {{:RequestedBy}}</span>
+    </a>
+</script>
+
 </body>
 </html>

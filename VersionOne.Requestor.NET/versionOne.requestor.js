@@ -1,7 +1,7 @@
-function VersionOneRequestor (hasBackend, host, service, serviceGateway, versionOneAuth) {
-    this.hasBackend = hasBackend;
+function VersionOneRequestor (useServiceGateway, host, service, serviceGateway, versionOneAuth) {
+    this.useServiceGateway = useServiceGateway;
     this.host = host;
-    this.serice = service;
+    this.service = service;
     this.versionOneAuth = versionOneAuth;
     this.serviceGateway = serviceGateway;
     this.config();
@@ -63,25 +63,31 @@ VersionOneRequestor.prototype.config = function () {
 };
 
 VersionOneRequestor.prototype.initializeThenSetup = function () {
-    if (this.hasBackend) {
+    if (this.useServiceGateway) {
         this.setup();
         return;
     }
     var url = this.config.service + "Scope" + "?where=" + $.param(this.config.whereCriteria)
         + "&" + $.param(this.config.whereParams);
+    console.log("initializeThenSetup: " + url);
     var that = this;
     $.ajax({
         url: url,
         headers: this.config.headers,
         type: "GET"
     }).done(function (data) {
-        that.config.projectScopeId = data._links.self.id;
-        that.setup();
+        if (data.length > 0) {
+            that.config.projectScopeId = data[0]._links.self.id;
+            that.setup();
+        } 
+        else {
+            console.log("No results for query: " + url);
+        }
     }).fail(function (ex) { console.log(ex); });
 };
 
 VersionOneRequestor.prototype.setup = function () {
-    if (this.hasBackend) {
+    if (this.useServiceGateway) {
         this.config.host = this.config.serviceGateway;
         this.config.service = this.config.host + "/";
     }
@@ -99,12 +105,42 @@ VersionOneRequestor.prototype.setup = function () {
         that.resetForm();
     });
 
+    // Populate the all requests list
+    this.loadAllRequests();    
+
 /*
     $(document).on('pagebeforechange', function(event, ui) {
         console.log(event);
         console.log(ui);
     });
 */
+};
+
+VersionOneRequestor.prototype.loadAllRequests = function () {
+    console.log("loadAllRequests");
+    var url = this.getRequestUrl() + "&" + $.param({ 
+        'sel': 'Name,RequestedBy'
+    });
+    console.log("loadAllRequests: " + url);
+    var request = { url: url };
+    if (!this.useServiceGateway) {
+        request.headers = this.config.headers;
+    }
+    $.ajax(request).done(function(data) {
+        console.log(data);
+        for(var i = 0; i < data.length; i++) {
+            var item = data[i];
+            var templ = $("<li></li>");
+            templ.html($("#requestItemTemplate").render(item));
+            $("#requests").append(templ);
+        }        
+        $("#requests").listview("refresh");
+    }).fail(function(ex) { console.log(ex); });    
+};
+
+VersionOneRequestor.prototype.getRequestUrl = function() {
+    var url = this.config.service + "Request" + "?" + $.param(this.config.queryOpts);
+    return url;
 };
 
 VersionOneRequestor.prototype.createStory = function () {
@@ -114,14 +150,14 @@ VersionOneRequestor.prototype.createStory = function () {
     }
     this.clearErrors();
     var dto = dtoResult[1];
-    var url = this.config.service + "Request" + "?" + $.param(this.config.queryOpts);
+    var url = this.getRequestUrl();
     var request = {
         url: url,
         type: "POST",
         data: JSON.stringify(dto),
         contentType: this.config.contentType
     };
-    if (!this.hasBackend) {
+    if (!this.useServiceGateway) {
         request.headers = this.config.headers;
     }
     return $.ajax(request).done(function(data) {
