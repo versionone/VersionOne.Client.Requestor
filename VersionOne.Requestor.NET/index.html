@@ -20,25 +20,55 @@ $(document).ready(function () {
 
     var useServiceGateway = false;
 
-    var v1requestor = new VersionOneRequestor(useServiceGateway, 
-        host, service, serviceGateway, versionOneAuth);
+    var assetName = "Request";
+    var selectFields = "Name,RequestedBy,Description";
+    var fields =
+    [
+        {
+            name: 'RequestedBy',
+            label: 'Requested By',
+            required: true,
+            autofocus: 'autofocus',
+            placeholder: 'Your name',
+            def: ''
+        }, {
+            name: 'Name',
+            required: true,
+            placeholder: 'Brief request title',
+            label: 'Title',
+            autofocus: '',
+            def: ''
+        }, {
+            name: 'Description',
+            label: 'Description',
+            placeholder: 'Give enough detail to aid follow-up conversations',
+            required: false,
+            autofocus: '',
+            def: '',
+            type: 'textarea',
+            height: 200
+        }
+    ];
+
+    var v1requestor = new VersionOneAssetEditor(useServiceGateway, 
+        host, service, serviceGateway, versionOneAuth, assetName, fields, selectFields);
 });
     </script>
 </head>    
 <body>
 
-<div data-role="page" id="all">
+<div data-role="page" id="list">
     <div data-role="header" style="text-align:center" data-theme="e">VersionOne Requestor</div>
     
     <div data-role="content">
-        <ul data-role="listview" data-filter="true" data-inset="true" id="requests" data-theme="e">
+        <ul data-role="listview" data-filter="true" data-inset="true" id="assets" data-theme="e">
         </ul>
     </div>
     
     <div data-role="footer" data-theme="e">
         <fieldset class="ui-grid-a">
-            <div class="ui-block-a"><a href="#all" data-role="button" data-icon="arrow-r">All Requests</a></div>
-            <div class="ui-block-b"><a href="#new" data-role="button" data-icon="plus">New Request</a></div>
+            <div class="ui-block-a"><a href="#list" data-role="button" data-icon="arrow-r">List</a></div>
+            <div class="ui-block-b"><a href="#" class="new" data-role="button" data-icon="plus">New</a></div>
         </fieldset>
     </div>    
 </div>
@@ -47,28 +77,33 @@ $(document).ready(function () {
     <div data-role="header" style="text-align:center" data-theme="e">VersionOne Requestor</div>
 
     <div data-role="content">    
-
-    <div id="requestFormDiv">
-        <form id="requestForm"></form> 
-    </div>
-        
-    <fieldset class="ui-grid-a">
-         <div class="ui-block-a"><a href="#create" data-role="button" id="run" data-icon="plus" data-mini="true">Submit</a></div>
-         <div class="ui-block-b"><a href="#reset" data-role="button" id="reset" data-icon="delete" data-mini="true">Reset</a></div>
-    </fieldset>     
-
-    <br/>
-    <hr/>
-    
-    <div id="output"></div>        
-    
-    <div data-role="footer" data-theme="e">
+        <div id="assetFormDiv">
+            <form id="assetForm"></form> 
+        </div>
+            
         <fieldset class="ui-grid-a">
-            <div class="ui-block-a"><a href="#all" data-role="button" data-icon="arrow-r">All Requests</a></div>
-            <div class="ui-block-b"><a href="#new" data-role="button" data-icon="plus">New Request</a></div>
-        </fieldset>
-    </div> 
+             <div class="ui-block-a"><a href="#create" data-role="button" id="run" data-icon="plus" data-mini="true">Submit</a></div>
+             <div class="ui-block-a" style="display:none;"><a href="#create" data-role="button" id="save" data-icon="plus" data-mini="true">Save</a></div>         
+             <div class="ui-block-b"><a href="#" data-role="button" id="reset" data-icon="delete" data-mini="true">Reset</a></div>
+        </fieldset>     
+
+        <br/>
+        <hr/>
+        
+        <div id="output"></div>        
+        
+        <div data-role="footer" data-theme="e">
+            <fieldset class="ui-grid-a">
+                <div class="ui-block-a"><a href="#list" data-role="button" data-icon="arrow-r">List</a></div>
+                <div class="ui-block-b"><a href="#" data-role="button" class="new" data-icon="plus">New</a></div>
+            </fieldset>
+        </div>
+    </div>
 </div>​
+
+<div data-role="page" id="blank" data-theme="b">  
+
+</div>
 
 <script id="fieldsTemplate" type="text/x-jquery-tmpl">
     <div id="fields">        
@@ -86,8 +121,8 @@ $(document).ready(function () {
     </div>
 </script>
         
-<script id="requestItemTemplate" type="text/x-jquery-tmpl">
-    <a class='requestItem' data-assetid='{{:_links.self.id}}' data-href='{{:_links.self.href}}' href='#'>
+<script id="assetItemTemplate" type="text/x-jquery-tmpl">
+    <a class='assetItem' data-assetid='{{:_links.self.id}}' data-href='{{:_links.self.href}}' href='#'>
         <span>{{:Name}}</span>
         <span style="font-size:80%">by {{:RequestedBy}}</span>
     </a>
