@@ -23,6 +23,12 @@ function VersionOneAssetEditor (options) {
     this.initializeThenSetup();
 }
 
+VersionOneAssetEditor.prototype.debug = function (message) {
+    if (this.showDebug) {
+        console.log(message)
+    }
+};
+
 VersionOneAssetEditor.prototype.initializeThenSetup = function () {
     if (this.serviceGateway) {
         this.setup();
@@ -30,7 +36,7 @@ VersionOneAssetEditor.prototype.initializeThenSetup = function () {
     }
     var url = this.service + 'Scope' + '?where=' + $.param(this.whereCriteria)
         + '&' + $.param(this.whereParamsForProjectScope);
-    console.log('initializeThenSetup: ' + url);
+    this.debug('initializeThenSetup: ' + url);
     var that = this;
     $.ajax({
         url: url,
@@ -42,9 +48,9 @@ VersionOneAssetEditor.prototype.initializeThenSetup = function () {
             that.setup();
         } 
         else {
-            console.log('No results for query: ' + url);
+            that.debug('No results for query: ' + url);
         }
-    }).fail(function (ex) { console.log(ex); });
+    }).fail(this._ajaxFail);
 };
 
 VersionOneAssetEditor.prototype.setup = function () {
@@ -52,7 +58,7 @@ VersionOneAssetEditor.prototype.setup = function () {
         this.host = this.serviceGateway;
         this.service = this.host + '/';
     }
-    console.log(this.fields);
+    this.debug(this.fields);
     $('#assetForm').html($('#fieldsTemplate').render({
         fields: this.fields
     }));
@@ -76,7 +82,7 @@ VersionOneAssetEditor.prototype.setup = function () {
 
     // Setup the data within select lists
     $(".selectField").each(function() {     
-        console.log(that);
+        that.debug(that);
         var item = $(this);
         var fieldName = item.attr("name");
         var field = that.findField(fieldName);
@@ -102,12 +108,16 @@ VersionOneAssetEditor.prototype.setup = function () {
                 item.selectmenu('refresh');
             }
             else {
-                console.log('No results for query: ' + url);
+                that.debug('No results for query: ' + url);
             }
-        }).fail(function (ex) { console.log(ex); });
+        }).fail(this._ajaxFail);
     });
 
     this.toggleNewOrEdit('new');
+};
+
+VersionOneAssetEditor.prototype._ajaxFail = function(ex) {
+    console.log(ex);
 };
 
 VersionOneAssetEditor.prototype.loadAssets = function (assetName, selectFields) {
@@ -128,7 +138,7 @@ VersionOneAssetEditor.prototype.loadAssets = function (assetName, selectFields) 
             assets.append(templ);
         }        
         assets.listview('refresh');
-    }).fail(function(ex) { console.log(ex); });    
+    }).fail(this._ajaxFail);    
 };
 
 VersionOneAssetEditor.prototype.newAsset = function() {    
@@ -142,14 +152,14 @@ VersionOneAssetEditor.prototype.editAsset = function(href) {
     var request = this.createRequest({url:url});
     var that = this;
     $.ajax(request).done(function(data) {
-        console.log(data);
+        that.debug(data);
         that.enumFields(function(key, field) {
-            console.log("getting: " + key);
+            that.debug("getting: " + key);
             var val = data[key];
             if (val != null && val != 'undefined') {
                 var els = $('#' + key);        
                 if (els.length > 0) {
-                    console.log(key);
+                    that.debug(key);
                     var el = $(els[0]);
                     el.val(data[key]);
                 }             
@@ -174,13 +184,13 @@ VersionOneAssetEditor.prototype.editAsset = function(href) {
                                 select.selectmenu('refresh', true);
                             }
                         }
-                    }).fail(function(ex) { console.log(ex); });                 
+                    }).fail(this._ajaxFail);
                 }
             }
         });
         that.toggleNewOrEdit('edit', href);
         that.changePage("#detail");
-    }).fail(function(ex) { console.log(ex); });
+    }).fail(this._ajaxFail);
 };
 
 VersionOneAssetEditor.prototype.toggleNewOrEdit = function(type, href) {
@@ -216,7 +226,7 @@ VersionOneAssetEditor.prototype.createAsset = function(assetName) {
 
 VersionOneAssetEditor.prototype.updateAsset = function(href) {
     var url = this.host + href + '?' + $.param(this.queryOpts);
-    console.log(url);
+    this.debug(url);
     this.saveAsset(url);
 };
 
@@ -234,13 +244,14 @@ VersionOneAssetEditor.prototype.saveAsset = function(url) {
         data: JSON.stringify(dto),
         contentType: this.contentType
     });
+    var that = this;
     return $.ajax(request).done(function(data) {
-        console.log(data);
+        that.debug(data);
         var item;
         item = $('<div></div>');
         item.html($('#assetItemTemplate').render(data));
         return $('#output').prepend(item);
-    }).fail(function(ex) { console.log(ex); });
+    }).fail(this._ajaxFail);
 };
 
 VersionOneAssetEditor.prototype.createDto = function (addProjectIdRef) {
@@ -277,7 +288,7 @@ VersionOneAssetEditor.prototype.createDto = function (addProjectIdRef) {
                 attributes[id] = val;
         }
     });
-    console.log(attributes);
+    this.debug(attributes);
     return [hasError, attributes];
 };
 
@@ -287,7 +298,7 @@ VersionOneAssetEditor.prototype.getAssetUrl = function(assetName) {
 };
     
 VersionOneAssetEditor.prototype.changePage = function(page) {
-    console.log(page);
+    this.debug(page);
     $.mobile.changePage(page);
 };
 
@@ -296,7 +307,7 @@ VersionOneAssetEditor.prototype.clearErrors = function() {
 };
 
 VersionOneAssetEditor.prototype.resetForm = function() {
-    console.log('resetForm');
+    this.debug('resetForm');
     $('#assetForm')[0].reset();
 };
 
