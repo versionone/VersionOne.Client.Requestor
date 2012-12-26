@@ -13,50 +13,59 @@
 $(document).ready(function () {
     // var host = "http://platform-dev";
     // var service = "http://platform-dev/CustomerTest/rest-1.v1/Data/";
+    
     var host = "http://localhost";
-    var service = host + "/VersionOne.Web/rest-1.v1/Data/";
-    var serviceGateway = "http://localhost/v1requestor";
+    var service = "http://localhost/VersionOne.Web/rest-1.v1/Data/";
     var versionOneAuth = "admin:admin";
 
-    var useServiceGateway = false;
-
-    var assetName = "Request";
-    var selectFields = "Name,RequestedBy,Description";
-
-    // TODO: You can modify to use other asset types:
-    //var assetName = "Story";
-    //var selectFields = "Name";
-
-    var fields =
-    [
-        {
-            name: 'RequestedBy',
-            label: 'Requested By',
-            required: true,
-            autofocus: 'autofocus',
-            placeholder: 'Your name',
-            def: ''
-        }, {
-            name: 'Name',
-            required: true,
-            placeholder: 'Brief request title',
-            label: 'Title',
-            autofocus: '',
-            def: ''
-        }, {
-            name: 'Description',
-            label: 'Description',
-            placeholder: 'Give enough detail to aid follow-up conversations',
-            required: false,
-            autofocus: '',
-            def: '',
-            type: 'textarea',
-            height: 200
-        }
-    ];
-
-    var editor = new VersionOneAssetEditor(useServiceGateway, 
-        host, service, serviceGateway, versionOneAuth, assetName, fields, selectFields);
+    var serviceGateway = false;
+    //var serviceGateway: "http://localhost/v1requestorGateway"
+    
+    var options = {
+        projectName: "'System (All Projects)'",
+        host: host,
+        service: service,
+        serviceGateway: serviceGateway,
+        versionOneAuth: versionOneAuth,
+        assetName: "Request",
+        fields: [
+            {
+                name: 'RequestedBy',
+                label: 'Requested By',
+                required: true,
+                autofocus: 'autofocus',
+                placeholder: 'Your name',
+                def: ''
+            }
+            ,{
+                name: 'Name',
+                required: true,
+                placeholder: 'Brief request title',
+                label: 'Title',
+                autofocus: '',
+                def: ''
+            }
+            ,{
+                name: 'Priority',
+                required: true,
+                label: 'Priority',
+                def: '', // TODO: handle this meaningfully
+                type: 'select',
+                assetName: 'RequestPriority'
+            }
+            ,{
+                name: 'Description',
+                label: 'Description',
+                placeholder: 'Give enough detail to aid follow-up conversations',
+                required: false,
+                autofocus: '',
+                def: '',
+                type: 'textarea',
+                height: 200
+            }
+        ]
+    };
+    var editor = new VersionOneAssetEditor(options);
 });
     </script>
 </head>    
@@ -70,15 +79,15 @@ $(document).ready(function () {
         </ul>
     </div>
     
-    <div data-role="footer" data-theme="e">
-        <fieldset class="ui-grid-a">
+    <div data-role="footer" data-theme="d" data-position="fixed">
+        <fieldset class="ui-grid-a" data-theme="a">
             <div class="ui-block-a"><a href="#list" data-role="button" data-icon="arrow-r">List</a></div>
-            <div class="ui-block-b"><a href="#" class="new" data-role="button" data-icon="plus">New</a></div>
+            <div class="ui-block-b"><a href="#detail" class="new" data-role="button" data-icon="plus">New</a></div>
         </fieldset>
     </div>    
 </div>
 
-<div data-role="page" id="new" data-theme="b"> 
+<div data-role="page" id="detail" data-theme="b"> 
     <div data-role="header" style="text-align:center" data-theme="e">VersionOne Requestor</div>
 
     <div data-role="content">    
@@ -87,23 +96,22 @@ $(document).ready(function () {
         </div>
             
         <fieldset class="ui-grid-a">
-             <div class="ui-block-a"><a href="#create" data-role="button" id="run" data-icon="plus" data-mini="true">Submit</a></div>
-             <div class="ui-block-a" style="display:none;"><a href="#create" data-role="button" id="save" data-icon="plus" data-mini="true">Save</a></div>         
+             <div class="ui-block-a"><a href="#" data-role="button" id="save" data-icon="plus" data-mini="true">Save</a></div>
              <div class="ui-block-b"><a href="#" data-role="button" id="reset" data-icon="delete" data-mini="true">Reset</a></div>
         </fieldset>     
 
         <br/>
         <hr/>
         
-        <div id="output"></div>        
-        
-        <div data-role="footer" data-theme="e">
-            <fieldset class="ui-grid-a">
-                <div class="ui-block-a"><a href="#list" data-role="button" data-icon="arrow-r">List</a></div>
-                <div class="ui-block-b"><a href="#" data-role="button" class="new" data-icon="plus">New</a></div>
-            </fieldset>
-        </div>
+        <div id="output"></div>
     </div>
+
+    <div data-role="footer" data-theme="d" data-position="fixed">
+        <fieldset class="ui-grid-a">
+            <div class="ui-block-a"><a href="#list" data-role="button" data-icon="arrow-r">List</a></div>
+            <div class="ui-block-b"><a href="#" data-role="button" class="new" data-icon="plus">New</a></div>
+        </fieldset>
+    </div>    
 </div>​
 
 <div data-role="page" id="blank" data-theme="b">  
@@ -115,10 +123,12 @@ $(document).ready(function () {
         {{for fields}}
             <label for="{{:name}}">{{:label}}: </label>
             <div>            
-            {{if type == "textarea" }}
-            <textarea id="{{:name}}" class="inputField ui-block-a" {{if required == true}}placeholder="Required" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}} />
+            {{if type === "textarea" }}
+                <textarea id="{{:name}}" class="inputField" {{if required == true}}placeholder="Required" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}} />
+            {{else type === "select" }}
+                <select class="selectField inputField" data-required="false" name="{{:name}}" id="{{:name}}" data-assetName="{{:assetName}}" data-rel="{{:name}}"></select>
             {{else}}
-                <input type="text" {{:autofocus}} value="{{:def}}" id="{{:name}}" class="inputField ui-block-a" {{if required == true}}placeholder="{{:placeholder}} (required)" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}}  />
+                <input type="text" {{:autofocus}} value="{{:def}}" id="{{:name}}" class="inputField" {{if required == true}}placeholder="{{:placeholder}} (required)" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}} />
             {{/if}}
             </div>
             <div>&nbsp;</div>
