@@ -20,7 +20,7 @@ $(document).ready(function () {
     var host = "http://localhost";
     var service = "http://localhost/VersionOne.Web/rest-1.v1/Data/";
     var versionOneAuth = "admin:admin";
-    var showDebugMessages = false;
+    var showDebugMessages = true;
 
     var serviceGateway = false;
     //var serviceGateway: "http://localhost/v1requestorGateway"
@@ -114,11 +114,11 @@ $(document).ready(function () {
     <div data-role="footer" data-theme="b" data-position="fixed">
         <fieldset class="ui-grid-a">
             <div class="ui-block-a">
+                <a href="#" data-role="button" id="saveAndNew" data-icon="plus" data-mini="true">Save and New</a>
+            </div>            
+            <div class="ui-block-b">
                 <a href="#" data-role="button" id="save" data-icon="plus" data-mini="true">Save</a>
             </div>
-            <div class="ui-block-b">
-                <a href="#" data-role="button" id="saveAndNew" data-icon="plus" data-mini="true">Save and New</a>
-            </div>        
         </fieldset>
     </div>    
 </div>​

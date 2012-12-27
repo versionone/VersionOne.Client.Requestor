@@ -162,18 +162,36 @@ VersionOneAssetEditor.prototype.listItemFormat = function(item) {
     return templ;
 };
 
-VersionOneAssetEditor.prototype.listItemReplaceFormat = function(item) {
-    // Thanks to Moments:
+VersionOneAssetEditor.prototype.listItemPrepend = function(item) {
+    this._normalizeIdWithoutMoment(item);
+    var templ = this.listItemFormat(item);
+    var assets = $("#assets");
+    assets.prepend(templ);
+    assets.listview('refresh');
+};
+
+VersionOneAssetEditor.prototype._normalizeIdWithoutMoment = function(item) {
     var id = item._links.self.id;
+    this.debug("The id from server with moment: " + id);
     id = id.split(":");
     id.pop();
     id = id.join(":");
+    item._links.self.id = id;
+    this.debug("Normalized id: " + id);
+};
+
+VersionOneAssetEditor.prototype.listItemReplace = function(item) {
+    // Thanks to Moments:
+    this._normalizeIdWithoutMoment(item);
+    var id = item._links.self.id;    
 
     var templ = this.listItemFormat(item);
-    var assets = $("#assets");
+    var assets = $("#assets");    
 
     var that = this;
-    assets.find("li a[data-assetid='" + id + "']").each(function() {
+    assets.find("a[data-assetid='" + id + "']").each(function() {
+        that.debug("Found a list item:");
+        that.debug(this);
         var listItem = $(this);        
         var newItem = that.listItemFormat(item);
         listItem.closest("li").replaceWith(newItem);
@@ -250,6 +268,8 @@ VersionOneAssetEditor.prototype.toggleNewOrEdit = function(type, href) {
         saveAndNew.bind('click', function () {
             that.createAsset(that.assetName);
             that.newAsset();
+            // Hardcoded:
+            $("#Name").focus();
         });
     }
     else if (type == "edit") 
@@ -278,8 +298,8 @@ VersionOneAssetEditor.prototype.createAsset = function(assetName) {
     this.requestorName = $("#RequestedBy").val();
     var that = this;
     this.saveAsset(url, function(data) {
-        toastr.success("New item created");
-        that.listItemReplaceFormat(data);
+        toastr.success("New item created");        
+        that.listItemPrepend(data);
     });
 };
 
@@ -289,8 +309,7 @@ VersionOneAssetEditor.prototype.updateAsset = function(href) {
     this.debug(url);
     this.saveAsset(url, function(data) {
         toastr.success("Save successful");
-        that.listItemReplaceFormat(data);
-        //that.updateList(data);
+        that.listItemReplace(data);
     });
 };
 
