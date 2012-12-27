@@ -76,43 +76,48 @@ $(document).ready(function () {
 <body>
 
 <div data-role="page" id="list">
-    <div data-role="header" data-position="fixed" style="text-align:center; padding:10px" data-theme="d">VersionOne Requestor</div>
-    
-    <div data-role="content">
-        <ul data-role="listview" data-filter="true" data-inset="true" id="assets" data-theme="b">
-        </ul>
+    <div data-role="header" data-position="fixed" style="text-align:center; padding-top:5px" data-theme="a">
+        VersionOne Requestor
+        <div>
+            <fieldset class="ui-grid-a">
+                <div class="ui-block-a"><a href="#" data-role="button" data-icon="arrow-r" id="refreshList" data-theme="e">Refresh List</a></div>
+                <div class="ui-block-b"><a href="#detail" class="new" data-role="button" data-icon="plus" data-theme="e">New</a></div>
+            </fieldset>
+        </div>
     </div>
     
-    <div data-role="footer" data-theme="d" data-position="fixed">
-        <fieldset class="ui-grid-a" data-theme="a">
-            <div class="ui-block-a"><a href="#" data-role="button" data-icon="arrow-r" id="refreshList">Refresh List</a></div>
-            <div class="ui-block-b"><a href="#detail" class="new" data-role="button" data-icon="plus">New</a></div>
-        </fieldset>
+    <div data-role="content" class="sideGradient">
+        <ul data-role="listview" data-filter="true" data-inset="true" id="assets" data-theme="e">
+        </ul>
     </div>    
 </div>
 
-<div data-role="page" id="detail" data-theme="b"> 
-    <div data-role="header" data-position="fixed" style="text-align:center; padding:10px" data-theme="d">VersionOne Requestor</div>
+<div data-role="page" id="detail"> 
+    <div data-role="header" data-position="fixed" style="text-align:center; padding-top:5px" data-theme="a">
+        VersionOne Requestor
+        <div>
+            <fieldset class="ui-grid-a">
+                <div class="ui-block-a"><a href="#list" data-role="button" data-icon="arrow-r" data-theme="e">List</a></div>
+                <div class="ui-block-b"><a href="#" data-role="button" class="new" data-icon="plus" data-theme="e">New</a></div>
+            </fieldset>
+        </div>
+    </div>
 
-    <div data-role="content" data-theme="b">    
+    <div data-role="content" class="sideGradient">      
         <div id="assetFormDiv">
             <form id="assetForm"></form> 
         </div>
             
-        <fieldset class="ui-grid-a">
-             <div class="ui-block-a"><a href="#" data-role="button" id="save" data-icon="plus" data-mini="true">Save</a></div>
-             <div class="ui-block-b"><a href="#" data-role="button" id="saveAndNew" data-icon="plus" data-mini="true">Save and New</a></div>        
-        </fieldset>     
-
-        <br/>
-        
-        <div id="assetLink"></div>
     </div>
 
-    <div data-role="footer" data-theme="d" data-position="fixed">
+    <div data-role="footer" data-theme="a" data-position="fixed">
         <fieldset class="ui-grid-a">
-            <div class="ui-block-a"><a href="#list" data-role="button" data-icon="arrow-r">List</a></div>
-            <div class="ui-block-b"><a href="#" data-role="button" class="new" data-icon="plus">New</a></div>
+            <div class="ui-block-a">
+                <a href="#" data-role="button" id="save" data-icon="plus" data-mini="true" data-theme="b">Save</a>
+            </div>
+            <div class="ui-block-b">
+                <a href="#" data-role="button" id="saveAndNew" data-icon="plus" data-mini="true" data-theme="b">Save and New</a>
+            </div>        
         </fieldset>
     </div>    
 </div>​

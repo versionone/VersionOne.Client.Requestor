@@ -151,7 +151,6 @@ VersionOneAssetEditor.prototype.loadAssets = function (assetName, selectFields) 
 
 VersionOneAssetEditor.prototype.newAsset = function() {    
     this.toggleNewOrEdit("new");
-    this.clearAssetLink();
     this.changePage("#detail");
     this.resetForm();
 };
@@ -160,7 +159,6 @@ VersionOneAssetEditor.prototype.editAsset = function(href) {
     var url = this.host + href + '?' + $.param(this.queryOpts);
     var request = this.createRequest({url:url});
     var that = this;
-    this.clearAssetLink();
     $.ajax(request).done(function(data) {
         that.debug(data);
         that.enumFields(function(key, field) {
@@ -233,10 +231,6 @@ VersionOneAssetEditor.prototype.toggleNewOrEdit = function(type, href) {
     }
 };
 
-VersionOneAssetEditor.prototype.clearAssetLink = function(options) {
-    $("#assetLink").empty();
-}
-
 VersionOneAssetEditor.prototype.createRequest = function(options) {
     if (!this.serviceGateway) {
         options.headers = this.headers;
@@ -253,15 +247,6 @@ VersionOneAssetEditor.prototype.updateAsset = function(href) {
     var url = this.host + href + '?' + $.param(this.queryOpts);
     this.debug(url);
     this.saveAsset(url);
-};
-
-VersionOneAssetEditor.prototype.updateAssetLink = function(item) {    
-    var that = this;
-    var assetLink = $("#assetLink");
-    assetLink.html($('#assetItemTemplate').render(item));
-    var link = assetLink.children('.assetItem').bind('click', function() {
-        that.editAsset($(this).attr('data-href'));
-    });
 };
 
 VersionOneAssetEditor.prototype.saveAsset = function(url) {
