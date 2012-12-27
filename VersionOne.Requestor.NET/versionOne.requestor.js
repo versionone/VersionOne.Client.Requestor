@@ -77,8 +77,14 @@ VersionOneAssetEditor.prototype.setup = function () {
     that.enumFields(function(key, field) {
         selectFields.push(key);
     });
+
     // Populate the assets list
     this.loadAssets(this.assetName, selectFields);
+
+    var refreshList = $('#refreshList');
+    refreshList.bind('click', function() {
+        that.loadAssets(that.assetName, selectFields);
+    });
 
     // Setup the data within select lists
     $(".selectField").each(function() {     
@@ -121,13 +127,15 @@ VersionOneAssetEditor.prototype._ajaxFail = function(ex) {
 };
 
 VersionOneAssetEditor.prototype.loadAssets = function (assetName, selectFields) {
-    var url = this.getAssetUrl(assetName) + '&' + $.param({ 
+    var url = this.getAssetUrl(assetName) + '&' + $.param({
         'sel': selectFields.join(',')
     });
     var request = this.createRequest({url: url});
     var that = this;
-    $.ajax(request).done(function(data) {        
-        var assets = $("#assets");
+    var assets = $("#assets");
+    assets.empty();
+    $.ajax(request).done(function(data) {
+        toastr.info("Found " + data.length + " requests");    
         for(var i = 0; i < data.length; i++) {
             var item = data[i];
             var templ = $('<li></li>');
@@ -137,12 +145,13 @@ VersionOneAssetEditor.prototype.loadAssets = function (assetName, selectFields) 
             });
             assets.append(templ);
         }        
-        assets.listview('refresh');
+        assets.listview('refresh');        
     }).fail(this._ajaxFail);    
 };
 
 VersionOneAssetEditor.prototype.newAsset = function() {    
     this.toggleNewOrEdit("new");
+    this.clearAssetLink();
     this.changePage("#detail");
     this.resetForm();
 };
@@ -151,6 +160,7 @@ VersionOneAssetEditor.prototype.editAsset = function(href) {
     var url = this.host + href + '?' + $.param(this.queryOpts);
     var request = this.createRequest({url:url});
     var that = this;
+    this.clearAssetLink();
     $.ajax(request).done(function(data) {
         that.debug(data);
         that.enumFields(function(key, field) {
@@ -195,12 +205,18 @@ VersionOneAssetEditor.prototype.editAsset = function(href) {
 
 VersionOneAssetEditor.prototype.toggleNewOrEdit = function(type, href) {
     var save = $('#save');
+    var saveAndNew = $('#saveAndNew');
     var that = this;
     if (type == 'new')
     {
         save.unbind('click');
         save.bind('click', function () {
             that.createAsset(that.assetName);
+        });
+        saveAndNew.unbind('click');
+        saveAndNew.bind('click', function () {
+            that.createAsset(that.assetName);
+            that.newAsset();
         });
     }
     else if (type == "edit") 
@@ -209,8 +225,17 @@ VersionOneAssetEditor.prototype.toggleNewOrEdit = function(type, href) {
         save.bind('click', function () {
             that.updateAsset(href);
         });
+        saveAndNew.unbind('click');
+        saveAndNew.bind('click', function () {
+            that.updateAsset(href);
+            that.newAsset();
+        });        
     }
 };
+
+VersionOneAssetEditor.prototype.clearAssetLink = function(options) {
+    $("#assetLink").empty();
+}
 
 VersionOneAssetEditor.prototype.createRequest = function(options) {
     if (!this.serviceGateway) {
@@ -228,6 +253,15 @@ VersionOneAssetEditor.prototype.updateAsset = function(href) {
     var url = this.host + href + '?' + $.param(this.queryOpts);
     this.debug(url);
     this.saveAsset(url);
+};
+
+VersionOneAssetEditor.prototype.updateAssetLink = function(item) {    
+    var that = this;
+    var assetLink = $("#assetLink");
+    assetLink.html($('#assetItemTemplate').render(item));
+    var link = assetLink.children('.assetItem').bind('click', function() {
+        that.editAsset($(this).attr('data-href'));
+    });
 };
 
 VersionOneAssetEditor.prototype.saveAsset = function(url) {
@@ -250,7 +284,7 @@ VersionOneAssetEditor.prototype.saveAsset = function(url) {
         var item;
         item = $('<div></div>');
         item.html($('#assetItemTemplate').render(data));
-        return $('#output').prepend(item);
+        toastr.success("Save successful");        
     }).fail(this._ajaxFail);
 };
 
@@ -309,6 +343,10 @@ VersionOneAssetEditor.prototype.clearErrors = function() {
 VersionOneAssetEditor.prototype.resetForm = function() {
     this.debug('resetForm');
     $('#assetForm')[0].reset();
+    // TODO: this is hard-coded
+    var sel = $("#Priority");
+    sel.val("RequestPriority:167");
+    sel.selectmenu('refresh');
 };
 
 VersionOneAssetEditor.prototype.enumFields = function(callback) {

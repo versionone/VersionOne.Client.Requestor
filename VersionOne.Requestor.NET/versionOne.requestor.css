@@ -53,4 +53,8 @@ input[type='text'].inactive, textarea.inactive, select.inactive, option.inactive
 
 input[type='text'].invalid, textarea.invalid, select.invalid, option.invalid{
     border-color: red;
-    }​
+}​
+
+#assetLink {
+    background: white;
+}

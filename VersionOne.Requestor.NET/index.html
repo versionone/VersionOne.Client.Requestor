@@ -1,13 +1,15 @@
 ﻿<html>
-<head>    
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <link href="Content/jquery.mobile-1.2.0.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="versionOne.requestor.css" />
+    <link rel="stylesheet" href="Content/toastr.css" />
     <script src="Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
     <script src="Scripts/jquery.mobile-1.2.0.min.js" type="text/javascript"></script>
     <script src="Scripts/jquery.validVal-4.2.5-packed.js" type="text/javascript"></script>
     <script src="Scripts/jquery.validVal-customValidations.js" type="text/javascript"></script>
     <script src="Scripts/jsrender.js" type="text/javascript"></script>
+    <script src="Scripts/toastr.js" type="text/javascript"></script>    
     <script type="text/javascript" src="versionOne.requestor.js"></script>
     <script type="text/javascript">
 $(document).ready(function () {
@@ -74,38 +76,37 @@ $(document).ready(function () {
 <body>
 
 <div data-role="page" id="list">
-    <div data-role="header" style="text-align:center" data-theme="e">VersionOne Requestor</div>
+    <div data-role="header" data-position="fixed" style="text-align:center; padding:10px" data-theme="d">VersionOne Requestor</div>
     
     <div data-role="content">
-        <ul data-role="listview" data-filter="true" data-inset="true" id="assets" data-theme="e">
+        <ul data-role="listview" data-filter="true" data-inset="true" id="assets" data-theme="b">
         </ul>
     </div>
     
     <div data-role="footer" data-theme="d" data-position="fixed">
         <fieldset class="ui-grid-a" data-theme="a">
-            <div class="ui-block-a"><a href="#list" data-role="button" data-icon="arrow-r">List</a></div>
+            <div class="ui-block-a"><a href="#" data-role="button" data-icon="arrow-r" id="refreshList">Refresh List</a></div>
             <div class="ui-block-b"><a href="#detail" class="new" data-role="button" data-icon="plus">New</a></div>
         </fieldset>
     </div>    
 </div>
 
 <div data-role="page" id="detail" data-theme="b"> 
-    <div data-role="header" style="text-align:center" data-theme="e">VersionOne Requestor</div>
+    <div data-role="header" data-position="fixed" style="text-align:center; padding:10px" data-theme="d">VersionOne Requestor</div>
 
-    <div data-role="content">    
+    <div data-role="content" data-theme="b">    
         <div id="assetFormDiv">
             <form id="assetForm"></form> 
         </div>
             
         <fieldset class="ui-grid-a">
              <div class="ui-block-a"><a href="#" data-role="button" id="save" data-icon="plus" data-mini="true">Save</a></div>
-             <div class="ui-block-b"><a href="#" data-role="button" id="reset" data-icon="delete" data-mini="true">Reset</a></div>
+             <div class="ui-block-b"><a href="#" data-role="button" id="saveAndNew" data-icon="plus" data-mini="true">Save and New</a></div>        
         </fieldset>     
 
         <br/>
-        <hr/>
         
-        <div id="output"></div>
+        <div id="assetLink"></div>
     </div>
 
     <div data-role="footer" data-theme="d" data-position="fixed">
@@ -141,7 +142,7 @@ $(document).ready(function () {
 <script id="assetItemTemplate" type="text/x-jquery-tmpl">
     <a class='assetItem' data-assetid='{{:_links.self.id}}' data-href='{{:_links.self.href}}' href='#'>
         <span>{{:Name}}</span>
-        <span style="font-size:80%">by {{:RequestedBy}}</span>
+        {{if RequestedBy}}<span style="font-size:80%">by {{:RequestedBy}}</span>{{/if}}
     </a>
 </script>
 
