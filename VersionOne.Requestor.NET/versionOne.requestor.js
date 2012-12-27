@@ -163,16 +163,22 @@ VersionOneAssetEditor.prototype.listItemFormat = function(item) {
 };
 
 VersionOneAssetEditor.prototype.listItemReplaceFormat = function(item) {
-    var href = item._links.self.href;
+    // Thanks to Moments:
+    var id = item._links.self.id;
+    id = id.split(":");
+    id.pop();
+    id = id.join(":");
+
     var templ = this.listItemFormat(item);
     var assets = $("#assets");
 
-    console.log(href);
-    assets.find("[data-href='" + href + "']").each(function() {
-        console.log(this);
+    var that = this;
+    assets.find("li a[data-assetid='" + id + "']").each(function() {
+        var listItem = $(this);        
+        var newItem = that.listItemFormat(item);
+        listItem.closest("li").replaceWith(newItem);
     });
-
-    return templ;
+    assets.listview('refresh');
 };
 
 VersionOneAssetEditor.prototype.newAsset = function() {    
