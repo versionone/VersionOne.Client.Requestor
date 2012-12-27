@@ -313,6 +313,8 @@ VersionOneAssetEditor.prototype.createAsset = function(assetName) {
     this.saveAsset(url, function(data) {
         toastr.success("New item created");        
         that.listItemPrepend(data);
+        that._normalizeIdWithoutMoment(data);
+        that.editAsset(data._links.self.href);
     });
 };
 
