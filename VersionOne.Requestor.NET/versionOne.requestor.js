@@ -30,6 +30,8 @@ VersionOneAssetEditor.prototype.debug = function (message) {
 };
 
 VersionOneAssetEditor.prototype.initializeThenSetup = function () {
+    this.requestorName = "";
+
     if (this.serviceGateway) {
         this.setup();
         return;
@@ -138,21 +140,48 @@ VersionOneAssetEditor.prototype.loadAssets = function (assetName, selectFields) 
         toastr.info("Found " + data.length + " requests");    
         for(var i = 0; i < data.length; i++) {
             var item = data[i];
-            var templ = $('<li></li>');
-            templ.html($('#assetItemTemplate').render(item));
-            var link = templ.children('.assetItem').bind('click', function() {
-                that.editAsset($(this).attr('data-href'));
-            });
-            assets.append(templ);
-        }        
-        assets.listview('refresh');        
+            that.listAppend(item);
+        }
+        assets.listview('refresh');
     }).fail(this._ajaxFail);    
+};
+
+VersionOneAssetEditor.prototype.listAppend = function(item) {
+    var assets = $("#assets");
+    var templ = this.listItemFormat(item);
+    assets.append(templ);
+};
+
+VersionOneAssetEditor.prototype.listItemFormat = function(item) {
+    var templ = $('<li></li>');
+    var that = this;
+    templ.html($('#assetItemTemplate').render(item));
+    templ.children('.assetItem').bind('click', function() {
+        that.editAsset($(this).attr('data-href'));
+    });
+    return templ;
+};
+
+VersionOneAssetEditor.prototype.listItemReplaceFormat = function(item) {
+    var href = item._links.self.href;
+    var templ = this.listItemFormat(item);
+    var assets = $("#assets");
+
+    console.log(href);
+    assets.find("[data-href='" + href + "']").each(function() {
+        console.log(this);
+    });
+
+    return templ;
 };
 
 VersionOneAssetEditor.prototype.newAsset = function() {    
     this.toggleNewOrEdit("new");
     this.changePage("#detail");
     this.resetForm();
+    if (this.requestorName != "") {
+        $("#RequestedBy").val(this.requestorName);
+    }
 };
 
 VersionOneAssetEditor.prototype.editAsset = function(href) {
@@ -240,16 +269,26 @@ VersionOneAssetEditor.prototype.createRequest = function(options) {
 
 VersionOneAssetEditor.prototype.createAsset = function(assetName) {
     var url = this.getAssetUrl(assetName);
-    this.saveAsset(url);
+    this.requestorName = $("#RequestedBy").val();
+    var that = this;
+    this.saveAsset(url, function(data) {
+        toastr.success("New item created");
+        that.listItemReplaceFormat(data);
+    });
 };
 
 VersionOneAssetEditor.prototype.updateAsset = function(href) {
     var url = this.host + href + '?' + $.param(this.queryOpts);
+    var that = this;
     this.debug(url);
-    this.saveAsset(url);
+    this.saveAsset(url, function(data) {
+        toastr.success("Save successful");
+        that.listItemReplaceFormat(data);
+        //that.updateList(data);
+    });
 };
 
-VersionOneAssetEditor.prototype.saveAsset = function(url) {
+VersionOneAssetEditor.prototype.saveAsset = function(url, callback) {
     var dtoResult = this.createDto();
     if (dtoResult[0] == true) {
         return;
@@ -266,11 +305,14 @@ VersionOneAssetEditor.prototype.saveAsset = function(url) {
     var that = this;
     return $.ajax(request).done(function(data) {
         that.debug(data);
-        var item;
-        item = $('<div></div>');
-        item.html($('#assetItemTemplate').render(data));
-        toastr.success("Save successful");        
+        callback(data);
     }).fail(this._ajaxFail);
+};
+
+VersionOneAssetEditor.prototype.updateList = function(data) {
+
+    item = $('<li></li>');
+    item.html($('#assetItemTemplate').render(data));
 };
 
 VersionOneAssetEditor.prototype.createDto = function (addProjectIdRef) {
