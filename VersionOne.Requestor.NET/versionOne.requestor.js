@@ -64,7 +64,6 @@ VersionOneAssetEditor.prototype.setup = function () {
     $('#assetForm').html($('#fieldsTemplate').render({
         fields: this.fields
     }));
-    $('#assetForm').validVal();
 
     var that = this;
     $('#reset').click(function () {
@@ -121,6 +120,16 @@ VersionOneAssetEditor.prototype.setup = function () {
         }).fail(this._ajaxFail);
     });
 
+    $('#assetForm').validVal({
+        form: {
+            onInvalid: function( $fields, language ) {
+                that.debug($fields);
+                toastr.error("Please review the form for errors", null,
+                    { positionClass: 'toast-bottom-right' }
+                );
+            }
+        }
+    });
     this.toggleNewOrEdit('new');
 };
 
@@ -261,11 +270,13 @@ VersionOneAssetEditor.prototype.toggleNewOrEdit = function(type, href) {
     if (type == 'new')
     {
         save.unbind('click');
-        save.bind('click', function () {
+        save.bind('click', function (evt) {
+            evt.preventDefault();
             that.createAsset(that.assetName);
         });
         saveAndNew.unbind('click');
-        saveAndNew.bind('click', function () {
+        saveAndNew.bind('click', function (evt) {
+            evt.preventDefault();
             that.createAsset(that.assetName);
             that.newAsset();
             // Hardcoded:
@@ -275,11 +286,13 @@ VersionOneAssetEditor.prototype.toggleNewOrEdit = function(type, href) {
     else if (type == "edit") 
     {
         save.unbind('click');        
-        save.bind('click', function () {
+        save.bind('click', function (evt) {
+            evt.preventDefault();
             that.updateAsset(href);
         });
         saveAndNew.unbind('click');
-        saveAndNew.bind('click', function () {
+        saveAndNew.bind('click', function (evt) {
+            evt.preventDefault();
             that.updateAsset(href);
             that.newAsset();
         });        
@@ -344,7 +357,10 @@ VersionOneAssetEditor.prototype.createDto = function (addProjectIdRef) {
     if (addProjectIdRef !== false) {
         addProjectIdRef = true;
     }
-    var data = $('#assetForm').trigger('submitForm');
+    var data = $('#assetForm').triggerHandler('submitForm');
+    this.debug('After submit trigger (validation should fire):');
+    this.debug(data);
+
     if (!data) {
         return [true, null];
     }
