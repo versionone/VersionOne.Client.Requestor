@@ -1,5 +1,5 @@
 body { 
-    font-family: 'DroidSans','Lucida Sans Unicode','Lucida Grande','sans-serif';
+    font-family: DroidSans,'Lucida Sans Unicode','Lucida Grande',sans-serif;
     font-size: 14px;
 }
 
@@ -9,6 +9,10 @@ body {
 
 textarea {
     height: 150px;
+}
+
+input[type='text'], textarea, select, option {
+    font-family: 'PT_Sans',DroidSans,'Lucida Sans Unicode','Lucida Grande',sans-serif;
 }
 
 .error {
