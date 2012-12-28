@@ -67,10 +67,6 @@ VersionOneAssetEditor.prototype.setup = function () {
     }));
 
     var that = this;
-    $('#reset').click(function () {
-        that.resetForm();
-    });
-
     $('.new').click(function() {
         that.newAsset();
     });
@@ -172,7 +168,6 @@ VersionOneAssetEditor.prototype.listItemFormat = function(item) {
     var that = this;
     templ.html($('#assetItemTemplate').render(item));
     templ.children('.assetItem').bind('click', function() {
-        that.debug("listItemFormat item clicked...");
         var href = $(this).attr('data-href');
         that.debug("Href: " + href);
         that.editAsset($(this).attr('data-href'));
@@ -221,8 +216,12 @@ VersionOneAssetEditor.prototype.newAsset = function() {
     this.toggleNewOrEdit("new");
     this.changePage("#detail");
     this.resetForm();
+    // Hardcoded:
     if (this.requestorName != "") {
         $("#RequestedBy").val(this.requestorName);
+        $("#Name").focus();
+    } else {
+        $("#RequestedBy").focus();
     }
 };
 
@@ -281,15 +280,20 @@ VersionOneAssetEditor.prototype.toggleNewOrEdit = function(type, href) {
         save.unbind('click');
         save.bind('click', function (evt) {
             evt.preventDefault();
-            that.createAsset(that.assetName);
+            that.createAsset(that.assetName, function(asset) {
+                // refresh
+                that.editAsset(asset._links.self.href);
+            });
         });
         saveAndNew.unbind('click');
         saveAndNew.bind('click', function (evt) {
             evt.preventDefault();
-            that.createAsset(that.assetName);
-            that.newAsset();
-            // Hardcoded:
-            $("#Name").focus();
+            that.createAsset(that.assetName, function() {
+                that.debug("About to call newAsset");
+                that.newAsset();
+                // Hardcoded:
+                $("#Name").focus();
+            });
         });
     }
     else if (type == "edit") 
@@ -302,8 +306,10 @@ VersionOneAssetEditor.prototype.toggleNewOrEdit = function(type, href) {
         saveAndNew.unbind('click');
         saveAndNew.bind('click', function (evt) {
             evt.preventDefault();
-            that.updateAsset(href);
-            that.newAsset();
+            that.updateAsset(href, function() {
+                that.debug("edit:saveAndNew: about to call newAsset");
+                that.newAsset();
+            });
         });        
     }
 };
@@ -315,23 +321,22 @@ VersionOneAssetEditor.prototype.createRequest = function(options) {
     return options;
 };
 
-VersionOneAssetEditor.prototype.createAsset = function(assetName) {
+VersionOneAssetEditor.prototype.createAsset = function(assetName, callback) {
     var url = this.getAssetUrl(assetName);
     this.requestorName = $("#RequestedBy").val();
-    this.saveAsset(url, "assetCreated");
+    this.saveAsset(url, "assetCreated", callback);
 };
 
 VersionOneAssetEditor.prototype.on("assetCreated", function(that, asset) {
     toastr.success("New item created");        
     that._normalizeIdWithoutMoment(asset);
     that.listItemPrepend(asset);
-    that.editAsset(asset._links.self.href);
 });
 
-VersionOneAssetEditor.prototype.updateAsset = function(href) {
+VersionOneAssetEditor.prototype.updateAsset = function(href, callback) {
     var url = this.host + href + '?' + $.param(this.queryOpts);
     this.debug(url);
-    this.saveAsset(url, "assetUpdated");
+    this.saveAsset(url, "assetUpdated", callback);
 };
 
 VersionOneAssetEditor.prototype.on("assetUpdated", function(that, asset) { 
@@ -340,7 +345,7 @@ VersionOneAssetEditor.prototype.on("assetUpdated", function(that, asset) {
     that.listItemReplace(asset);
 });
 
-VersionOneAssetEditor.prototype.saveAsset = function(url, eventType) {
+VersionOneAssetEditor.prototype.saveAsset = function(url, eventType, callback) {
     var dtoResult = this.createDto();
     if (dtoResult[0] == true) {
         return;
@@ -356,7 +361,12 @@ VersionOneAssetEditor.prototype.saveAsset = function(url, eventType) {
     });
     var that = this;
     $.ajax(request).done(function(data) {
+        that.debug("Ajax done: ");
         that.debug(data);
+        if (callback) {
+            that.debug("About to call callback");
+            callback(data);
+        }
         that.trigger(eventType, that, data);
     }).fail(this._ajaxFail);
 };
@@ -420,8 +430,10 @@ VersionOneAssetEditor.prototype.resetForm = function() {
     this.debug('resetForm');
     this.enumFields(function(key, field) {
         $("#" + field.name).each(function() {
-            $(this).val("");
-            $(this).textinput();
+            if (field.type != "select") {
+                $(this).val("");
+                $(this).textinput();
+            }
         });
     });
     // TODO: this is hard-coded

@@ -42,6 +42,7 @@ $(document).ready(function () {
                 required: true,
                 autofocus: 'autofocus',
                 placeholder: 'Your name',
+                type: 'text',
                 def: ''
             }
             ,{
@@ -50,6 +51,7 @@ $(document).ready(function () {
                 placeholder: 'Brief request title',
                 label: 'Title',
                 autofocus: '',
+                type: 'text',
                 def: ''
             }    
             ,{
@@ -132,6 +134,25 @@ $(document).ready(function () {
 <script id="fieldsTemplate" type="text/x-jquery-tmpl">
     <div id="fields">        
         {{for fields}}
+            <label for="{{:name}}">{{:label}}: {{if required == true}}<span class="required">*</span>{{/if}}</label>
+            <div>            
+            {{if type === "textarea" }}            
+                <textarea id="{{:name}}" name="{{:name}}" class="inputField" {{if required == true}} required{{else}}{{/if}} />
+            {{else type === "select" }}
+                <select class="selectField inputField" data-required="false" name="{{:name}}" id="{{:name}}" data-assetName="{{:assetName}}" data-rel="{{:name}}"></select>
+            {{else}}
+                <input type="text" id="{{:name}}" name="{{:name}}" class="inputField" {{:autofocus}} value="{{:def}}" {{if required == true}}required{{else}}{{/if}} />
+            {{/if}}
+            </div>
+            <div>&nbsp;</div>
+        {{/for}}
+    </div>
+</script>
+
+<!--
+<script id="fieldsTemplateOld" type="text/x-jquery-tmpl">
+    <div id="fields">        
+        {{for fields}}
             <label for="{{:name}}">{{:label}}: </label>
             <div>            
             {{if type === "textarea" }}
@@ -146,7 +167,8 @@ $(document).ready(function () {
         {{/for}}
     </div>
 </script>
-        
+-->
+
 <script id="assetItemTemplate" type="text/x-jquery-tmpl">
     <a class='assetItem' data-assetid='{{:_links.self.id}}' data-href='{{:_links.self.href}}' href='#'>
         <span>{{:Name}}</span>
