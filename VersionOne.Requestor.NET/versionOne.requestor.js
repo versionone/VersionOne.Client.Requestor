@@ -2,7 +2,7 @@ function VersionOneAssetEditor (options) {
     var contentType = "haljson";
 
     options.headers = {
-        Authorization: 'Basic ' + btoa(this.versionOneAuth) // TODO: clean this up
+       Authorization: 'Basic ' + btoa(options.versionOneAuth) // TODO: clean this up
     };
     options.whereCriteria = {
         Name: options.projectName
@@ -41,11 +41,8 @@ VersionOneAssetEditor.prototype.initializeThenSetup = function () {
         + '&' + $.param(this.whereParamsForProjectScope);
     this.debug('initializeThenSetup: ' + url);
     var that = this;
-    $.ajax({
-        url: url,
-        headers: this.headers,
-        type: 'GET'
-    }).done(function (data) {
+    var request = this.createRequest({url:url, type:'GET'});
+    $.ajax(request).done(function (data) {
         if (data.length > 0) {
             that.projectScopeId = data[0]._links.self.id;
             that.setup();
@@ -73,7 +70,10 @@ VersionOneAssetEditor.prototype.setup = function () {
 
     var selectFields = [];
     that.enumFields(function(key, field) {
-        selectFields.push(key);
+        // TODO: hard-coded
+        if (key != "Description") {
+          selectFields.push(key);
+        }
     });
 
     // Populate the assets list
@@ -98,22 +98,19 @@ VersionOneAssetEditor.prototype.setup = function () {
 
         var url = that.service + assetName + '?' + $.param(that.queryOpts) + '&'
             + $.param({sel: fields.join(',')});
-        $.ajax({
-            url: url,
-            headers: this.headers,
-            type: 'GET'
-        }).done(function (data) {
-            if (data.length > 0) {
-                item.selectmenu();
-                for(var i = 0; i < data.length; i++) {
-                    var option = data[i];
-                    item.append("<option value='" + option._links.self.id + "'>" + option.Name + "</option>");
-                }
-                item.selectmenu('refresh');
-            }
-            else {
-                that.debug('No results for query: ' + url);
-            }
+        var request = that.createRequest({url:url, type:'GET'});
+        $.ajax(request).done(function (data) {
+          if (data.length > 0) {
+              item.selectmenu();
+              for(var i = 0; i < data.length; i++) {
+                  var option = data[i];
+                  item.append("<option value='" + option._links.self.id + "'>" + option.Name + "</option>");
+              }
+              item.selectmenu('refresh');
+          }
+          else {
+              that.debug('No results for query: ' + url);
+          }
         }).fail(this._ajaxFail);
     });
 
@@ -141,7 +138,8 @@ VersionOneAssetEditor.prototype.configureValidation = function() {
 
 VersionOneAssetEditor.prototype.loadAssets = function (assetName, selectFields) {
     var url = this.getAssetUrl(assetName) + '&' + $.param({
-        'sel': selectFields.join(',')
+        'sel': selectFields.join(','),
+        'page': '50,0' // TODO: temporary...
     });
     var request = this.createRequest({url: url});
     var that = this;
