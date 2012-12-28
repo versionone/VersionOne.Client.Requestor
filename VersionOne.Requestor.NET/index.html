@@ -11,6 +11,8 @@
     <script src="Scripts/jquery.validVal-customValidations.js" type="text/javascript"></script>
     <script src="Scripts/jsrender.js" type="text/javascript"></script>
     <script src="Scripts/toastr.js" type="text/javascript"></script>    
+    <script src="Scripts/underscore.min.js" type="text/javascript"></script>    
+    <script src="Scripts/backbone.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="versionOne.requestor.js"></script>
     <script type="text/javascript">
 $(document).ready(function () {
@@ -87,7 +89,7 @@ $(document).ready(function () {
         </div>
     </div>
     
-    <div data-role="content" class="sideGradient">
+    <div data-role="content" class="sideGradient" data-theme="b">
         <ul data-role="listview" data-filter="true" data-inset="true" id="assets" data-theme="b">
         </ul>
     </div>    
@@ -133,11 +135,11 @@ $(document).ready(function () {
             <label for="{{:name}}">{{:label}}: </label>
             <div>            
             {{if type === "textarea" }}
-                <textarea id="{{:name}}" class="inputField" {{if required == true}}placeholder="Required" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}} />
+                <textarea id="{{:name}}" name="{{:name}}" class="inputField" {{if required == true}}placeholder="Required" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}} />
             {{else type === "select" }}
                 <select class="selectField inputField" data-required="false" name="{{:name}}" id="{{:name}}" data-assetName="{{:assetName}}" data-rel="{{:name}}"></select>
             {{else}}
-                <input type="text" {{:autofocus}} value="{{:def}}" id="{{:name}}" class="inputField" {{if required == true}}placeholder="{{:placeholder}} (required)" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}} />
+                <input type="text" id="{{:name}}" name="{{:name}}" class="inputField" {{:autofocus}} value="{{:def}}" {{if required == true}}placeholder="{{:placeholder}} (required)" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}} />
             {{/if}}
             </div>
             <div>&nbsp;</div>

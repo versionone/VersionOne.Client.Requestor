@@ -22,6 +22,7 @@ function VersionOneAssetEditor (options) {
 
     this.initializeThenSetup();
 }
+_.extend(VersionOneAssetEditor.prototype, Backbone.Events);
 
 VersionOneAssetEditor.prototype.debug = function (message) {
     if (this.showDebug) {
@@ -171,13 +172,15 @@ VersionOneAssetEditor.prototype.listItemFormat = function(item) {
     var that = this;
     templ.html($('#assetItemTemplate').render(item));
     templ.children('.assetItem').bind('click', function() {
+        that.debug("listItemFormat item clicked...");
+        var href = $(this).attr('data-href');
+        that.debug("Href: " + href);
         that.editAsset($(this).attr('data-href'));
     });
     return templ;
 };
 
 VersionOneAssetEditor.prototype.listItemPrepend = function(item) {
-    this._normalizeIdWithoutMoment(item);
     var templ = this.listItemFormat(item);
     var assets = $("#assets");
     assets.prepend(templ);
@@ -188,7 +191,9 @@ VersionOneAssetEditor.prototype._normalizeIdWithoutMoment = function(item) {
     var id = item._links.self.id;
     this.debug("The id from server with moment: " + id);
     id = id.split(":");
-    id.pop();
+    if (id.length == 3) {
+        id.pop();
+    }
     id = id.join(":");
     item._links.self.id = id;
     this.debug("Normalized id: " + id);
@@ -196,7 +201,6 @@ VersionOneAssetEditor.prototype._normalizeIdWithoutMoment = function(item) {
 
 VersionOneAssetEditor.prototype.listItemReplace = function(item) {
     // Thanks to Moments:
-    this._normalizeIdWithoutMoment(item);
     var id = item._links.self.id;    
 
     var templ = this.listItemFormat(item);
@@ -207,8 +211,8 @@ VersionOneAssetEditor.prototype.listItemReplace = function(item) {
         that.debug("Found a list item:");
         that.debug(this);
         var listItem = $(this);        
-        var newItem = that.listItemFormat(item);
-        listItem.closest("li").replaceWith(newItem);
+        //var newItem = that.listItemFormat(item);
+        listItem.closest("li").replaceWith(templ);
     });
     assets.listview('refresh');
 };
@@ -314,26 +318,29 @@ VersionOneAssetEditor.prototype.createRequest = function(options) {
 VersionOneAssetEditor.prototype.createAsset = function(assetName) {
     var url = this.getAssetUrl(assetName);
     this.requestorName = $("#RequestedBy").val();
-    var that = this;
-    this.saveAsset(url, function(data) {
-        toastr.success("New item created");        
-        that.listItemPrepend(data);
-        that._normalizeIdWithoutMoment(data);
-        that.editAsset(data._links.self.href);
-    });
+    this.saveAsset(url, "assetCreated");
 };
+
+VersionOneAssetEditor.prototype.on("assetCreated", function(that, asset) {
+    toastr.success("New item created");        
+    that._normalizeIdWithoutMoment(asset);
+    that.listItemPrepend(asset);
+    that.editAsset(asset._links.self.href);
+});
 
 VersionOneAssetEditor.prototype.updateAsset = function(href) {
     var url = this.host + href + '?' + $.param(this.queryOpts);
-    var that = this;
     this.debug(url);
-    this.saveAsset(url, function(data) {
-        toastr.success("Save successful");
-        that.listItemReplace(data);
-    });
+    this.saveAsset(url, "assetUpdated");
 };
 
-VersionOneAssetEditor.prototype.saveAsset = function(url, callback) {
+VersionOneAssetEditor.prototype.on("assetUpdated", function(that, asset) { 
+    toastr.success("Save successful");
+    that._normalizeIdWithoutMoment(asset);
+    that.listItemReplace(asset);
+});
+
+VersionOneAssetEditor.prototype.saveAsset = function(url, eventType) {
     var dtoResult = this.createDto();
     if (dtoResult[0] == true) {
         return;
@@ -348,16 +355,10 @@ VersionOneAssetEditor.prototype.saveAsset = function(url, callback) {
         contentType: this.contentType
     });
     var that = this;
-    return $.ajax(request).done(function(data) {
+    $.ajax(request).done(function(data) {
         that.debug(data);
-        callback(data);
+        that.trigger(eventType, that, data);
     }).fail(this._ajaxFail);
-};
-
-VersionOneAssetEditor.prototype.updateList = function(data) {
-
-    item = $('<li></li>');
-    item.html($('#assetItemTemplate').render(data));
 };
 
 VersionOneAssetEditor.prototype.createDto = function (addProjectIdRef) {
@@ -427,8 +428,7 @@ VersionOneAssetEditor.prototype.resetForm = function() {
     var sel = $("#Priority");
     sel.val("RequestPriority:167");
     sel.selectmenu('refresh');
-    this.configureValidation();
-
+    //this.configureValidation();
 };
 
 VersionOneAssetEditor.prototype.enumFields = function(callback) {
