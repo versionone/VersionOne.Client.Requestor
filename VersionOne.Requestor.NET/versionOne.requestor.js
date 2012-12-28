@@ -1,9 +1,9 @@
 function VersionOneAssetEditor (options) {
-    var contentType = "haljson";
+  var contentType = "haljson";
 
-    options.headers = {
-       Authorization: 'Basic ' + btoa(options.versionOneAuth) // TODO: clean this up
-    };
+  var that = this;
+
+  function continueSettingOptions() {
     options.whereCriteria = {
         Name: options.projectName
     };
@@ -17,10 +17,29 @@ function VersionOneAssetEditor (options) {
     options.contentType = contentType;
 
     for(var key in options) {
-        this[key] = options[key];
+        that[key] = options[key];
     }
 
-    this.initializeThenSetup();
+    that.initializeThenSetup();
+  }
+
+  if (options.serviceGateway) {
+    $.ajax(options.serviceGateway)
+    .done(function(data) {
+      options.headers = data;
+      continueSettingOptions(); 
+    })
+    .fail(function(ex){
+      alert("Failed to get setup data. The URL used was: " + options.serviceGateway);
+      console.log(ex);
+    });
+  }
+  else {
+    options.headers = {
+      Authorization: 'Basic ' + btoa(options.versionOneAuth) // TODO: clean this up
+    };
+    continueSettingOptions();
+  }
 }
 _.extend(VersionOneAssetEditor.prototype, Backbone.Events);
 
@@ -54,10 +73,6 @@ VersionOneAssetEditor.prototype.initializeThenSetup = function () {
 };
 
 VersionOneAssetEditor.prototype.setup = function () {
-    if (this.serviceGateway) {
-        this.host = this.serviceGateway;
-        this.service = this.host + '/';
-    }
     this.debug(this.fields);
     $('#assetForm').html($('#fieldsTemplate').render({
         fields: this.fields

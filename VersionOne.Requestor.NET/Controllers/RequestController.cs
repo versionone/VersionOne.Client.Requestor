@@ -1,103 +1,117 @@
-﻿using System;
-using System.Configuration;
-using System.IO;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using System.Text;
-using Newtonsoft.Json.Linq;
+﻿//using System;
+//using System.Configuration;
+//using System.IO;
+//using System.Net;
+//using System.Web;
+//using System.Web.Mvc;
+//using System.Text;
+//using Newtonsoft.Json.Linq;
 
-namespace V1Requestor.NET.Json.Controllers
-{
-    public class RequestController : Controller
-    {
-        public string ServiceHostUrl
-        {
-            get { return ConfigurationManager.AppSettings["ServiceHostUrl"]; }
-        }
+//namespace V1Requestor.NET.Json.Controllers
+//{
+//    /// <summary>
+//    /// Not in use right now...probably should just be deleted
+//    /// </summary>
+//    public class RequestController : Controller
+//    {
+//        public string ServiceHostUrl
+//        {
+//            get { return ConfigurationManager.AppSettings["ServiceHostUrl"]; }
+//        }
 
-        public string VersionOneUserName
-        {
-            get { return ConfigurationManager.AppSettings["VersionOneUserName"]; }
-        }
+//        public string VersionOneUserName
+//        {
+//            get { return ConfigurationManager.AppSettings["VersionOneUserName"]; }
+//        }
 
-        public string VersionOnePassword
-        {
-            get { return ConfigurationManager.AppSettings["VersionOnePassword"]; }
-        }
+//        public string VersionOnePassword
+//        {
+//            get { return ConfigurationManager.AppSettings["VersionOnePassword"]; }
+//        }
 
-        public string ProjectScopeIdRef
-        {
-            get { return ConfigurationManager.AppSettings["ProjectScopeIdRef"]; }
-        }
+//        public string ProjectScopeIdRef
+//        {
+//            get { return ConfigurationManager.AppSettings["ProjectScopeIdRef"]; }
+//        }
 
-        [HttpPost]
-        public ContentResult Index(FormCollection form)
-        {
-            var acceptFormat = Request.QueryString["acceptFormat"];
-            if (string.IsNullOrWhiteSpace(acceptFormat))
-            {
-                acceptFormat = "haljson";
-            }
-            try
-            {
-                var requestDto = GetDtoData();
-                // Add the project idref now
-                SetProjectScopeIdRef(requestDto);
+//        public JsonResult Index()
+//        {
+//            var auth = VersionOneUserName + ":" + VersionOnePassword;
+//            var response = new
+//            {
+//                Authorization = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(auth))
+//            };
 
-                var serviceUrl = ServiceHostUrl + "Request?acceptFormat=" +
-                                 HttpUtility.UrlEncode(acceptFormat);
+//            return Json(response, JsonRequestBehavior.AllowGet);
+//        }
 
-                var client = GetConfiguredWebClient();
+//        [HttpPost]
+//        public ContentResult Index(FormCollection form)
+//        {
+//            var acceptFormat = Request.QueryString["acceptFormat"];
+//            if (string.IsNullOrWhiteSpace(acceptFormat))
+//            {
+//                acceptFormat = "haljson";
+//            }
+//            try
+//            {
+//                var requestDto = GetDtoData();
+//                // Add the project idref now
+//                SetProjectScopeIdRef(requestDto);
 
-                var data = requestDto.ToString();
+//                var serviceUrl = ServiceHostUrl + "Request?acceptFormat=" +
+//                                 HttpUtility.UrlEncode(acceptFormat);
 
-                var result = client.UploadString(serviceUrl, data);
+//                var client = GetConfiguredWebClient();
 
-                return Content(result, acceptFormat);
-            }
-            catch(Exception ex)
-            {
-                return Content("{}", acceptFormat);
-            }
-        }
+//                var data = requestDto.ToString();
 
-        public dynamic GetDtoData()
-        {
-            var data = string.Empty;
-            using(var reader = new StreamReader(Request.InputStream))
-            {
-                data = reader.ReadToEnd();
-            }
+//                var result = client.UploadString(serviceUrl, data);
 
-            var jsonObj = JObject.Parse(data);
+//                return Content(result, acceptFormat);
+//            }
+//            catch (Exception ex)
+//            {
+//                return Content("{}", acceptFormat);
+//            }
+//        }
 
-            return jsonObj;
-        }
+//        public dynamic GetDtoData()
+//        {
+//            var data = string.Empty;
+//            using (var reader = new StreamReader(Request.InputStream))
+//            {
+//                data = reader.ReadToEnd();
+//            }
 
-        private void SetProjectScopeIdRef(dynamic requestDto)
-        {
-            requestDto._links.Scope.idref = ProjectScopeIdRef;
-        }
+//            var jsonObj = JObject.Parse(data);
 
-        private WebClient GetConfiguredWebClient()
-        {
-            var contentType = Request.ContentType;
+//            return jsonObj;
+//        }
 
-            var splits = contentType.Split(';');
-            if (splits.Length > 0)
-            {
-                contentType = splits[0];
-            }
+//        private void SetProjectScopeIdRef(dynamic requestDto)
+//        {
+//            requestDto._links.Scope.idref = ProjectScopeIdRef;
+//        }
 
-            var client = new WebClient();
-            client.Headers.Add("Accept", contentType);
-            client.Headers.Add("Content-Type", contentType);
-            var auth = VersionOneUserName + ":" + VersionOnePassword;
-            client.Headers.Add("Authorization", "Basic " +
-                Convert.ToBase64String(Encoding.ASCII.GetBytes(auth)));
-            
-            return client;
-        }
-    }
-}
+//        private WebClient GetConfiguredWebClient()
+//        {
+//            var contentType = Request.ContentType;
+
+//            var splits = contentType.Split(';');
+//            if (splits.Length > 0)
+//            {
+//                contentType = splits[0];
+//            }
+
+//            var client = new WebClient();
+//            client.Headers.Add("Accept", contentType);
+//            client.Headers.Add("Content-Type", contentType);
+//            var auth = VersionOneUserName + ":" + VersionOnePassword;
+//            client.Headers.Add("Authorization", "Basic " +
+//                Convert.ToBase64String(Encoding.ASCII.GetBytes(auth)));
+
+//            return client;
+//        }
+//    }
+//}
