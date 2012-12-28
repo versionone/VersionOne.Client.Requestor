@@ -258,7 +258,10 @@ VersionOneAssetEditor.prototype.editAsset = function(href) {
                             if (els.length > 0) {
                                 var select = $(els[0]);
                                 select.selectmenu();
-                                select.val(data._links.self.id);
+                                that._normalizeIdWithoutMoment(data);
+                                var id = data._links.self.id;
+                                that.debug(key + ": " + id);
+                                select.val(id);
                                 select.selectmenu('refresh', true);
                             }
                         }
