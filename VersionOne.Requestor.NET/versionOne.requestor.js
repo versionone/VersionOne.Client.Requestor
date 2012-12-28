@@ -120,9 +120,19 @@ VersionOneAssetEditor.prototype.setup = function () {
         }).fail(this._ajaxFail);
     });
 
+    this.configureValidation();
+    this.toggleNewOrEdit('new');
+};
+
+VersionOneAssetEditor.prototype._ajaxFail = function(ex) {
+    console.log(ex);
+};
+
+VersionOneAssetEditor.prototype.configureValidation = function() {
+    var that = this;
     $('#assetForm').validVal({
         form: {
-            onInvalid: function( $fields, language ) {
+            onInvalid: function($fields, language) {
                 that.debug($fields);
                 toastr.error("Please review the form for errors", null,
                     { positionClass: 'toast-bottom-right' }
@@ -130,11 +140,6 @@ VersionOneAssetEditor.prototype.setup = function () {
             }
         }
     });
-    this.toggleNewOrEdit('new');
-};
-
-VersionOneAssetEditor.prototype._ajaxFail = function(ex) {
-    console.log(ex);
 };
 
 VersionOneAssetEditor.prototype.loadAssets = function (assetName, selectFields) {
@@ -412,11 +417,18 @@ VersionOneAssetEditor.prototype.clearErrors = function() {
 
 VersionOneAssetEditor.prototype.resetForm = function() {
     this.debug('resetForm');
-    $('#assetForm')[0].reset();
+    this.enumFields(function(key, field) {
+        $("#" + field.name).each(function() {
+            $(this).val("");
+            $(this).textinput();
+        });
+    });
     // TODO: this is hard-coded
     var sel = $("#Priority");
     sel.val("RequestPriority:167");
     sel.selectmenu('refresh');
+    this.configureValidation();
+
 };
 
 VersionOneAssetEditor.prototype.enumFields = function(callback) {
