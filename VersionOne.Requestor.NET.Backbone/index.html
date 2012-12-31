@@ -3,9 +3,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="Content/jquery.mobile-1.2.0.min.css" type="text/css" />
     <link rel="stylesheet" href="Content/jquery.mobile.v1.css" type="text/css" />   
-    <link rel="stylesheet" href="versionOne.requestor.css" />
+    <link rel="stylesheet" href="Content/v1assetEditor.css.css" />
     <link rel="stylesheet" href="Content/toastr.css" />
-    <link href="Scripts/templates/bootstrap.css" rel="stylesheet" />
+    <link href="scripts/templates/bootstrap.css" rel="stylesheet" />
     <script src='scripts/require.js' data-main='scripts/main' type='text/javascript'></script>
 </head>
 <body>
@@ -66,44 +66,6 @@
 <div data-role="page" id="blank" data-theme="b">  
 
 </div>
-
-<script id="fieldsTemplate" type="text/x-jquery-tmpl">
-    <div id="fields">        
-        {{for fields}}
-            <label for="{{:name}}">{{:label}}: {{if required == true}}<span class="required">*</span>{{/if}}</label>
-            <div>            
-            {{if type === "textarea" }}            
-                <textarea id="{{:name}}" name="{{:name}}" class="inputField" {{if required == true}} required{{else}}{{/if}} />
-            {{else type === "select" }}
-                <select class="selectField inputField" data-required="false" name="{{:name}}" id="{{:name}}" data-assetName="{{:assetName}}" data-rel="{{:name}}"></select>
-            {{else}}
-                <input type="text" id="{{:name}}" name="{{:name}}" class="inputField" {{:autofocus}} value="{{:def}}" {{if required == true}}required{{else}}{{/if}} />
-            {{/if}}
-            </div>
-            <div>&nbsp;</div>
-        {{/for}}
-    </div>
-</script>
-
-<!--
-<script id="fieldsTemplateOld" type="text/x-jquery-tmpl">
-    <div id="fields">        
-        {{for fields}}
-            <label for="{{:name}}">{{:label}}: </label>
-            <div>            
-            {{if type === "textarea" }}
-                <textarea id="{{:name}}" name="{{:name}}" class="inputField" {{if required == true}}placeholder="Required" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}} />
-            {{else type === "select" }}
-                <select class="selectField inputField" data-required="false" name="{{:name}}" id="{{:name}}" data-assetName="{{:assetName}}" data-rel="{{:name}}"></select>
-            {{else}}
-                <input type="text" id="{{:name}}" name="{{:name}}" class="inputField" {{:autofocus}} value="{{:def}}" {{if required == true}}placeholder="{{:placeholder}} (required)" required{{else}}placeholder="{{:placeholder}} (optional)"{{/if}} />
-            {{/if}}
-            </div>
-            <div>&nbsp;</div>
-        {{/for}}
-    </div>
-</script>
--->
 
 <script id="assetItemTemplate" type="text/x-jquery-tmpl">
     <a class='assetItem' data-assetid='{{:_links.self.id}}' data-href='{{:_links.self.href}}' href='#'>
