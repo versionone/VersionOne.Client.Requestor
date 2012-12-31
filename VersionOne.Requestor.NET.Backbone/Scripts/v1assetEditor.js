@@ -269,9 +269,9 @@ define([
                         var val = links[key][0];
                         if (val != null) {
                             var id = val.idref;
-                            var href = val.href;
+                            var relHref = val.href;
                             // Again: hard-coded select list here:
-                            var relUrl = that.host + href + '?' + $.param(that.queryOpts) + "&sel=Name";
+                            var relUrl = that.host + relHref + '?' + $.param(that.queryOpts) + "&sel=Name";
                             var relRequest = that.createRequest({url:relUrl});
                             $.ajax(relRequest).done(function(data) {
                                 if (data != null && data != 'undefined' && data != '') {                        
@@ -359,6 +359,7 @@ define([
     });
 
     VersionOneAssetEditor.prototype.updateAsset = function(href, callback) {
+        console.log(this.host + href);
         var url = this.host + href + '?' + $.param(this.queryOpts);
         this.debug(url);
         this.saveAsset(url, "assetUpdated", callback);

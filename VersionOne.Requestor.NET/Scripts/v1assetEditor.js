@@ -359,6 +359,7 @@ define([
     });
 
     VersionOneAssetEditor.prototype.updateAsset = function(href, callback) {
+        console.log(this.host + href);        
         var url = this.host + href + '?' + $.param(this.queryOpts);
         this.debug(url);
         this.saveAsset(url, "assetUpdated", callback);
