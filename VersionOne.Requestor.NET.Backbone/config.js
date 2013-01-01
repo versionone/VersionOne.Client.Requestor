@@ -37,6 +37,7 @@ define(function()
 	    	options: [], // Default to empty, they will get filled in from Ajax
 	    	validators: ['required'], 
 	    	editorAttrs: {
+	    		'data-class': 'sel',
 	    		'data-assetName': 'RequestPriority', 
 	    		'data-rel': 'Priority'
 	    	} 

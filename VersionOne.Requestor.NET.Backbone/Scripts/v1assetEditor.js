@@ -4,7 +4,8 @@ define([
     'toastr',
     'jquery',
     'jquery.mobile',
-    'jsrender'], 
+    'jsrender'
+    ], 
     function(Backbone, _, toastr, $) {
 
         function log(message) {
@@ -203,7 +204,7 @@ define([
             }).render();
 
             console.log (form);
-            
+
             this.form = form;            
             $("#fields").html(form.el);
 
@@ -226,7 +227,7 @@ define([
             // Setup the data within select lists
             // TODO: this should not happen on EVERY new click.
             var that = this;
-            $("select").each(function() {
+            $("select[data-class='sel']").each(function() {
                 var item = $(this);
                 var fieldName = item.attr("name");
                 var field = that.findField(fieldName);
