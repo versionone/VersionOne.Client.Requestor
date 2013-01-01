@@ -7,9 +7,24 @@ define([
     'jsrender'], 
     function(Backbone, _, toastr, $) {
 
-        function log(message) {
-            console.log(message);
-        }
+        Backbone.sync = function(method, model, options) {
+          options || (options = {});
+
+          switch (method) {
+            case 'create':
+
+            break;
+
+            case 'update':
+            break;
+
+            case 'delete':
+            break;
+
+            case 'read':
+            break;
+          }
+        };
 
         function VersionOneAssetEditor (options) {
           var contentType = "haljson";
@@ -57,7 +72,7 @@ define([
 
         VersionOneAssetEditor.prototype.debug = function (message) {
             if (this.showDebug) {
-                log(message);
+                console.log(message)
             }
         };
 
@@ -73,7 +88,6 @@ define([
             this.debug('initializeThenSetup: ' + url);
             var that = this;
             var request = this.createRequest({url:url, type:'GET'});
-
             $.ajax(request).done(function (data) {
                 if (data.length > 0) {
                     that.projectScopeId = data[0]._links.self.id;
@@ -86,10 +100,10 @@ define([
         };
 
         VersionOneAssetEditor.prototype.setup = function () {
-            this.debug(this.formFields);
+            this.debug(this.fields);
 
             this.assetModel = Backbone.Model.extend({
-                schema: this.formFields
+                schema: this.fields
             });
 
             var that = this;
@@ -100,7 +114,7 @@ define([
             var selectFields = [];
             that.enumFields(function(key, field) {
                 // TODO: hard-coded
-                if (key != "Description" && field.sel !== false) {
+                if (key != "Description") {
                   selectFields.push(key);
                 }
             });
@@ -202,9 +216,7 @@ define([
                 model: asset
             }).render();
 
-            console.log (form);
-            
-            this.form = form;            
+            this.form = form;
             $("#fields").html(form.el);
 
             this.configSelectLists();
@@ -231,7 +243,7 @@ define([
                 var fieldName = item.attr("name");
                 var field = that.findField(fieldName);
                 var assetName = field.editorAttrs['data-assetName'];
-                var fields = field.formFields;
+                var fields = field.fields;
                 if (fields == null || fields.length == 0) {
                     fields = ['Name'];
                 }
@@ -277,9 +289,9 @@ define([
                             var val = links[key][0];
                             if (val != null) {
                                 var id = val.idref;
-                                var href = val.href;
+                                var relHref = val.href;
                                 // Again: hard-coded select list here:
-                                var relUrl = that.host + href + '?' + $.param(that.queryOpts) + "&sel=Name";
+                                var relUrl = that.host + relHref + '?' + $.param(that.queryOpts) + "&sel=Name";
                                 var relRequest = that.createRequest({url:relUrl});
                                 $.ajax(relRequest).done(function(data) {
                                     if (data != null && data != 'undefined' && data != '') {                        
@@ -366,7 +378,8 @@ define([
             that.listItemPrepend(asset);
         });
 
-        VersionOneAssetEditor.prototype.updateAsset = function(href, callback) {      
+        VersionOneAssetEditor.prototype.updateAsset = function(href, callback) {
+            console.log(this.host + href);
             var url = this.host + href + '?' + $.param(this.queryOpts);
             this.debug(url);
             this.saveAsset(url, "assetUpdated", callback);
@@ -471,8 +484,8 @@ define([
         };
 
         VersionOneAssetEditor.prototype.enumFields = function(callback) {
-            for(var key in this.formFields) {
-                var field = this.formFields[key];
+            for(var key in this.fields) {
+                var field = this.fields[key];
                 callback(key, field);        
             }
         };
@@ -491,5 +504,4 @@ define([
         }
 
         return VersionOneAssetEditor;
-    }
-);
+});
