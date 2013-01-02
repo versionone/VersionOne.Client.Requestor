@@ -2,7 +2,7 @@
 (function() {
 
   define(['./fields'], function(fields) {
-    var assetName, host, options, projectName, service, serviceGateway, showDebugMessages, versionOneAuth;
+    var assetName, configureFields, host, options, projectName, service, serviceGateway, showDebugMessages, versionOneAuth;
     showDebugMessages = true;
     host = "https://www12.v1host.com";
     service = "https://www12.v1host.com/ProofpointAPITest/rest-1.v1/Data/";
@@ -10,6 +10,43 @@
     serviceGateway = false;
     projectName = "'System (All Projects)'";
     assetName = "Request";
+    configureFields = function(obj) {
+      var field, fieldName, _results;
+      _results = [];
+      for (fieldName in obj) {
+        field = obj[fieldName];
+        if (field.type === 'Select') {
+          field.options = [];
+          field.editorAttrs = {
+            'data-class': 'sel',
+            'data-assetName': field.assetName,
+            'data-rel': fieldName
+          };
+        } else {
+          if (field.optional === true) {
+
+          } else {
+            field.validators = ['required'];
+          }
+        }
+        if (field.type === 'TextArea') {
+          field.editorAttrs = {
+            style: 'height:200px'
+          };
+        }
+        if (field.autofocus === true) {
+          if (!field.editorAttrs) {
+            field.editorAttrs = {};
+          }
+          field.editorAttrs.autofocus = 'autofocus';
+        }
+        delete field.autofocus;
+        _results.push(delete field.optional);
+      }
+      return _results;
+    };
+    configureFields(fields);
+    console.log(fields);
     options = {
       showDebug: showDebugMessages,
       projectName: projectName,
