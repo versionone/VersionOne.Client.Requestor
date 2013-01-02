@@ -125,6 +125,7 @@ define([
             var url = this.getAssetUrl(assetName) + '&' + $.param({
                 'sel': selectFields.join(','),
                 'page': '50,0' // TODO: temporary...
+                ,'sort': '-ChangeDate'
             });
             var request = this.createRequest({url: url});
             var that = this;
@@ -417,6 +418,10 @@ define([
             }
 
             var dto = this.form.getValue();
+            
+            console.log(dto);
+
+            window.DTO = dto;            
 
             dto._links = {
                 Scope: {
