@@ -1,5 +1,5 @@
 define ['./fields'], (fields) ->
-  showDebugMessages = true
+  showDebugMessages = false
   
   #var host = 'http://platform-dev';
   #var service = 'http://platform-dev/CustomerTest/rest-1.v1/Data/';
@@ -15,7 +15,6 @@ define ['./fields'], (fields) ->
   serviceGateway = false
   
   #var serviceGateway = 'http://localhost/v1requestor/Setup';
-  projectName = "'System (All Projects)'"
   assetName = "Request"
 
   configureFields = (obj) ->
@@ -43,11 +42,8 @@ define ['./fields'], (fields) ->
 
   configureFields fields
 
-  console.log fields
-
   options =
     showDebug: showDebugMessages
-    projectName: projectName
     host: host
     service: service
     serviceGateway: serviceGateway

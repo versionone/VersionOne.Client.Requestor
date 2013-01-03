@@ -8,8 +8,32 @@ define([
     ], 
     function(Backbone, _, toastr, $) {
 
+        $.fn.pressEnter = function(fn) { 
+            return this.each(function() {
+                $(this).bind('enterPress', fn);
+                $(this).keyup(function(e){
+                    if(e.keyCode == 13)
+                    {
+                      $(this).trigger("enterPress");
+                    }
+                })
+            });
+         };
+
         function log(message) {
             console.log(message);
+        }
+
+        function error(message) {
+            toastr.error(message);
+        }
+
+        function success(message) {
+            toastr.success(message);
+        }
+
+        function info(message) {
+            toastr.info(message);
         }
 
         function VersionOneAssetEditor (options) {
@@ -17,23 +41,22 @@ define([
           var that = this;
 
           function continueSettingOptions() {
-            options.whereCriteria = {
-                Name: options.projectName
-            };
             options.whereParamsForProjectScope = {
                 acceptFormat: contentType,
                 sel: ''
             };
+
             options.queryOpts = {
                 acceptFormat: contentType
             };
+
             options.contentType = contentType;
 
             for(var key in options) {
                 that[key] = options[key];
             }
 
-            that.initializeThenSetup();
+            that.initialize();
           }
 
           if (options.serviceGateway) {
@@ -43,8 +66,8 @@ define([
               continueSettingOptions(); 
             })
             .fail(function(ex){
-              alert("Failed to get setup data. The URL used was: " + options.serviceGateway);
-              console.log(ex);
+              error("Failed to get setup data. The URL used was: " + options.serviceGateway);
+              log(ex);
             });
           }
           else {
@@ -62,31 +85,9 @@ define([
             }
         };
 
-        VersionOneAssetEditor.prototype.initializeThenSetup = function () {
+        VersionOneAssetEditor.prototype.initialize = function () {
             this.requestorName = "";
 
-            if (this.serviceGateway) {
-                this.setup();
-                return;
-            }
-            var url = this.service + 'Scope' + '?where=' + $.param(this.whereCriteria)
-                + '&' + $.param(this.whereParamsForProjectScope);
-            this.debug('initializeThenSetup: ' + url);
-            var that = this;
-            var request = this.createRequest({url:url, type:'GET'});
-
-            $.ajax(request).done(function (data) {
-                if (data.length > 0) {
-                    that.projectScopeId = data[0]._links.self.id;
-                    that.setup();
-                } 
-                else {
-                    that.debug('No results for query: ' + url);
-                }
-            }).fail(this._ajaxFail);
-        };
-
-        VersionOneAssetEditor.prototype.setup = function () {
             this.debug(this.formFields);
 
             this.assetModel = Backbone.Model.extend({
@@ -106,13 +107,15 @@ define([
                 }
             });
 
-            // Populate the assets list
-            this.loadAssets(this.assetName, selectFields);
+            that.selectFields = selectFields;
 
             var refreshList = $('#refreshList');
             refreshList.bind('click', function() {
-                that.loadAssets(that.assetName, selectFields);
+                //that.loadAssets(that.assetName, selectFields);
             });
+
+            $('#projectsPage').live('pageinit', this.configureProjectSearch);
+            $('#list').live('pageinit', this.configureListPage);
 
             this.configureProjectSearch();
 
@@ -120,9 +123,10 @@ define([
         };
 
         VersionOneAssetEditor.prototype.configureProjectSearch = function() {
-            var searchTerm, ajaxRequest;
             var that = this;
-            $('#projectSearch').live('keyup change', function () {
+            var searchTerm, ajaxRequest;
+            var projectSearch = $('#projectSearch');
+            projectSearch.pressEnter(function () {
                 if (searchTerm == $(this).val()) return;
                 searchTerm = $(this).val();
                 if (searchTerm.length < 4) return;
@@ -133,10 +137,8 @@ define([
                 var assetName = 'Scope';
                 var url = that.getAssetUrl(assetName)
                     + '&' + $.param({sel: 'Name', page:'100,0', find:"'" + searchTerm + "'", findin:'Name'});
-                console.log(url);
                 var request = that.createRequest({url: url});
                 var projects = $("#projects");
-                console.log(url);
                 ajaxRequest = $.ajax(request).done(function (data) {
                     ajaxRequest = undefined;
                     var projects = $('#projects').empty();
@@ -146,20 +148,13 @@ define([
                     projects.listview('refresh');
                     $.mobile.hidePageLoadingMsg();
                 }).fail(that._ajaxFail);
-            });                
+            });
         };
 
-        VersionOneAssetEditor.prototype.loadProjects = function(projectName) {
-            projects.empty();
-            projects.listview();
-            $.ajax(request).done(function(data) {
-                toastr.info("Found " + data.length + " projects");
-                for(var i = 0; i < data.length; i++) {
-                    var item = data[i];
-                    that.projectItemAppend(item);
-                }
-                projects.listview('refresh');
-            }).fail(this._ajaxFail);
+        VersionOneAssetEditor.prototype.configureListPage = function() {
+            var assets = $("#assets");
+            assets.empty();
+            assets.listview();
         };
 
         VersionOneAssetEditor.prototype._ajaxFail = function(ex) {
@@ -167,10 +162,11 @@ define([
             console.log(ex);
         };
 
-        VersionOneAssetEditor.prototype.loadAssets = function (assetName, selectFields) {
-            var url = this.getAssetUrl(assetName) + '&' + $.param({
-                'sel': selectFields.join(','),
-                'page': '50,0' // TODO: temporary...
+        VersionOneAssetEditor.prototype.loadRequests = function (projectIdref) {
+            var url = this.getAssetUrl(this.assetName) + '&' + $.param({
+                'where' : "Scope='" + projectIdref + "'",
+                'sel': 'Name,RequestedBy',
+                'page': '75,0' // TODO: temporary... until real paging support
                 ,'sort': '-ChangeDate'
             });
             var request = this.createRequest({url: url});
@@ -178,13 +174,14 @@ define([
             var assets = $("#assets");
             assets.empty();
             $.ajax(request).done(function(data) {
-                toastr.info("Found " + data.length + " requests");    
+                info("Found " + data.length + " requests");    
                 for(var i = 0; i < data.length; i++) {
                     var item = data[i];
                     that.listAppend(item);
-                }
+                }                
                 assets.listview('refresh');
-            }).fail(this._ajaxFail);    
+            }).fail(this._ajaxFail);  
+            this.changePage("#list");
         };
 
         VersionOneAssetEditor.prototype.listAppend = function(item) {
@@ -216,11 +213,15 @@ define([
             var that = this;
             templ.html($('#projectItemTemplate').render(item));
             templ.children('.projectItem').bind('click', function() {
-                var href = $(this).attr('data-href');
-                that.debug("Href: " + href);
-                that.projectSelect($(this).attr('data-href'));
+                var idref = $(this).attr('data-idref');
+                that.debug("Idref: " + idref);
+                that.loadRequests(idref);
             });
             return templ;
+        };
+
+        VersionOneAssetEditor.prototype.projectSelect = function(href) {
+            projectSelect
         };
 
         VersionOneAssetEditor.prototype.listItemPrepend = function(item) {
@@ -260,7 +261,8 @@ define([
             assets.listview('refresh');
         };
 
-        VersionOneAssetEditor.prototype.newAsset = function() {
+        VersionOneAssetEditor.prototype.newAsset = function(callback) {
+            var that = this;
             var asset = new this.assetModel();
             this.asset = asset;
 
@@ -268,16 +270,17 @@ define([
                 model: asset
             }).render();
 
-            console.log (form);
-
             this.form = form;            
             $("#fields").html(form.el);
 
-            this.configSelectLists();
-
-            this.toggleNewOrEdit("new");
-            this.changePage("#detail");
-            this.resetForm();
+            if (!callback) {
+                callback = function() {
+                    that.toggleNewOrEdit("new");
+                    that.changePage("#detail");
+                    that.resetForm();
+                }
+            }
+            this.configSelectLists(callback);
 
             // Hardcoded:
             if (this.requestorName != "") {
@@ -292,7 +295,10 @@ define([
             // Setup the data within select lists
             // TODO: this should not happen on EVERY new click.
             var that = this;
-            $("select[data-class='sel']").each(function() {
+            var selectLists = $("select[data-class='sel']");
+            var count = selectLists.length;
+            log(count);
+            selectLists.each(function() {
                 var item = $(this);
                 var fieldName = item.attr("name");
                 var field = that.findField(fieldName);
@@ -305,7 +311,7 @@ define([
                 var url = that.service + assetName + '?' + $.param(that.queryOpts) + '&'
                     + $.param({sel: fields.join(',')});
                 var request = that.createRequest({url:url, type:'GET'});
-                $.ajax(request).done(function (data) {
+                $.ajax(request).done(function (data) {                  
                   if (data.length > 0) {
                       item.selectmenu();
                       for(var i = 0; i < data.length; i++) {
@@ -317,35 +323,43 @@ define([
                   else {
                       that.debug('No results for query: ' + url);
                   }
-                  if (callback) {
-                    callback();
-                  }
-                }).fail(this._ajaxFail);
+                    count--;
+                    if (count == 0 && callback) callback();
+                }).fail(function(ex) { 
+                    count--;
+                    if (count == 0 && callback) callback();
+                    that._ajaxFail(ex)
+                });
             });
         };
 
         VersionOneAssetEditor.prototype.editAsset = function(href) {
+            log('edit: ' + href);
             var url = this.host + href + '?' + $.param(this.queryOpts);
             var request = this.createRequest({url:url});
             var that = this;
-            this.configSelectLists(function() {
+            var populateForm = function() {
                 $.ajax(request).done(function(data) {
-                    that.newAsset();
+                    log('done: ' + href);
                     var modelData = that.form.getValue();
+                    var links = data._links;
+                    log(links);
                     for (var key in modelData) {
                         var value = data[key];
                         if (value) {
+                            log('setting: ' + key);
                             that.form.setValue(key, data[key]);
                         }
                         else {
                             // TODO: need better way to do this
-                            var links = data._links;
+                            log("Key: " + key);
+                            log(links[key]);                 
                             var val = links[key][0];
                             if (val != null) {
                                 var id = val.idref;
-                                var href = val.href;
+                                var assetHref = val.href;
                                 // Again: hard-coded select list here:
-                                var relUrl = that.host + href + '?' + $.param(that.queryOpts) + "&sel=Name";
+                                var relUrl = that.host + assetHref + '?' + $.param(that.queryOpts) + "&sel=Name";
                                 var relRequest = that.createRequest({url:relUrl});
                                 $.ajax(relRequest).done(function(data) {
                                     if (data != null && data != 'undefined' && data != '') {                        
@@ -367,7 +381,8 @@ define([
                     that.toggleNewOrEdit('edit', href);
                     that.changePage("#detail");
                 }).fail(this._ajaxFail);
-            });
+            };
+            that.newAsset(populateForm); // TODO: hacky.
         };
 
         VersionOneAssetEditor.prototype.toggleNewOrEdit = function(type, href) {
@@ -427,7 +442,7 @@ define([
         };
 
         VersionOneAssetEditor.prototype.on("assetCreated", function(that, asset) {
-            toastr.success("New item created");        
+            success("New item created");        
             that._normalizeIdWithoutMoment(asset);
             that.listItemPrepend(asset);
         });
@@ -439,7 +454,7 @@ define([
         };
 
         VersionOneAssetEditor.prototype.on("assetUpdated", function(that, asset) { 
-            toastr.success("Save successful");
+            success("Save successful");
             that._normalizeIdWithoutMoment(asset);
             that.listItemReplace(asset);
         });
@@ -449,7 +464,7 @@ define([
             var validations = this.form.validate();
 
             if (validations != null) {
-                toastr.error("Please review the form for errors", null,
+                error("Please review the form for errors", null,
                             { positionClass: 'toast-bottom-right' });
                 return;
             }
@@ -483,8 +498,7 @@ define([
 
             var dto = this.form.getValue();
             
-            console.log(dto);
-
+            // TODO: hard-coded for test
             window.DTO = dto;            
 
             dto._links = {
@@ -537,7 +551,6 @@ define([
             sel.selectmenu();
             sel.val("RequestPriority:167");
             sel.selectmenu('refresh');
-            //this.configureValidation();
         };
 
         VersionOneAssetEditor.prototype.enumFields = function(callback) {

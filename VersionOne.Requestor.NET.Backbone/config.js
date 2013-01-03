@@ -2,13 +2,12 @@
 (function() {
 
   define(['./fields'], function(fields) {
-    var assetName, configureFields, host, options, projectName, service, serviceGateway, showDebugMessages, versionOneAuth;
-    showDebugMessages = true;
+    var assetName, configureFields, host, options, service, serviceGateway, showDebugMessages, versionOneAuth;
+    showDebugMessages = false;
     host = "https://www12.v1host.com";
     service = "https://www12.v1host.com/ProofpointAPITest/rest-1.v1/Data/";
     versionOneAuth = "bstussy:Proofpoint!";
     serviceGateway = false;
-    projectName = "'System (All Projects)'";
     assetName = "Request";
     configureFields = function(obj) {
       var field, fieldName, _results;
@@ -46,10 +45,8 @@
       return _results;
     };
     configureFields(fields);
-    console.log(fields);
     options = {
       showDebug: showDebugMessages,
-      projectName: projectName,
       host: host,
       service: service,
       serviceGateway: serviceGateway,
