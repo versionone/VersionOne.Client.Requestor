@@ -114,10 +114,56 @@ define([
                 that.loadAssets(that.assetName, selectFields);
             });
 
+            this.configureProjectSearch();
+
             this.toggleNewOrEdit('new');
         };
 
+        VersionOneAssetEditor.prototype.configureProjectSearch = function() {
+            var searchTerm, ajaxRequest;
+            var that = this;
+            $('#projectSearch').live('keyup change', function () {
+                if (searchTerm == $(this).val()) return;
+                searchTerm = $(this).val();
+                if (searchTerm.length < 4) return;
+                $.mobile.showPageLoadingMsg();
+                if (ajaxRequest) {
+                    ajaxRequest.abort();
+                }
+                var assetName = 'Scope';
+                var url = that.getAssetUrl(assetName)
+                    + '&' + $.param({sel: 'Name', page:'100,0', find:"'" + searchTerm + "'", findin:'Name'});
+                console.log(url);
+                var request = that.createRequest({url: url});
+                var projects = $("#projects");
+                console.log(url);
+                ajaxRequest = $.ajax(request).done(function (data) {
+                    ajaxRequest = undefined;
+                    var projects = $('#projects').empty();
+                    $.each(data, function (i, val) {
+                        that.projectItemAppend(val);
+                    });
+                    projects.listview('refresh');
+                    $.mobile.hidePageLoadingMsg();
+                }).fail(that._ajaxFail);
+            });                
+        };
+
+        VersionOneAssetEditor.prototype.loadProjects = function(projectName) {
+            projects.empty();
+            projects.listview();
+            $.ajax(request).done(function(data) {
+                toastr.info("Found " + data.length + " projects");
+                for(var i = 0; i < data.length; i++) {
+                    var item = data[i];
+                    that.projectItemAppend(item);
+                }
+                projects.listview('refresh');
+            }).fail(this._ajaxFail);
+        };
+
         VersionOneAssetEditor.prototype._ajaxFail = function(ex) {
+            console.log("Error: ");
             console.log(ex);
         };
 
@@ -155,6 +201,24 @@ define([
                 var href = $(this).attr('data-href');
                 that.debug("Href: " + href);
                 that.editAsset($(this).attr('data-href'));
+            });
+            return templ;
+        };
+
+        VersionOneAssetEditor.prototype.projectItemAppend = function(item) {
+            var projects = $("#projects");
+            var templ = this.projectItemFormat(item);
+            projects.append(templ);
+        };
+
+        VersionOneAssetEditor.prototype.projectItemFormat = function(item) {
+            var templ = $('<li></li>');
+            var that = this;
+            templ.html($('#projectItemTemplate').render(item));
+            templ.children('.projectItem').bind('click', function() {
+                var href = $(this).attr('data-href');
+                that.debug("Href: " + href);
+                that.projectSelect($(this).attr('data-href'));
             });
             return templ;
         };

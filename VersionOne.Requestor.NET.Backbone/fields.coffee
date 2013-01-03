@@ -1,5 +1,4 @@
 define ->
-  return  {
     RequestedBy:
       title: 'Requested By'
       autofocus: true     
@@ -38,4 +37,3 @@ define ->
       title: 'Priority'
       type: 'Select'
       assetName: 'RequestPriority'
-  }

@@ -10,6 +10,32 @@
 </head>
 <body>
 
+<div data-role="page" id="projectsPage" data-theme="b">
+    <div data-role="header" data-position="fixed" style="text-align:center;padding-top:5px" data-theme="b">
+        <div>&nbsp;
+            <img style="background:white;width:120px;padding:2px;margin-left:6px;" src="images/logo.png" border="0" align="left" /><span class="ui-block-b" style="font-size:120%;">&nbsp;&nbsp;Requestor App</span>
+        </div>
+        <div>&nbsp;
+            <a href="#" data-role="button" data-icon="refresh" id="refreshList">Refresh List</a>
+        </div>
+    </div>
+    
+    <div data-role="content" class="sideGradient" data-theme="b">
+        <!--
+        <ul data-role="listview" data-filter="true" data-inset="true" id="projects" data-theme="b" data-filter-placeholder="Search for a project...">        
+        </ul>
+        -->
+
+        <div>
+            <input type="search" name="projectSearch" id="projectSearch" placeholder="Search for a project..." />
+        </div>
+        <br />
+        <div>
+            <ul id="projects" data-role="listview" data-theme="b"></ul>
+        </div>
+    </div>
+</div>
+
 <div data-role="page" id="list" data-theme="b">
     <div data-role="header" data-position="fixed" style="text-align:center;padding-top:5px" data-theme="b">
         <div>&nbsp;
@@ -26,7 +52,7 @@
     <div data-role="content" class="sideGradient" data-theme="b">
         <ul data-role="listview" data-filter="true" data-inset="true" id="assets" data-theme="b">
         </ul>
-    </div>    
+    </div>
 </div>
 
 <div data-role="page" id="detail" data-theme="b"> 
@@ -71,6 +97,11 @@
     <a class='assetItem' data-assetid='{{:_links.self.id}}' data-href='{{:_links.self.href}}' href='#'>
         <span>{{:Name}}</span>
         {{if RequestedBy}}<span style="font-size:80%">by {{:RequestedBy}}</span>{{/if}}
+    </a>
+</script>
+
+<script id="projectItemTemplate" type="text/x-jquery-tmpl">
+    <a class='assetItem' data-assetid='{{:_links.self.id}}' data-href='{{:_links.self.href}}' href='#'><span>{{:Name}}</span>
     </a>
 </script>
 
