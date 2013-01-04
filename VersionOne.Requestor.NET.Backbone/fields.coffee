@@ -3,8 +3,8 @@ define ->
     default :
       RequestedBy:
         title: 'Requested By'
-        autofocus: true   
-        
+        autofocus: true
+
       Name:
         title: 'Request Title'
 
@@ -20,7 +20,7 @@ define ->
     'Scope:173519':
       RequestedBy:
         title: 'Requested By'
-        autofocus: true     
+        autofocus: true
         
       Name:
         title: 'Request Title'

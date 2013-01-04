@@ -402,6 +402,7 @@ define([
                     }
                     that.toggleNewOrEdit('edit', href);
                     that.changePage("#detail");
+                    $('#detail').trigger('create');
                 }).fail(this._ajaxFail);
             };
             log('new...');
