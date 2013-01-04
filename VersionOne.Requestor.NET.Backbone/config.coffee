@@ -1,5 +1,5 @@
 define ['./fields'], (fields) ->
-  showDebugMessages = false
+  showDebugMessages = true
   
   #var host = 'http://platform-dev';
   #var service = 'http://platform-dev/CustomerTest/rest-1.v1/Data/';

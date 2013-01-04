@@ -11,6 +11,7 @@ define ->
       Description:
         title: 'Request Description (Project & Why needed)'
         type: 'TextArea'
+        optional: true
 
       Priority:
         title: 'Priority'
@@ -32,6 +33,7 @@ define ->
       Description:
         title: 'Request Description (Project & Why needed)'
         type: 'TextArea'
+        optional: true
 
       Custom_ProductService:
         title: 'Product/Service'

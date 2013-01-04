@@ -36,9 +36,19 @@ define([
             toastr.info(message);
         }
 
+        var debugEnabled = false;
+
+        function debug(message) {
+            if (debugEnabled) {
+                console.log(message);
+            }
+        }
+
         function VersionOneAssetEditor (options) {
           var contentType = "haljson";
           var that = this;
+
+          debugEnabled = options.showDebug;
 
           function continueSettingOptions() {
             options.whereParamsForProjectScope = {
@@ -167,6 +177,7 @@ define([
         };
 
         VersionOneAssetEditor.prototype.loadRequests = function (projectIdref) {
+            this.projectIdref = projectIdref;
             this.refreshFieldSet(projectIdref);
             var url = this.getAssetUrl(this.assetName) + '&' + $.param({
                 'where' : "Scope='" + projectIdref + "'",
@@ -495,7 +506,8 @@ define([
 
             var dto = this.createDto();
 
-            this.clearErrors();
+            debug('Dto:');
+            debug(dto);
 
             var request = this.createRequest({
                 url: url,
@@ -515,11 +527,7 @@ define([
             }).fail(this._ajaxFail);
         };
 
-        VersionOneAssetEditor.prototype.createDto = function (addProjectIdRef) {
-            if (addProjectIdRef !== false) {
-                addProjectIdRef = true;
-            }
-
+        VersionOneAssetEditor.prototype.createDto = function () {
             var dto = this.form.getValue();
             
             // TODO: hard-coded for test
@@ -527,7 +535,7 @@ define([
 
             dto._links = {
                 Scope: {
-                    idref: this.projectScopeId
+                    idref: this.projectIdref
                 }
             };
 
@@ -553,10 +561,6 @@ define([
         VersionOneAssetEditor.prototype.changePage = function(page) {
             this.debug(page);
             $.mobile.changePage(page);
-        };
-
-        VersionOneAssetEditor.prototype.clearErrors = function() {
-            $('.error').text('');
         };
 
         VersionOneAssetEditor.prototype.resetForm = function() {

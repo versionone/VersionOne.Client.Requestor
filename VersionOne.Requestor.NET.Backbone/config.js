@@ -3,7 +3,7 @@
 
   define(['./fields'], function(fields) {
     var assetName, configureFields, host, options, service, serviceGateway, showDebugMessages, versionOneAuth;
-    showDebugMessages = false;
+    showDebugMessages = true;
     host = "https://www12.v1host.com";
     service = "https://www12.v1host.com/ProofpointAPITest/rest-1.v1/Data/";
     versionOneAuth = "bstussy:Proofpoint!";
