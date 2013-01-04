@@ -14,7 +14,7 @@ define([
                 $(this).keyup(function(e){
                     if(e.keyCode == 13)
                     {
-                      $(this).trigger("enterPress");
+                      $(this).trigger('enterPress');
                     }
                 })
             });
@@ -45,7 +45,7 @@ define([
         }
 
         function VersionOneAssetEditor (options) {
-          var contentType = "haljson";
+          var contentType = 'haljson';
           var that = this;
 
           debugEnabled = options.showDebug;
@@ -76,7 +76,7 @@ define([
               continueSettingOptions(); 
             })
             .fail(function(ex){
-              error("Failed to get setup data. The URL used was: " + options.serviceGateway);
+              error('Failed to get setup data. The URL used was: ' + options.serviceGateway);
               log(ex);
             });
           }
@@ -96,7 +96,7 @@ define([
         };
 
         VersionOneAssetEditor.prototype.initialize = function () {
-            this.requestorName = "";
+            this.requestorName = '';
             this.refreshFieldSet('default');
 
             this.debug(this.formFields);
@@ -109,7 +109,7 @@ define([
             var selectFields = [];
             that.enumFields(function(key, field) {
                 // TODO: hard-coded
-                if (key != "Description" && field.sel !== false) {
+                if (key != 'Description' && field.sel !== false) {
                   selectFields.push(key);
                 }
             });
@@ -126,7 +126,7 @@ define([
 
         VersionOneAssetEditor.prototype.refreshFormModel = function() {
             log(this.formFields[this.fieldSetName]);
-            this.assetModel = Backbone.Model.extend({
+            this.assetModel = Backbone.Model.extend({                
                 schema: this.formFields[this.fieldSetName]
             });
         };
@@ -147,7 +147,7 @@ define([
                 var url = that.getAssetUrl(assetName)
                     + '&' + $.param({sel: 'Name', page:'100,0', find:"'" + searchTerm + "'", findin:'Name'});
                 var request = that.createRequest({url: url});
-                var projects = $("#projects");
+                var projects = $('#projects');
                 ajaxRequest = $.ajax(request).done(function (data) {
                     ajaxRequest = undefined;
                     var projects = $('#projects').empty();
@@ -161,13 +161,13 @@ define([
         };
 
         VersionOneAssetEditor.prototype.configureListPage = function() {
-            var assets = $("#assets");
+            var assets = $('#assets');
             assets.empty();
             assets.listview();
         };
 
         VersionOneAssetEditor.prototype._ajaxFail = function(ex) {
-            console.log("Error: ");
+            console.log('Error: ');
             console.log(ex);
         };
 
@@ -182,17 +182,17 @@ define([
             });
             var request = this.createRequest({url: url});
             var that = this;
-            var assets = $("#assets");
+            var assets = $('#assets');
             assets.empty();
             $.ajax(request).done(function(data) {
-                info("Found " + data.length + " requests");    
+                info('Found ' + data.length + ' requests');    
                 for(var i = 0; i < data.length; i++) {
                     var item = data[i];
                     that.listAppend(item);
                 }                
                 assets.listview('refresh');
             }).fail(this._ajaxFail);  
-            this.changePage("#list");
+            this.changePage('#list');
         };
 
         VersionOneAssetEditor.prototype.refreshFieldSet = function(fieldSetName) {
@@ -221,8 +221,7 @@ define([
         };
 
         VersionOneAssetEditor.prototype.listAppend = function(item) {
-            var assets = $("#assets");
-            this._normalizeIdWithoutMoment(item);
+            var assets = $('#assets');
             var templ = this.listItemFormat(item);
             assets.append(templ);
         };
@@ -233,14 +232,14 @@ define([
             templ.html($('#assetItemTemplate').render(item));
             templ.children('.assetItem').bind('click', function() {
                 var href = $(this).attr('data-href');
-                that.debug("Href: " + href);
+                that.debug('Href: ' + href);
                 that.editAsset($(this).attr('data-href'));
             });
             return templ;
         };
 
         VersionOneAssetEditor.prototype.projectItemAppend = function(item) {
-            var projects = $("#projects");
+            var projects = $('#projects');
             var templ = this.projectItemFormat(item);
             projects.append(templ);
         };
@@ -251,7 +250,7 @@ define([
             templ.html($('#projectItemTemplate').render(item));
             templ.children('.projectItem').bind('click', function() {
                 var idref = $(this).attr('data-idref');
-                that.debug("Idref: " + idref);
+                that.debug('Idref: ' + idref);
                 that.loadRequests(idref);
             });
             return templ;
@@ -263,37 +262,50 @@ define([
 
         VersionOneAssetEditor.prototype.listItemPrepend = function(item) {
             var templ = this.listItemFormat(item);
-            var assets = $("#assets");
+            var assets = $('#assets');
             assets.prepend(templ);
             assets.listview('refresh');
         };
 
         VersionOneAssetEditor.prototype._normalizeIdWithoutMoment = function(item) {
             var id = item._links.self.id;
-            this.debug("The id from server with moment: " + id);
-            id = id.split(":");
+            this.debug('The id from server with moment: ' + id);
+            id = id.split(':');
             if (id.length == 3) {
                 id.pop();
             }
-            id = id.join(":");
+            id = id.join(':');
             item._links.self.id = id;
-            this.debug("Normalized id: " + id);
+            this.debug('Normalized id: ' + id);
         };
+
+        VersionOneAssetEditor.prototype._normalizeHrefWithoutMoment = function(item) {
+            var href = item._links.self.href;
+            this.debug('The href from server with moment: ' + href);
+            if (href.match(/\D\/\d*?\/\d*$/)) {
+                href = href.split('/');
+                this.debug('Items count: ' + href.length);
+                href.pop();
+                href = href.join('/');
+                item._links.self.href = href;            
+            }
+            this.debug('Normalized href: ' + href);            
+        };        
 
         VersionOneAssetEditor.prototype.listItemReplace = function(item) {
             // Thanks to Moments:
             var id = item._links.self.id;    
 
             var templ = this.listItemFormat(item);
-            var assets = $("#assets");    
+            var assets = $('#assets');    
 
             var that = this;
             assets.find("a[data-assetid='" + id + "']").each(function() {
-                that.debug("Found a list item:");
+                that.debug('Found a list item:');
                 that.debug(this);
                 var listItem = $(this);        
                 //var newItem = that.listItemFormat(item);
-                listItem.closest("li").replaceWith(templ);
+                listItem.closest('li').replaceWith(templ);
             });
             assets.listview('refresh');
         };
@@ -307,20 +319,27 @@ define([
                 model: asset
             }).render();
 
-            this.form = form;            
-            $("#fields").html(form.el);
+            this.form = form;
+
+            $('#fields').html(form.el);
 
             if (!callback) {
                 callback = function() {
-                    that.toggleNewOrEdit("new");
-                    that.changePage("#detail");
+                    that.toggleNewOrEdit('new');
+                    that.changePage('#detail');
                     that.resetForm();
                 }
             }
-            this.configSelectLists(callback);
+
+            this.configSelectLists().done(function() {
+                that.debug('Config select lists is done...');
+                callback();
+            });
+
+            $('#detail').trigger('create');
 
             // Hardcoded:
-            if (this.requestorName != "") {
+            if (this.requestorName != '') {
                 $("[name='RequestedBy']").val(this.requestorName);
                 $("[name='Name']").focus();
             } else {
@@ -328,44 +347,63 @@ define([
             }
         };
 
-        VersionOneAssetEditor.prototype.configSelectLists = function(callback) {
+        VersionOneAssetEditor.prototype.configSelectLists = function() {
             // Setup the data within select lists
             // TODO: this should not happen on EVERY new click.
             var that = this;
+            var promise = new $.Deferred();
+            var ajaxRequests = [];
             var selectLists = $("select[data-class='sel']");
-            var count = selectLists.length;
+            
             selectLists.each(function() {
                 var item = $(this);
-                var fieldName = item.attr("name");
+                var fieldName = item.attr('name');
+                that.debug('Starting select list process for: ' + fieldName);
                 var field = that.findField(fieldName);
                 var assetName = field.editorAttrs['data-assetName'];
                 var fields = field.formFields;
                 if (fields == null || fields.length == 0) {
                     fields = ['Name'];
                 }
-
                 var url = that.service + assetName + '?' + $.param(that.queryOpts) + '&'
                     + $.param({sel: fields.join(',')});
                 var request = that.createRequest({url:url, type:'GET'});
-                $.ajax(request).done(function (data) {                  
+                var ajaxRequest = $.ajax(request).done(function (data) {                  
                   if (data.length > 0) {
                       item.selectmenu();
-                      for(var i = 0; i < data.length; i++) {
-                          var option = data[i];
-                          item.append("<option value='" + option._links.self.id + "'>" + option.Name + "</option>");
-                      }
+                      $.each(data, function(i, option) {                       
+                          item.append("<option value='" + option._links.self.id + "'>" + option.Name + '</option>');
+                      });
                       item.selectmenu('refresh');
                   }
                   else {
                       that.debug('No results for query: ' + url);
                   }
-                    count--;
-                    if (count == 0 && callback) callback();
-                }).fail(function(ex) { 
-                    count--;
-                    if (count == 0 && callback) callback();
-                    that._ajaxFail(ex)
-                });
+                }).fail(that._ajaxFail);
+                that.debug('Ending select list process for: ' + fieldName);
+                ajaxRequests.push(ajaxRequest);
+            });    
+            
+            if (this.resolveIfEmpty(promise, ajaxRequests)) {
+                return promise;
+            }
+
+            this.resolveWhenAllDone(promise, ajaxRequests);
+
+            return promise;            
+        };
+
+        VersionOneAssetEditor.prototype.resolveIfEmpty = function(promise, ajaxRequests) {
+            if (ajaxRequests.length < 1) {
+                promise.resolve();
+                return true;
+            }
+            return false;
+        };
+
+        VersionOneAssetEditor.prototype.resolveWhenAllDone = function(promise, ajaxRequests) {
+            $.when.apply($, ajaxRequests).then(function() {
+                promise.resolve();
             });
         };
 
@@ -373,25 +411,42 @@ define([
             log('edit: ' + href);
             var url = this.host + href + '?' + $.param(this.queryOpts);
             var fieldsClause = this.getFormFieldsForSelectQuery();
-            url += "&" + fieldsClause;
+            url += '&' + fieldsClause;
             var request = this.createRequest({url:url});
+            this.debug('Fetching for edit: ' + url);
             var that = this;
             var populateForm = function() {
                 $.ajax(request).done(function(data) {
-                    log('done: ' + href);
+                    log('Fetch for edit done: ' + href);
+                    log('Fetched object data:');
+                    log(data);
                     var modelData = that.form.getValue();
                     var links = data._links;
                     log(links);
                     for (var key in modelData) {
+                        that.debug('Key: ' + key);
                         var value = data[key];
                         if (value) {
+                            that.debug(value);                            
                             // TODO: hack:
                             if (key == 'Custom_RequestedETA') {
                                 value = new Date(Date.parse(value));
+                                value = new Date(2012, 11, 28)
+                                that.debug('Converted to date: ' + value);
                             }
-                            log('setting: ' + key);
-                            if (data[key] !== undefined)
+                            that.debug('Data[key]:');
+                            that.debug(data[key]);
+                            if (data[key] !== undefined) {
+                                that.debug('setting: ' + key);
+                                that.debug('Old Form value: ');
+                                that.debug(that.form.getValue(key));
                                 that.form.setValue(key, value);
+                                that.debug('New Form value: ');
+                                that.debug(that.form.getValue(key));
+                            }
+                            else {
+                                that.debug('Setting Key: ' + key + ' is undefined');
+                            }
                         }
                         else {
                             // TODO: need better way to do this
@@ -404,7 +459,7 @@ define([
                                 var id = val.idref;
                                 var assetHref = val.href;
                                 // Again: hard-coded select list here:
-                                var relUrl = that.host + assetHref + '?' + $.param(that.queryOpts) + "&sel=Name";
+                                var relUrl = that.host + assetHref + '?' + $.param(that.queryOpts) + '&sel=Name';
                                 var relRequest = that.createRequest({url:relUrl});
                                 // Must do this to ensure that the linkId is properly in the closure,
                                 // not the most-recent value from above...
@@ -416,7 +471,7 @@ define([
                                                 var select = $(els[0]);
                                                 select.selectmenu();
                                                 that._normalizeIdWithoutMoment(data);
-                                                that.debug(relKey + ": " + linkId);
+                                                that.debug(relKey + ': ' + linkId);
                                                 select.val(linkId);
                                                 log('new val');
                                                 log(select.val());
@@ -430,11 +485,10 @@ define([
                         }
                     }
                     that.toggleNewOrEdit('edit', href);
-                    that.changePage("#detail");
-                    $('#detail').trigger('create');
+                    that.changePage('#detail');
+                    $('#detail').trigger('create');                    
                 }).fail(this._ajaxFail);
             };
-            log('new...');
             that.newAsset(populateForm); // TODO: hacky.
         };
 
@@ -456,14 +510,14 @@ define([
                 saveAndNew.bind('click', function (evt) {
                     evt.preventDefault();
                     that.createAsset(that.assetName, function() {
-                        that.debug("About to call newAsset");
+                        that.debug('About to call newAsset');
                         that.newAsset();
                         // Hardcoded:
-                        $("#Name").focus();
+                        $('#Name').focus();
                     });
                 });
             }
-            else if (type == "edit") 
+            else if (type == 'edit') 
             {
                 save.unbind('click');        
                 save.bind('click', function (evt) {
@@ -474,7 +528,7 @@ define([
                 saveAndNew.bind('click', function (evt) {
                     evt.preventDefault();
                     that.updateAsset(href, function() {
-                        that.debug("edit:saveAndNew: about to call newAsset");
+                        that.debug('edit:saveAndNew: about to call newAsset');
                         that.newAsset();
                     });
                 });        
@@ -490,25 +544,27 @@ define([
 
         VersionOneAssetEditor.prototype.createAsset = function(assetName, callback) {
             var url = this.getAssetUrl(assetName);
-            this.requestorName = $("#RequestedBy").val();
-            this.saveAsset(url, "assetCreated", callback);
+            this.requestorName = $('#RequestedBy').val();
+            this.saveAsset(url, 'assetCreated', callback);
         };
 
-        VersionOneAssetEditor.prototype.on("assetCreated", function(that, asset) {
-            success("New item created");        
+        VersionOneAssetEditor.prototype.on('assetCreated', function(that, asset) {
+            success('New item created');        
             that._normalizeIdWithoutMoment(asset);
+            that._normalizeHrefWithoutMoment(asset);            
             that.listItemPrepend(asset);
         });
 
         VersionOneAssetEditor.prototype.updateAsset = function(href, callback) {      
             var url = this.host + href + '?' + $.param(this.queryOpts);
             this.debug(url);
-            this.saveAsset(url, "assetUpdated", callback);
+            this.saveAsset(url, 'assetUpdated', callback);
         };
 
-        VersionOneAssetEditor.prototype.on("assetUpdated", function(that, asset) { 
-            success("Save successful");
+        VersionOneAssetEditor.prototype.on('assetUpdated', function(that, asset) { 
+            success('Save successful');
             that._normalizeIdWithoutMoment(asset);
+            that._normalizeHrefWithoutMoment(asset);
             that.listItemReplace(asset);
         });
 
@@ -517,7 +573,7 @@ define([
             var validations = this.form.validate();
 
             if (validations != null) {
-                error("Please review the form for errors", null,
+                error('Please review the form for errors', null,
                             { positionClass: 'toast-bottom-right' });
                 return;
             }
@@ -535,13 +591,13 @@ define([
             });
             var that = this;
             $.ajax(request).done(function(data) {
-                that.debug("Ajax done: ");
+                that.debug('Ajax done: ');
                 that.debug(data);
+                that.trigger(eventType, that, data);                
                 if (callback) {
-                    that.debug("About to call callback");
+                    that.debug('About to call callback');
                     callback(data);
                 }
-                that.trigger(eventType, that, data);
             }).fail(this._ajaxFail);
         };
 
@@ -586,8 +642,8 @@ define([
 
             this.enumFields(function(key, field) {
                 $("[name='" + key + "']").each(function() {
-                    if (field.type != "select") {
-                        $(this).val("");
+                    if (field.type != 'select') {
+                        $(this).val('');
                         $(this).textinput();
                     }
                 });
@@ -595,7 +651,7 @@ define([
             // TODO: this is hard-coded
             var sel = $("[name='Priority']");
             sel.selectmenu();
-            sel.val("RequestPriority:167");
+            sel.val('RequestPriority:167');
             sel.selectmenu('refresh');
         };
 
