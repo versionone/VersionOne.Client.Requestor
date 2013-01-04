@@ -116,11 +116,6 @@ define([
 
             that.selectFields = selectFields;
 
-            var refreshList = $('#refreshList');
-            refreshList.bind('click', function() {
-                //that.loadAssets(that.assetName, selectFields);
-            });
-
             $('#projectsPage').live('pageinit', this.configureProjectSearch);
             $('#list').live('pageinit', this.configureListPage);
 
@@ -227,6 +222,7 @@ define([
 
         VersionOneAssetEditor.prototype.listAppend = function(item) {
             var assets = $("#assets");
+            this._normalizeIdWithoutMoment(item);
             var templ = this.listItemFormat(item);
             assets.append(templ);
         };
@@ -401,30 +397,35 @@ define([
                             // TODO: need better way to do this
                             var rel = links[key];
                             if (rel === undefined)
-                                continue;
-                            log("Key: " + key);
-                            log(links[key]);              
-                            var val = links[key][0];
-                            if (val != null) {
+                                continue;                            
+                            var val = links[key];
+                            if (val != null && val.length > 0) {
+                                val = val[0];
                                 var id = val.idref;
                                 var assetHref = val.href;
                                 // Again: hard-coded select list here:
                                 var relUrl = that.host + assetHref + '?' + $.param(that.queryOpts) + "&sel=Name";
                                 var relRequest = that.createRequest({url:relUrl});
-                                $.ajax(relRequest).done(function(data) {
-                                    if (data != null && data != 'undefined' && data != '') {                        
-                                        var els = $("[name='" + key + "']");
-                                        if (els.length > 0) {
-                                            var select = $(els[0]);
-                                            select.selectmenu();
-                                            that._normalizeIdWithoutMoment(data);
-                                            var id = data._links.self.id;
-                                            that.debug(key + ": " + id);
-                                            select.val(id);
-                                            select.selectmenu('refresh', true);
+                                // Must do this to ensure that the linkId is properly in the closure,
+                                // not the most-recent value from above...
+                                var getData = function(relKey, linkId) {
+                                    $.ajax(relRequest).done(function(data) {
+                                        if (data != null && data != 'undefined' && data != '') {                    
+                                            var els = $("[name='" + relKey + "']");
+                                            if (els.length > 0) {
+                                                var select = $(els[0]);
+                                                select.selectmenu();
+                                                that._normalizeIdWithoutMoment(data);
+                                                that.debug(relKey + ": " + linkId);
+                                                select.val(linkId);
+                                                log('new val');
+                                                log(select.val());
+                                                select.selectmenu('refresh', true);
+                                            }
                                         }
-                                    }
-                                }).fail(this._ajaxFail);
+                                    }).fail(this._ajaxFail);
+                                };
+                                getData(key, id);
                             }
                         }
                     }
