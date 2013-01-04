@@ -214,6 +214,17 @@ define([
             return this.formFields[this.fieldSetName];
         };
 
+        VersionOneAssetEditor.prototype.getFormFieldsForSelectQuery = function() {
+            var fields = [];
+            this.enumFields(function(key) {
+                fields.push(key);
+            });
+            fields = fields.join(',');        
+            var fieldsClause =$.param({sel: fields});
+            log(fieldsClause);
+            return fieldsClause;
+        };
+
         VersionOneAssetEditor.prototype.listAppend = function(item) {
             var assets = $("#assets");
             var templ = this.listItemFormat(item);
@@ -365,6 +376,8 @@ define([
         VersionOneAssetEditor.prototype.editAsset = function(href) {
             log('edit: ' + href);
             var url = this.host + href + '?' + $.param(this.queryOpts);
+            var fieldsClause = this.getFormFieldsForSelectQuery();
+            url += "&" + fieldsClause;
             var request = this.createRequest({url:url});
             var that = this;
             var populateForm = function() {
@@ -376,9 +389,13 @@ define([
                     for (var key in modelData) {
                         var value = data[key];
                         if (value) {
+                            // TODO: hack:
+                            if (key == 'Custom_RequestedETA') {
+                                value = new Date(Date.parse(value));
+                            }
                             log('setting: ' + key);
                             if (data[key] !== undefined)
-                                that.form.setValue(key, data[key]);
+                                that.form.setValue(key, value);
                         }
                         else {
                             // TODO: need better way to do this
