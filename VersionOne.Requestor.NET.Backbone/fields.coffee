@@ -1,39 +1,53 @@
 define ->
-    RequestedBy:
-      title: 'Requested By'
-      autofocus: true     
-      
-    Name:
-      title: 'Request Title'
+  fieldsConfig =
+    default :
+      RequestedBy:
+        title: 'Requested By'
+        autofocus: true   
+        
+      Name:
+        title: 'Request Title'
 
-    Custom_RequestedETA:
-      title: 'Requested by (ETA)'
-      type: 'Date'
+      Description:
+        title: 'Request Description (Project & Why needed)'
+        type: 'TextArea'
 
-    Description:
-      title: 'Request Description (Project & Why needed)'
-      type: 'TextArea'
+      Priority:
+        title: 'Priority'
+        type: 'Select'
+        assetName: 'RequestPriority'
 
-    Custom_ProductService:
-      title: 'Product/Service'
-      type: 'Select'
-      assetName: 'Custom_Product'
+    'Scope:173519':
+      RequestedBy:
+        title: 'Requested By'
+        autofocus: true     
+        
+      Name:
+        title: 'Request Title'
 
-    Custom_Team2:
-      title: 'Team'
-      type: 'Select'
-      assetName: 'Custom_Team'
+      Custom_RequestedETA:
+        title: 'Requested by (ETA)'
+        type: 'Date'
 
-    Custom_HWRequestedlistandcostperunit:
-      title: 'Capacity or HW Requested'
-      type: 'TextArea'
+      Description:
+        title: 'Request Description (Project & Why needed)'
+        type: 'TextArea'
 
-    Custom_RequestImpact:
-      title: 'Request Impact'
-      type: 'Select'
-      assetName: 'Custom_Severity'
+      Custom_ProductService:
+        title: 'Product/Service'
+        type: 'Select'
+        assetName: 'Custom_Product'
 
-    Priority:
-      title: 'Priority'
-      type: 'Select'
-      assetName: 'RequestPriority'
+      Custom_Team2:
+        title: 'Team'
+        type: 'Select'
+        assetName: 'Custom_Team'
+
+      Custom_HWRequestedlistandcostperunit:
+        title: 'Capacity or HW Requested'
+        type: 'TextArea'
+
+      Custom_RequestImpact:
+        title: 'Request Impact'
+        type: 'Select'
+        assetName: 'Custom_Severity'

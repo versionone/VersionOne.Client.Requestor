@@ -10,37 +10,45 @@
     serviceGateway = false;
     assetName = "Request";
     configureFields = function(obj) {
-      var field, fieldName, _results;
+      var field, fieldGroup, fieldGroupName, fieldName, _results;
       _results = [];
-      for (fieldName in obj) {
-        field = obj[fieldName];
-        if (field.type === 'Select') {
-          field.options = [];
-          field.editorAttrs = {
-            'data-class': 'sel',
-            'data-assetName': field.assetName,
-            'data-rel': fieldName
-          };
-        } else {
-          if (field.optional === true) {
+      for (fieldGroupName in obj) {
+        fieldGroup = obj[fieldGroupName];
+        _results.push((function() {
+          var _results1;
+          _results1 = [];
+          for (fieldName in fieldGroup) {
+            field = fieldGroup[fieldName];
+            if (field.type === 'Select') {
+              field.options = [];
+              field.editorAttrs = {
+                'data-class': 'sel',
+                'data-assetName': field.assetName,
+                'data-rel': fieldName
+              };
+            } else {
+              if (field.optional === true) {
 
-          } else {
-            field.validators = ['required'];
+              } else {
+                field.validators = ['required'];
+              }
+            }
+            if (field.type === 'TextArea') {
+              field.editorAttrs = {
+                style: 'height:200px'
+              };
+            }
+            if (field.autofocus === true) {
+              if (!field.editorAttrs) {
+                field.editorAttrs = {};
+              }
+              field.editorAttrs.autofocus = 'autofocus';
+            }
+            delete field.autofocus;
+            _results1.push(delete field.optional);
           }
-        }
-        if (field.type === 'TextArea') {
-          field.editorAttrs = {
-            style: 'height:200px'
-          };
-        }
-        if (field.autofocus === true) {
-          if (!field.editorAttrs) {
-            field.editorAttrs = {};
-          }
-          field.editorAttrs.autofocus = 'autofocus';
-        }
-        delete field.autofocus;
-        _results.push(delete field.optional);
+          return _results1;
+        })());
       }
       return _results;
     };

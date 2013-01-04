@@ -18,27 +18,28 @@ define ['./fields'], (fields) ->
   assetName = "Request"
 
   configureFields = (obj) ->
-    for fieldName, field of obj
-      if field.type == 'Select'
-        field.options = [] # Ajax will fill 'em in
-        field.editorAttrs =
-          'data-class': 'sel'
-          'data-assetName': field.assetName
-          'data-rel': fieldName
-      else
-        if field.optional == true          
+    for fieldGroupName, fieldGroup of obj
+      for fieldName, field of fieldGroup
+        if field.type == 'Select'
+          field.options = [] # Ajax will fill 'em in
+          field.editorAttrs =
+            'data-class': 'sel'
+            'data-assetName': field.assetName
+            'data-rel': fieldName
         else
-          field.validators = ['required']
-      if field.type == 'TextArea'
-        field.editorAttrs =
-          style: 'height:200px'
-      if field.autofocus == true
-        if not field.editorAttrs
-          field.editorAttrs = {}
-        field.editorAttrs.autofocus = 'autofocus'
-      # Delete properties, if they exist, from field
-      delete field.autofocus
-      delete field.optional        
+          if field.optional == true          
+          else
+            field.validators = ['required']
+        if field.type == 'TextArea'
+          field.editorAttrs =
+            style: 'height:200px'
+        if field.autofocus == true
+          if not field.editorAttrs
+            field.editorAttrs = {}
+          field.editorAttrs.autofocus = 'autofocus'
+        # Delete properties, if they exist, from field
+        delete field.autofocus
+        delete field.optional
 
   configureFields fields
 

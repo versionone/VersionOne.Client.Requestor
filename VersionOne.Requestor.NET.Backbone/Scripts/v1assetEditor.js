@@ -87,12 +87,9 @@ define([
 
         VersionOneAssetEditor.prototype.initialize = function () {
             this.requestorName = "";
+            this.refreshFieldSet('default');
 
             this.debug(this.formFields);
-
-            this.assetModel = Backbone.Model.extend({
-                schema: this.formFields
-            });
 
             var that = this;
             $('.new').click(function() {
@@ -120,6 +117,13 @@ define([
             this.configureProjectSearch();
 
             this.toggleNewOrEdit('new');
+        };
+
+        VersionOneAssetEditor.prototype.refreshFormModel = function() {
+            log(this.formFields[this.fieldSetName]);
+            this.assetModel = Backbone.Model.extend({
+                schema: this.formFields[this.fieldSetName]
+            });
         };
 
         VersionOneAssetEditor.prototype.configureProjectSearch = function() {
@@ -163,6 +167,7 @@ define([
         };
 
         VersionOneAssetEditor.prototype.loadRequests = function (projectIdref) {
+            this.refreshFieldSet(projectIdref);
             var url = this.getAssetUrl(this.assetName) + '&' + $.param({
                 'where' : "Scope='" + projectIdref + "'",
                 'sel': 'Name,RequestedBy',
@@ -182,6 +187,20 @@ define([
                 assets.listview('refresh');
             }).fail(this._ajaxFail);  
             this.changePage("#list");
+        };
+
+        VersionOneAssetEditor.prototype.refreshFieldSet = function(fieldSetName) {
+            if (this.formFields[fieldSetName] !== undefined) {
+                this.fieldSetName = fieldSetName;
+            } else {
+                this.fieldSetName = 'default';
+            }
+            this.refreshFormModel();
+            log(this.getFormFields());
+        };
+
+        VersionOneAssetEditor.prototype.getFormFields = function() {
+            return this.formFields[this.fieldSetName];
         };
 
         VersionOneAssetEditor.prototype.listAppend = function(item) {
@@ -297,7 +316,6 @@ define([
             var that = this;
             var selectLists = $("select[data-class='sel']");
             var count = selectLists.length;
-            log(count);
             selectLists.each(function() {
                 var item = $(this);
                 var fieldName = item.attr("name");
@@ -348,12 +366,16 @@ define([
                         var value = data[key];
                         if (value) {
                             log('setting: ' + key);
-                            that.form.setValue(key, data[key]);
+                            if (data[key] !== undefined)
+                                that.form.setValue(key, data[key]);
                         }
                         else {
                             // TODO: need better way to do this
+                            var rel = links[key];
+                            if (rel === undefined)
+                                continue;
                             log("Key: " + key);
-                            log(links[key]);                 
+                            log(links[key]);              
                             var val = links[key][0];
                             if (val != null) {
                                 var id = val.idref;
@@ -382,6 +404,7 @@ define([
                     that.changePage("#detail");
                 }).fail(this._ajaxFail);
             };
+            log('new...');
             that.newAsset(populateForm); // TODO: hacky.
         };
 
@@ -554,10 +577,9 @@ define([
         };
 
         VersionOneAssetEditor.prototype.enumFields = function(callback) {
-            for(var key in this.formFields) {
-                var field = this.formFields[key];
-                callback(key, field);        
-            }
+            $.each(this.getFormFields(), function(key, field) {
+                callback(key, field);     
+            });
         };
 
         VersionOneAssetEditor.prototype.findField = function(fieldName) {
