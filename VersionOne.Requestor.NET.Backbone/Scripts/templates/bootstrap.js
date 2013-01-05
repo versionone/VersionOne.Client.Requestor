@@ -59,10 +59,10 @@ define(['jquery', 'underscore', 'backbone', 'backbone-forms'], function($, _, Ba
     ',
 
     date: '\
-      <div class="bbf-date">\
-        <select data-type="date" class="bbf-date">{{dates}}</select>\
-        <select data-type="month" class="bbf-month">{{months}}</select>\
-        <select data-type="year" class="bbf-year">{{years}}</select>\
+      <div class="bbf-date ui-grid-b">\
+        <div class="ui-block-a"><select data-type="date" class="bbf-date">{{dates}}</select></div>\
+        <div class="ui-block-b"><select data-type="month" class="bbf-month">{{months}}</select></div>\
+        <div class="ui-block-c"><select data-type="year" class="bbf-year">{{years}}</select></div>\
       </div>\
     ',
 
