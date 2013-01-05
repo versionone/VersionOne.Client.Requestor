@@ -299,41 +299,88 @@ define([
         };
 
         VersionOneAssetEditor.prototype.newAsset = function(modelData) {
-            var that = this;
-            var asset;
-            if (modelData) {
-                asset = new this.assetModel(modelData);
-            }
-            else {
-                asset = new this.assetModel();
-            }
-            this.asset = asset;
+                var that = this;
 
-            var form = new Backbone.Form({
-                model: asset
-            }).render();
+                this.configSelectLists().done(function() {
+                var asset;
+                if (modelData) {
+                    asset = new that.assetModel(modelData);
+                }
+                else {
+                    asset = new that.assetModel();
+                }
+                this.asset = asset;
 
-            this.form = form;
+                var form = new Backbone.Form({
+                    model: asset
+                }).render();
 
-            $('#fields').html(form.el);
+                that.form = form;
 
-            this.configSelectLists().done(function() {
+                $('#fields').html(form.el);
+
                 that.toggleNewOrEdit('new');
                 that.changePage('#detail');
                 if (!modelData)
                     that.resetForm();
                 $('#detail').trigger('create');
+
+                // Hardcoded:
+                if (this.requestorName != '') {
+                    $("[name='RequestedBy']").val(this.requestorName);
+                    $("[name='Name']").focus();
+                } else {
+                    $("[name='RequestedBy']").focus();
+                }                
             });
-            // Hardcoded:
-            if (this.requestorName != '') {
-                $("[name='RequestedBy']").val(this.requestorName);
-                $("[name='Name']").focus();
-            } else {
-                $("[name='RequestedBy']").focus();
-            }
         };
 
         VersionOneAssetEditor.prototype.configSelectLists = function() {
+            // Setup the data within select lists
+            // TODO: this should not happen on EVERY new click.
+            var that = this;
+            var promise = new $.Deferred();
+            var ajaxRequests = [];
+            var model = (new that.assetModel()).schema;
+            selectLists = [];
+            $.each(model, function(key, value) {
+                if (value.type == 'Select') {
+                    selectLists.push(value);
+                }
+            });
+
+            $.each(selectLists, function(i, field) {
+                var assetName = field.editorAttrs['data-assetName'];
+                var fields = field.formFields;
+                if (fields == null || fields.length == 0) {
+                    fields = ['Name'];
+                }
+                var url = that.service + assetName + '?' + $.param(that.queryOpts) + '&'
+                    + $.param({sel: fields.join(',')});
+                var request = that.createRequest({url:url, type:'GET'});
+                var ajaxRequest = $.ajax(request).done(function (data) {                  
+                  if (data.length > 0) {
+                      $.each(data, function(i, option) {
+                            field.options.push({val:option._links.self.id, label: option.Name});
+                      });
+                  }
+                  else {
+                      that.debug('No results for query: ' + url);
+                  }
+                }).fail(that._ajaxFail);
+                ajaxRequests.push(ajaxRequest);
+            });    
+            
+            if (this.resolveIfEmpty(promise, ajaxRequests)) {
+                return promise;
+            }
+
+            this.resolveWhenAllDone(promise, ajaxRequests);
+
+            return promise;            
+        };        
+
+        VersionOneAssetEditor.prototype.configSelectListsOld = function() {
             // Setup the data within select lists
             // TODO: this should not happen on EVERY new click.
             var that = this;
