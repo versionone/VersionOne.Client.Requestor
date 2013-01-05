@@ -298,9 +298,15 @@ define([
             assets.listview('refresh');
         };
 
-        VersionOneAssetEditor.prototype.newAsset = function(callback) {
+        VersionOneAssetEditor.prototype.newAsset = function(modelData) {
             var that = this;
-            var asset = new this.assetModel();
+            var asset;
+            if (modelData) {
+                asset = new this.assetModel(modelData);
+            }
+            else {
+                asset = new this.assetModel();
+            }
             this.asset = asset;
 
             var form = new Backbone.Form({
@@ -311,16 +317,18 @@ define([
 
             $('#fields').html(form.el);
 
-            if (!callback) {
+            var callback = null;
+            if (!modelData) {
                 callback = function() {
                     that.toggleNewOrEdit('new');
                     that.changePage('#detail');
                     that.resetForm();
-                }
+                };
             }
 
             this.configSelectLists().done(function() {
-                callback();
+                if (callback)
+                    callback();
             });
 
             $('#detail').trigger('create');
@@ -397,65 +405,47 @@ define([
             var fieldsClause = this.getFormFieldsForSelectQuery();
             url += '&' + fieldsClause;
             var request = this.createRequest({url:url});
-            var that = this;
-            var populateForm = function() {
-                $.ajax(request).done(function(data) {
-                    var modelData = that.form.getValue();
-                    var links = data._links;
-                    for (var key in modelData) {
-                        var value = data[key];
-                        if (value) {
-                            // TODO: hack:
-                            if (key == 'Custom_RequestedETA') {
-                                value = new Date(Date.parse(value));
-                                value = new Date(2012, 11, 28)
-                            }
-                            if (data[key] !== undefined) {
-                                that.form.setValue(key, value);
-                            }
-                            else {
-                                that.debug('Setting Key: ' + key + ' is undefined');
-                            }
+            var that = this;            
+            $.ajax(request).done(function(data) {
+                var modelData = {};
+                var model = new that.assetModel().schema;
+                log("Model:");
+                log(model);
+                var links = data._links;
+                for (var key in model) {
+                    var value = data[key];
+                    if (value) {
+                        // TODO: hack:
+                        if (key == 'Custom_RequestedETA') {
+                            value = new Date(Date.parse(value));
+                            value = new Date(2012, 11, 28)
+                        }
+                        if (data[key] !== undefined) {
+                            modelData[key] = value;
                         }
                         else {
-                            // TODO: need better way to do this
-                            var rel = links[key];
-                            if (rel === undefined)
-                                continue;                            
-                            var val = links[key];
-                            if (val != null && val.length > 0) {
-                                val = val[0];
-                                var id = val.idref;
-                                var assetHref = val.href;
-                                // Again: hard-coded select list here:
-                                var relUrl = that.host + assetHref + '?' + $.param(that.queryOpts) + '&sel=Name';
-                                var relRequest = that.createRequest({url:relUrl});
-                                // Must do this to ensure that the linkId is properly in the closure,
-                                // not the most-recent value from above...
-                                var getData = function(relKey, linkId) {
-                                    $.ajax(relRequest).done(function(data) {
-                                        if (data != null && data != 'undefined' && data != '') {                    
-                                            var els = $("[name='" + relKey + "']");
-                                            if (els.length > 0) {
-                                                var select = $(els[0]);
-                                                select.selectmenu();
-                                                that._normalizeIdWithoutMoment(data);
-                                                select.val(linkId);
-                                                select.selectmenu('refresh', true);
-                                            }
-                                        }
-                                    }).fail(this._ajaxFail);
-                                };
-                                getData(key, id);
-                            }
+                            that.debug('Setting Key: ' + key + ' is undefined');
                         }
                     }
-                    that.toggleNewOrEdit('edit', href);
-                    that.changePage('#detail');
-                    $('#detail').trigger('create');                    
-                }).fail(this._ajaxFail);
-            };
-            that.newAsset(populateForm); // TODO: hacky.
+                    else {
+                        // TODO: need better way to do this
+                        var rel = links[key];
+                        if (rel === undefined)
+                            continue;                            
+                        var val = links[key];
+                        if (val != null && val.length > 0) {
+                            val = val[0];
+                            var id = val.idref;
+                            modelData[key] = id;
+                        }
+                    }
+                }
+                log(modelData);
+                that.newAsset(modelData);
+                that.toggleNewOrEdit('edit', href);
+                that.changePage('#detail');
+                $('#detail').trigger('create');
+            }).fail(this._ajaxFail);
         };
 
         VersionOneAssetEditor.prototype.toggleNewOrEdit = function(type, href) {
