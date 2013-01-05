@@ -317,22 +317,13 @@ define([
 
             $('#fields').html(form.el);
 
-            var callback = null;
-            if (!modelData) {
-                callback = function() {
-                    that.toggleNewOrEdit('new');
-                    that.changePage('#detail');
-                    that.resetForm();
-                };
-            }
-
             this.configSelectLists().done(function() {
-                if (callback)
-                    callback();
+                that.toggleNewOrEdit('new');
+                that.changePage('#detail');
+                if (!modelData)
+                    that.resetForm();
+                $('#detail').trigger('create');
             });
-
-            $('#detail').trigger('create');
-
             // Hardcoded:
             if (this.requestorName != '') {
                 $("[name='RequestedBy']").val(this.requestorName);
@@ -408,7 +399,7 @@ define([
             var that = this;            
             $.ajax(request).done(function(data) {
                 var modelData = {};
-                var model = new that.assetModel().schema;
+                var model = (new that.assetModel()).schema;
                 log("Model:");
                 log(model);
                 var links = data._links;
@@ -418,7 +409,6 @@ define([
                         // TODO: hack:
                         if (key == 'Custom_RequestedETA') {
                             value = new Date(Date.parse(value));
-                            value = new Date(2012, 11, 28)
                         }
                         if (data[key] !== undefined) {
                             modelData[key] = value;
@@ -440,7 +430,6 @@ define([
                         }
                     }
                 }
-                log(modelData);
                 that.newAsset(modelData);
                 that.toggleNewOrEdit('edit', href);
                 that.changePage('#detail');
