@@ -298,7 +298,7 @@ define([
             assets.listview('refresh');
         };
 
-        VersionOneAssetEditor.prototype.newAsset = function(modelData) {
+        VersionOneAssetEditor.prototype.newAsset = function(modelData, href) {
                 var that = this;
 
                 this.configSelectLists().done(function() {
@@ -319,14 +319,18 @@ define([
 
                 $('#fields').html(form.el);
 
-                that.toggleNewOrEdit('new');
+                if (modelData)
+                    that.toggleNewOrEdit('edit', href);
+                else 
+                    that.toggleNewOrEdit('new');
+
                 that.changePage('#detail');
                 if (!modelData)
                     that.resetForm();
                 $('#detail').trigger('create');
 
                 // Hardcoded:
-                if (this.requestorName != '') {
+                if (!modelData && this.requestorName != '') {
                     $("[name='RequestedBy']").val(this.requestorName);
                     $("[name='Name']").focus();
                 } else {
@@ -345,7 +349,8 @@ define([
             selectLists = [];
             $.each(model, function(key, value) {
                 if (value.type == 'Select') {
-                    selectLists.push(value);
+                    if (value.options.length < 1)
+                        selectLists.push(value);
                 }
             });
 
@@ -477,10 +482,7 @@ define([
                         }
                     }
                 }
-                that.newAsset(modelData);
-                that.toggleNewOrEdit('edit', href);
-                that.changePage('#detail');
-                $('#detail').trigger('create');
+                that.newAsset(modelData, href);
             }).fail(this._ajaxFail);
         };
 
