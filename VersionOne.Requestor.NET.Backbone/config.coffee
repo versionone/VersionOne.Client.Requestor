@@ -5,13 +5,10 @@ define ['./fields'], (fields) ->
   #var service = 'http://platform-dev/CustomerTest/rest-1.v1/Data/';
   #var versionOneAuth = 'admin:Admin101#';
   
-  #var host = 'http://localhost';
-  #var service = 'http://localhost/VersionOne.Web/rest-1.v1/Data/';
-  #var versionOneAuth = 'admin:admin';
+  var host = 'http://localhost';
+  var service = 'http://localhost/VersionOne.Web/rest-1.v1/Data/';
+  var versionOneAuth = 'admin:admin';
 
-  host = "https://www12.v1host.com"
-  service = "https://www12.v1host.com/ProofpointAPITest/rest-1.v1/Data/"
-  versionOneAuth = "userName:password"
   serviceGateway = false
   
   #var serviceGateway = 'http://localhost/v1requestor/Setup';
