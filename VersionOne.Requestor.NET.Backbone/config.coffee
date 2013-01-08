@@ -11,7 +11,7 @@ define ['./fields'], (fields) ->
 
   host = "https://www12.v1host.com"
   service = "https://www12.v1host.com/ProofpointAPITest/rest-1.v1/Data/"
-  versionOneAuth = "bstussy:Proofpoint!"
+  versionOneAuth = "userName:password"
   serviceGateway = false
   
   #var serviceGateway = 'http://localhost/v1requestor/Setup';
