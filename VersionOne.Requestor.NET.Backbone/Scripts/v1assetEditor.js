@@ -361,7 +361,7 @@ define([
                     fields = ['Name'];
                 }
                 var url = that.service + assetName + '?' + $.param(that.queryOpts) + '&'
-                    + $.param({sel: fields.join(',')});
+                    + $.param({sel: fields.join(','), sort:'Order'});
                 var request = that.createRequest({url:url, type:'GET'});
                 var ajaxRequest = $.ajax(request).done(function (data) {                  
                   if (data.length > 0) {
