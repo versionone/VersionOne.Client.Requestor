@@ -4,9 +4,9 @@
   define(['./fields'], function(fields) {
     var assetName, configureFields, host, options, service, serviceGateway, showDebugMessages, versionOneAuth;
     showDebugMessages = true;
-    host = "https://www12.v1host.com";
-    service = "https://www12.v1host.com/ProofpointAPITest/rest-1.v1/Data/";
-    versionOneAuth = "bstussy:Proofpoint!";
+    host = "http://localhost;
+    service = "http://localhost/VersionOne.Web/rest-1.v1/Data/";
+    versionOneAuth = "admin:admin";
     serviceGateway = false;
     assetName = "Request";
     configureFields = function(obj) {
