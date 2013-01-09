@@ -5,9 +5,9 @@ define ['./fields'], (fields) ->
   #var service = 'http://platform-dev/CustomerTest/rest-1.v1/Data/';
   #var versionOneAuth = 'admin:Admin101#';
   
-  var host = 'http://localhost';
-  var service = 'http://localhost/VersionOne.Web/rest-1.v1/Data/';
-  var versionOneAuth = 'admin:admin';
+  host = 'http://localhost';
+  service = 'http://localhost/VersionOne.Web/rest-1.v1/Data/';
+  versionOneAuth = 'admin:admin';
 
   serviceGateway = false
   

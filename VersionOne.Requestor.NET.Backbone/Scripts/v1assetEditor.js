@@ -7,7 +7,6 @@ define([
     'jsrender'
     ], 
     function(Backbone, _, toastr, $) {
-
         $.fn.pressEnter = function(fn) { 
             return this.each(function() {
                 $(this).bind('enterPress', fn);
@@ -35,6 +34,12 @@ define([
         function info(message) {
             toastr.info(message);
         }
+
+        function qs(queryString, key) {
+            key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
+            var match = queryString.match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"));
+            return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+        }        
 
         var debugEnabled = false;
 
@@ -125,12 +130,12 @@ define([
         };
 
         VersionOneAssetEditor.prototype.refreshFormModel = function() {
-            this.assetModel = Backbone.Model.extend({                
+            this.assetModel = Backbone.Model.extend({
                 schema: this.formFields[this.fieldSetName]
             });
         };
 
-        VersionOneAssetEditor.prototype.configureProjectSearch = function() {
+        VersionOneAssetEditor.prototype.configureProjectSearch = function() {     
             var that = this;
             var searchTerm, ajaxRequest;
             var projectSearch = $('#projectSearch');
@@ -157,7 +162,22 @@ define([
                     $.mobile.hidePageLoadingMsg();
                 }).fail(that._ajaxFail);
             });
-        };
+
+            this.loadProjectIfPassedOnQueryString();
+        };        
+
+        VersionOneAssetEditor.prototype.loadProjectIfPassedOnQueryString = function() {
+            if (window.location.href.indexOf('#list?') > -1) {
+                var projectId = qs(window.location.href, 'projectId');
+                if (projectId != null) {
+                    var scopeOid = projectId;
+                    if (scopeOid.indexOf('Scope:') != 0) {
+                        scopeOid = "Scope:" + scopeOid;
+                    }
+                    this.loadRequests(scopeOid);
+                }
+            }           
+        }
 
         VersionOneAssetEditor.prototype.configureListPage = function() {
             var assets = $('#assets');
