@@ -123,6 +123,9 @@ define([
 
             $('#projectsPage').live('pageinit', this.configureProjectSearch);
             $('#list').live('pageinit', this.configureListPage);
+            $('#list').live('pagebeforeshow', function() {
+                that.listFetchIfNotLoaded();
+            });
 
             this.configureProjectSearch();
 
@@ -133,6 +136,12 @@ define([
             this.assetModel = Backbone.Model.extend({
                 schema: this.formFields[this.fieldSetName]
             });
+        };
+
+        VersionOneAssetEditor.prototype.listFetchIfNotLoaded = function() {
+            if (!this._listLoaded) {                
+                this.loadRequests();
+            }
         };
 
         VersionOneAssetEditor.prototype.configureProjectSearch = function() {     
@@ -174,15 +183,27 @@ define([
                     if (scopeOid.indexOf('Scope:') != 0) {
                         scopeOid = "Scope:" + scopeOid;
                     }
-                    this.loadRequests(scopeOid);
+                    this.loadRequests(scopeOid, false);
                 }
-            }           
+            }
+            else if (window.location.href.indexOf('#detail?') > -1) {
+                var projectId = qs(window.location.href, 'projectId');
+                if (projectId != null) {
+                    var scopeOid = projectId;
+                    if (scopeOid.indexOf('Scope:') != 0) {
+                        scopeOid = "Scope:" + scopeOid;
+                    }
+                    this.setProject(scopeOid);
+                    this.newAsset();
+                }
+            }
         }
 
         VersionOneAssetEditor.prototype.configureListPage = function() {
             var assets = $('#assets');
             assets.empty();
             assets.listview();
+            this._listLoaded = false;
         };
 
         VersionOneAssetEditor.prototype._ajaxFail = function(ex) {
@@ -190,9 +211,19 @@ define([
             console.log(ex);
         };
 
-        VersionOneAssetEditor.prototype.loadRequests = function (projectIdref) {
+        VersionOneAssetEditor.prototype.setProject = function(projectIdref) {
             this.projectIdref = projectIdref;
             this.refreshFieldSet(projectIdref);
+            //this.configureListPage();
+            this._listLoaded = false;
+        };
+
+        VersionOneAssetEditor.prototype.loadRequests = function (projectIdref) {
+            if (projectIdref == null || projectIdref == 'undefined') {
+                projectIdref = this.projectIdref;
+            } else {
+                this.setProject(projectIdref);
+            }
             var url = this.getAssetUrl(this.assetName) + '&' + $.param({
                 'where' : "Scope='" + projectIdref + "'",
                 'sel': 'Name,RequestedBy',
