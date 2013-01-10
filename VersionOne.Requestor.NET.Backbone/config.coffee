@@ -14,6 +14,9 @@ define ['./fields'], (fields) ->
   #var serviceGateway = 'http://localhost/v1requestor/Setup';
   assetName = "Request"
 
+  projectListClickTarget = 'new'
+  #projectListClickTarget = 'list'
+
   configureFields = (obj) ->
     for fieldGroupName, fieldGroup of obj
       for fieldName, field of fieldGroup
@@ -48,6 +51,7 @@ define ['./fields'], (fields) ->
     versionOneAuth: versionOneAuth
     assetName: assetName
     formFields: fields
+    projectListClickTarget: projectListClickTarget
 
   return options
 #

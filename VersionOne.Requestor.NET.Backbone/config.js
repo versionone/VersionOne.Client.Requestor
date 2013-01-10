@@ -2,13 +2,14 @@
 (function() {
 
   define(['./fields'], function(fields) {
-    var assetName, configureFields, host, options, service, serviceGateway, showDebugMessages, versionOneAuth;
+    var assetName, configureFields, host, options, projectListClickTarget, service, serviceGateway, showDebugMessages, versionOneAuth;
     showDebugMessages = true;
     host = 'http://localhost';
     service = 'http://localhost/VersionOne.Web/rest-1.v1/Data/';
     versionOneAuth = 'admin:admin';
     serviceGateway = false;
     assetName = "Request";
+    projectListClickTarget = 'new';
     configureFields = function(obj) {
       var field, fieldGroup, fieldGroupName, fieldName, _results;
       _results = [];
@@ -60,7 +61,8 @@
       serviceGateway: serviceGateway,
       versionOneAuth: versionOneAuth,
       assetName: assetName,
-      formFields: fields
+      formFields: fields,
+      projectListClickTarget: projectListClickTarget
     };
     return options;
   });

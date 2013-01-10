@@ -68,6 +68,8 @@ define([
             options.contentType = contentType;
 
             for(var key in options) {
+                console.log(key);
+                console.log(options[key]);
                 that[key] = options[key];
             }
 
@@ -121,7 +123,6 @@ define([
 
             that.selectFields = selectFields;
 
-            $('#projectsPage').live('pageinit', this.configureProjectSearch);
             $('#list').live('pageinit', this.configureListPage);
             $('#list').live('pagebeforeshow', function() {
                 that.listFetchIfNotLoaded();
@@ -219,6 +220,8 @@ define([
         };
 
         VersionOneAssetEditor.prototype.loadRequests = function (projectIdref) {
+            console.log('called load');
+            this._listLoaded = true;
             if (projectIdref == null || projectIdref == 'undefined') {
                 projectIdref = this.projectIdref;
             } else {
@@ -297,7 +300,14 @@ define([
             templ.html($('#projectItemTemplate').render(item));
             templ.children('.projectItem').bind('click', function() {
                 var idref = $(this).attr('data-idref');
-                that.loadRequests(idref);
+                that.setProject(idref);
+                console.log("click:");
+                console.log(that.projectListClickTarget);
+                if (that.projectListClickTarget == 'new') {
+                    that.newAsset();
+                } else {
+                    that.loadRequests();
+                }
             });
             return templ;
         };
