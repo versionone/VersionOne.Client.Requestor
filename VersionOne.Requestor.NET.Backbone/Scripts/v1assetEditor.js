@@ -128,6 +128,10 @@ define([
                 that.listFetchIfNotLoaded();
             });
 
+            $('#projectsPage').live('pagebeforeshow', function() {
+                that.setTitle("Projects");
+            });            
+
             this.configureProjectSearch();
 
             this.toggleNewOrEdit('new');
@@ -300,6 +304,8 @@ define([
             templ.html($('#projectItemTemplate').render(item));
             templ.children('.projectItem').bind('click', function() {
                 var idref = $(this).attr('data-idref');
+                var name = $(this).attr('data-name');
+                that.setTitle(name);
                 that.setProject(idref);
                 console.log("click:");
                 console.log(that.projectListClickTarget);
@@ -312,8 +318,8 @@ define([
             return templ;
         };
 
-        VersionOneAssetEditor.prototype.projectSelect = function(href) {
-            projectSelect
+        VersionOneAssetEditor.prototype.setTitle = function(title) {
+            $(".title").text(": " + title);
         };
 
         VersionOneAssetEditor.prototype.listItemPrepend = function(item) {
