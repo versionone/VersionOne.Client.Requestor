@@ -1,5 +1,4 @@
 define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender"], (Backbone, _, toastr, $) ->
-
   log = (message) ->
     console.log message
 
@@ -91,14 +90,18 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       @toggleNewOrEdit "new"
 
     refreshFormModel: ->
-      @assetModel = Backbone.Model.extend(schema: @formFields[@fieldSetName])
+      log 'Refreshing model: '
+      @assetModel = Backbone.Model.extend({schema: @getFormFields()})
+      n = new @assetModel
+      log 's:'
+      log n.schema
 
     listFetchIfNotLoaded: ->
       @loadRequests() unless @_listLoaded
 
     configureProjectSearch: ->
-      searchTerm = undefined
-      ajaxRequest = undefined
+      searchTerm = null
+      ajaxRequest = null
       projectSearch = $("#projectSearch")
       projectSearch.pressEnter (e) =>
         target = $(e.currentTarget)
@@ -117,7 +120,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         request = @createRequest(url: url)
         projects = $("#projects")
         ajaxRequest = $.ajax(request).done((data) =>
-          ajaxRequest = `undefined`
+          ajaxRequest = null
           projects = $("#projects").empty()
           for val in data
             @projectItemAppend val
@@ -154,13 +157,13 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
 
     setProject: (projectIdref) ->
       @projectIdref = projectIdref
-      @refreshFieldSet projectIdref    
+      @refreshFieldSet projectIdref
       #this.configureListPage();
       @_listLoaded = false
 
     loadRequests: (projectIdref) ->
       @_listLoaded = true
-      if not projectIdref? or projectIdref is "undefined"
+      if not projectIdref?
         projectIdref = @projectIdref
       else
         @setProject projectIdref
@@ -182,7 +185,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       @changePage "#list"
 
     refreshFieldSet: (fieldSetName) ->
-      if @formFields[fieldSetName] isnt `undefined`
+      if @formFields[fieldSetName]?
         @fieldSetName = fieldSetName
       else
         @fieldSetName = "default"
@@ -270,8 +273,8 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
 
     newAsset: (modelData, href) ->
       @configSelectLists().done =>
-        asset = undefined
-        if modelData
+        asset = null
+        if modelData?        
           asset = new @assetModel(modelData)
         else
           asset = new @assetModel()
@@ -279,7 +282,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         form = new Backbone.Form(model: asset).render()
         @form = form
         $("#fields").html form.el
-        if modelData
+        if modelData?
           @toggleNewOrEdit "edit", href
         else
           @toggleNewOrEdit "new"
@@ -299,7 +302,10 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       # TODO: this should not happen on EVERY new click.
       promise = new $.Deferred()
       ajaxRequests = []
-      model = (new @assetModel()).schema
+      log @assetModel
+      model = new @assetModel().schema
+      log 'sc'
+      log model
       selectLists = []
       for key, value of model
         selectLists.push value if value.options.length < 1 if value.type is "Select"
@@ -342,27 +348,30 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         promise.resolve()
 
     editAsset: (href) ->
+      fields = @getFormFields()
+      
       url = @host + href + "?" + $.param(@queryOpts)
       fieldsClause = @getFormFieldsForSelectQuery()
       url += "&" + fieldsClause
-      request = @createRequest(url: url)
-      # TODO: need better way to do this
-      $.ajax(request).done((data) =>
+
+      asset = @createFetchModel url
+
+      asset.get().done(->
         modelData = {}
-        model = (new @assetModel()).schema
-        links = data._links
+        model = (new @assetModel()).schema # TODO: this might not be needed anymore
+        links = asset._links
         for key of model
-          value = data[key]
+          value = asset[key]
           if value
-            # HARD-CODED
-            value = new Date(Date.parse(value)) if key is "Custom_RequestedETA"
-            if data[key] isnt `undefined`
+            if fields[key].type == 'Date'
+              value = new Date(Date.parse(value))
+            if data[key]?
               modelData[key] = value
             else
               @debug "Setting Key: " + key + " is undefined"
           else
             rel = links[key]
-            continue if rel is `undefined`
+            continue if not rel?
             val = links[key]
             if val? and val.length > 0
               val = val[0]
@@ -402,6 +411,18 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
     createRequest: (options) ->
       options.headers = @headers  unless @serviceGateway
       return options
+
+    createFetchModel: (url) ->
+      options = {}
+      options.headers = @headers unless @serviceGateway
+      props = 
+        url: url
+        get: ->
+          return @fetch(options)
+
+      fetchModel = Backbone.Model.extend(props)
+
+      return new fetchModel()
 
     createAsset: (assetName, callback) ->
       url = @getAssetUrl(assetName)
