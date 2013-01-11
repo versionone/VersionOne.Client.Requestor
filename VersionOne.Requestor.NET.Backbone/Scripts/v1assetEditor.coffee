@@ -119,7 +119,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         ajaxRequest = $.ajax(request).done((data) =>
           ajaxRequest = `undefined`
           projects = $("#projects").empty()
-          $.each data, (i, val) =>
+          for val in data
             @projectItemAppend val
           projects.listview "refresh"
           $.mobile.hidePageLoadingMsg()
@@ -175,11 +175,8 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       assets.empty()
       $.ajax(request).done((data) =>
         info "Found " + data.length + " requests"
-        i = 0
-        while i < data.length
-          item = data[i]
+        for item, i in data
           @listAppend item
-          i++
         assets.listview "refresh"
       ).fail @_ajaxFail
       @changePage "#list"
@@ -304,10 +301,10 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       ajaxRequests = []
       model = (new @assetModel()).schema
       selectLists = []
-      $.each model, (key, value) ->
+      for key, value of model
         selectLists.push value if value.options.length < 1 if value.type is "Select"
 
-      $.each selectLists, (i, field) =>
+      for field in selectLists
         assetName = field.editorAttrs["data-assetName"]
         fields = field.formFields
         fields = ["Name"] if not fields? or fields.length is 0
@@ -321,7 +318,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         )
         ajaxRequest = $.ajax(request).done((data) =>
           if data.length > 0
-            $.each data, (i, option) ->
+            for option in data
               field.options.push
                 val: option._links.self.id
                 label: option.Name
@@ -357,6 +354,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         for key of model
           value = data[key]
           if value
+            # HARD-CODED
             value = new Date(Date.parse(value)) if key is "Custom_RequestedETA"
             if data[key] isnt `undefined`
               modelData[key] = value
@@ -471,7 +469,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       sel.selectmenu "refresh"
 
     enumFields: (callback) ->
-      $.each @getFormFields(), (key, field) ->
+      for key, field of @getFormFields()
         callback key, field
 
     findField: (fieldName) ->

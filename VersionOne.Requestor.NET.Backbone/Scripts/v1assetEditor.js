@@ -163,11 +163,13 @@
           });
           projects = $("#projects");
           return ajaxRequest = $.ajax(request).done(function(data) {
+            var val, _i, _len;
             ajaxRequest = undefined;
             projects = $("#projects").empty();
-            $.each(data, function(i, val) {
-              return _this.projectItemAppend(val);
-            });
+            for (_i = 0, _len = data.length; _i < _len; _i++) {
+              val = data[_i];
+              _this.projectItemAppend(val);
+            }
             projects.listview("refresh");
             return $.mobile.hidePageLoadingMsg();
           }).fail(_this._ajaxFail);
@@ -239,13 +241,11 @@
         assets = $("#assets");
         assets.empty();
         $.ajax(request).done(function(data) {
-          var i, item;
+          var i, item, _i, _len;
           info("Found " + data.length + " requests");
-          i = 0;
-          while (i < data.length) {
+          for (i = _i = 0, _len = data.length; _i < _len; i = ++_i) {
             item = data[i];
             _this.listAppend(item);
-            i++;
           }
           return assets.listview("refresh");
         }).fail(this._ajaxFail);
@@ -410,46 +410,51 @@
       };
 
       VersionOneAssetEditor.prototype.configSelectLists = function() {
-        var ajaxRequests, model, promise, selectLists,
+        var ajaxRequest, ajaxRequests, assetName, field, fields, key, model, promise, request, selectLists, url, value, _i, _len,
           _this = this;
         promise = new $.Deferred();
         ajaxRequests = [];
         model = (new this.assetModel()).schema;
         selectLists = [];
-        $.each(model, function(key, value) {
+        for (key in model) {
+          value = model[key];
           if (value.type === "Select" ? value.options.length < 1 : void 0) {
-            return selectLists.push(value);
+            selectLists.push(value);
           }
-        });
-        $.each(selectLists, function(i, field) {
-          var ajaxRequest, assetName, fields, request, url;
+        }
+        for (_i = 0, _len = selectLists.length; _i < _len; _i++) {
+          field = selectLists[_i];
           assetName = field.editorAttrs["data-assetName"];
           fields = field.formFields;
           if (!(fields != null) || fields.length === 0) {
             fields = ["Name"];
           }
-          url = _this.service + assetName + "?" + $.param(_this.queryOpts) + "&" + $.param({
+          url = this.service + assetName + "?" + $.param(this.queryOpts) + "&" + $.param({
             sel: fields.join(","),
             sort: "Order"
           });
-          request = _this.createRequest({
+          request = this.createRequest({
             url: url,
             type: "GET"
           });
           ajaxRequest = $.ajax(request).done(function(data) {
+            var option, _j, _len1, _results;
             if (data.length > 0) {
-              return $.each(data, function(i, option) {
-                return field.options.push({
+              _results = [];
+              for (_j = 0, _len1 = data.length; _j < _len1; _j++) {
+                option = data[_j];
+                _results.push(field.options.push({
                   val: option._links.self.id,
                   label: option.Name
-                });
-              });
+                }));
+              }
+              return _results;
             } else {
               return _this.debug("No results for query: " + url);
             }
-          }).fail(_this._ajaxFail);
-          return ajaxRequests.push(ajaxRequest);
-        });
+          }).fail(this._ajaxFail);
+          ajaxRequests.push(ajaxRequest);
+        }
         if (this.resolveIfEmpty(promise, ajaxRequests)) {
           return promise;
         }
@@ -648,9 +653,14 @@
       };
 
       VersionOneAssetEditor.prototype.enumFields = function(callback) {
-        return $.each(this.getFormFields(), function(key, field) {
-          return callback(key, field);
-        });
+        var field, key, _ref, _results;
+        _ref = this.getFormFields();
+        _results = [];
+        for (key in _ref) {
+          field = _ref[key];
+          _results.push(callback(key, field));
+        }
+        return _results;
       };
 
       VersionOneAssetEditor.prototype.findField = function(fieldName) {
