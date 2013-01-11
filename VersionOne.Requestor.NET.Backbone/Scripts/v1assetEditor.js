@@ -36,6 +36,7 @@
         });
       });
     };
+    $("#projectsPage").live("pageinit", $.mobile.loading('show'), $('#bodyDiv').css('visibility', 'visible').hide().fadeIn('slow'), $.mobile.loading('hide'));
     VersionOneAssetEditor = (function() {
 
       function VersionOneAssetEditor(options) {
@@ -85,7 +86,6 @@
           _this = this;
         this.requestorName = "";
         this.refreshFieldSet("default");
-        this.debug(this.formFields);
         $(".new").click(function() {
           return _this.newAsset();
         });
@@ -147,7 +147,7 @@
           if (searchTerm.length < 4) {
             return;
           }
-          $.mobile.showPageLoadingMsg();
+          $.mobile.loading('show');
           if (ajaxRequest) {
             ajaxRequest.abort();
           }
@@ -171,7 +171,7 @@
               _this.projectItemAppend(val);
             }
             projects.listview("refresh");
-            return $.mobile.hidePageLoadingMsg();
+            return $.mobile.loading('hide');
           }).fail(_this._ajaxFail);
         });
         return this.loadProjectIfPassedOnQueryString();
@@ -399,13 +399,7 @@
           if (!modelData) {
             _this.resetForm();
           }
-          $("#detail").trigger("create");
-          if (!modelData && _this.requestorName !== "") {
-            $("[name='RequestedBy']").val(_this.requestorName);
-            return $("[name='Name']").focus();
-          } else {
-            return $("[name='RequestedBy']").focus();
-          }
+          return $("#detail").trigger("create");
         });
       };
 
@@ -576,7 +570,6 @@
       VersionOneAssetEditor.prototype.createAsset = function(assetName, callback) {
         var url;
         url = this.getAssetUrl(assetName);
-        this.requestorName = $("#RequestedBy").val();
         return this.saveAsset(url, "assetCreated", callback);
       };
 

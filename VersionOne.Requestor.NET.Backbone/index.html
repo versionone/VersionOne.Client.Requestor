@@ -9,7 +9,7 @@
     <script src='scripts/require.js' data-main='scripts/main' type='text/javascript'></script>
 </head>
 <body>
-
+<div id="bodyDiv" style="visibility:hidden">
 <div data-role="page" id="projectsPage" data-theme="b">
     <div data-role="header" data-position="fixed" style="text-align:center;padding-top:5px" data-theme="b">
         <div>&nbsp;
@@ -83,8 +83,6 @@
     </div>    
 </div>​
 
-<div data-role="page" id="blank" data-theme="b">  
-
 </div>
 
 <script id="assetItemTemplate" type="text/x-jquery-tmpl">
@@ -98,6 +96,5 @@
     <a class='projectItem' data-name='{{:Name}}' data-assetid='{{:_links.self.id}}' data-idref='{{:_links.self.id}}' href='#'><span>{{:Name}}</span>
     </a>
 </script>
-
 </body>
 </html>

@@ -23,8 +23,13 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
     @each ->
       $(this).bind "enterPress", fn
       $(this).keyup (e) ->
-        $(this).trigger "enterPress" if e.keyCode is 13 
+        $(this).trigger "enterPress" if e.keyCode is 13
 
+  $("#projectsPage").live "pageinit",
+    $.mobile.loading('show')
+    $('#bodyDiv').css('visibility','visible').hide().fadeIn('slow');
+    $.mobile.loading('hide')
+  
   class VersionOneAssetEditor
     constructor: (options) ->          
       continueSettingOptions = =>
@@ -57,7 +62,6 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
     initialize: ->
       @requestorName = ""
       @refreshFieldSet "default"
-      @debug @formFields
       $(".new").click =>
         @newAsset()
 
@@ -68,9 +72,10 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
 
       @selectFields = selectFields
       $("#list").live "pageinit", @configureListPage
+
       $("#list").live "pagebeforeshow", =>
         @listFetchIfNotLoaded()
-
+      
       $("#projectsPage").live "pagebeforeshow", =>
         @setTitle "Projects"
 
@@ -104,7 +109,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         return if searchTerm is target.val()
         searchTerm = target.val()
         return if searchTerm.length < 4
-        $.mobile.showPageLoadingMsg()
+        $.mobile.loading('show')
         ajaxRequest.abort() if ajaxRequest
         assetName = "Scope"
         url = @getAssetUrl(assetName) + "&" + $.param(
@@ -121,7 +126,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
           for val in data
             @projectItemAppend val
           projects.listview "refresh"
-          $.mobile.hidePageLoadingMsg()
+          $.mobile.loading('hide')
         ).fail(@_ajaxFail)
 
       @loadProjectIfPassedOnQueryString()
@@ -286,13 +291,6 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         @resetForm() unless modelData
         $("#detail").trigger "create"
         
-        # Hardcoded:
-        if not modelData and @requestorName isnt ""
-          $("[name='RequestedBy']").val @requestorName
-          $("[name='Name']").focus()
-        else
-          $("[name='RequestedBy']").focus()
-
     configSelectLists: ->    
       # Setup the data within select lists
       # TODO: this should not happen on EVERY new click.
@@ -327,7 +325,9 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         ajaxRequests.push ajaxRequest
 
       return promise if @resolveIfEmpty(promise, ajaxRequests)
+      
       @resolveWhenAllDone promise, ajaxRequests
+      
       return promise
 
     resolveIfEmpty: (promise, ajaxRequests) ->
@@ -416,7 +416,6 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
 
     createAsset: (assetName, callback) ->
       url = @getAssetUrl(assetName)
-      @requestorName = $("#RequestedBy").val()
       @saveAsset url, "assetCreated", callback
 
     updateAsset: (href, callback) ->
@@ -445,7 +444,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
 
     createDto: ->
       dto = @form.getValue()
-      
+
       # TODO: hard-coded for test
       dto._links = Scope:
         idref: @projectIdref
