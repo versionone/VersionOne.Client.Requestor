@@ -120,8 +120,8 @@
       };
 
       VersionOneAssetEditor.prototype.refreshFormModel = function() {
-        return this.assetModel = Backbone.Model.extend({
-          schema: this.formFields[this.fieldSetName]
+        return this.assetFormModel = Backbone.Model.extend({
+          schema: this.getFormFields()
         });
       };
 
@@ -134,8 +134,8 @@
       VersionOneAssetEditor.prototype.configureProjectSearch = function() {
         var ajaxRequest, projectSearch, searchTerm,
           _this = this;
-        searchTerm = void 0;
-        ajaxRequest = void 0;
+        searchTerm = null;
+        ajaxRequest = null;
         projectSearch = $("#projectSearch");
         projectSearch.pressEnter(function(e) {
           var assetName, projects, request, target, url;
@@ -164,7 +164,7 @@
           projects = $("#projects");
           return ajaxRequest = $.ajax(request).done(function(data) {
             var val, _i, _len;
-            ajaxRequest = undefined;
+            ajaxRequest = null;
             projects = $("#projects").empty();
             for (_i = 0, _len = data.length; _i < _len; _i++) {
               val = data[_i];
@@ -224,7 +224,7 @@
         var assets, request, url,
           _this = this;
         this._listLoaded = true;
-        if (!(projectIdref != null) || projectIdref === "undefined") {
+        if (!(projectIdref != null)) {
           projectIdref = this.projectIdref;
         } else {
           this.setProject(projectIdref);
@@ -253,7 +253,7 @@
       };
 
       VersionOneAssetEditor.prototype.refreshFieldSet = function(fieldSetName) {
-        if (this.formFields[fieldSetName] !== undefined) {
+        if (this.formFields[fieldSetName] != null) {
           this.fieldSetName = fieldSetName;
         } else {
           this.fieldSetName = "default";
@@ -378,11 +378,11 @@
         var _this = this;
         return this.configSelectLists().done(function() {
           var asset, form;
-          asset = void 0;
-          if (modelData) {
-            asset = new _this.assetModel(modelData);
+          asset = null;
+          if (modelData != null) {
+            asset = new _this.assetFormModel(modelData);
           } else {
-            asset = new _this.assetModel();
+            asset = new _this.assetFormModel();
           }
           _this.asset = asset;
           form = new Backbone.Form({
@@ -390,7 +390,7 @@
           }).render();
           _this.form = form;
           $("#fields").html(form.el);
-          if (modelData) {
+          if (modelData != null) {
             _this.toggleNewOrEdit("edit", href);
           } else {
             _this.toggleNewOrEdit("new");
@@ -414,7 +414,7 @@
           _this = this;
         promise = new $.Deferred();
         ajaxRequests = [];
-        model = (new this.assetModel()).schema;
+        model = new this.assetFormModel().schema;
         selectLists = [];
         for (key in model) {
           value = model[key];
@@ -477,33 +477,28 @@
       };
 
       VersionOneAssetEditor.prototype.editAsset = function(href) {
-        var fieldsClause, request, url,
+        var asset, fields, fieldsClause, url,
           _this = this;
+        fields = this.getFormFields();
         url = this.host + href + "?" + $.param(this.queryOpts);
         fieldsClause = this.getFormFieldsForSelectQuery();
         url += "&" + fieldsClause;
-        request = this.createRequest({
-          url: url
-        });
-        return $.ajax(request).done(function(data) {
+        asset = this.createFetchModel(url);
+        return asset.exec().done(function() {
           var id, key, links, model, modelData, rel, val, value;
           modelData = {};
-          model = (new _this.assetModel()).schema;
-          links = data._links;
+          model = new _this.assetFormModel().schema;
+          links = asset.get('_links');
           for (key in model) {
-            value = data[key];
-            if (value) {
-              if (key === "Custom_RequestedETA") {
+            value = asset.get(key);
+            if (value != null) {
+              if (fields[key].type === 'Date') {
                 value = new Date(Date.parse(value));
               }
-              if (data[key] !== undefined) {
-                modelData[key] = value;
-              } else {
-                _this.debug("Setting Key: " + key + " is undefined");
-              }
+              modelData[key] = value;
             } else {
               rel = links[key];
-              if (rel === undefined) {
+              if (!(rel != null)) {
                 continue;
               }
               val = links[key];
@@ -560,6 +555,22 @@
           options.headers = this.headers;
         }
         return options;
+      };
+
+      VersionOneAssetEditor.prototype.createFetchModel = function(url) {
+        var fetchModel, options, props;
+        options = {};
+        if (!this.serviceGateway) {
+          options.headers = this.headers;
+        }
+        props = {
+          url: url,
+          exec: function() {
+            return this.fetch(options);
+          }
+        };
+        fetchModel = Backbone.Model.extend(props);
+        return new fetchModel();
       };
 
       VersionOneAssetEditor.prototype.createAsset = function(assetName, callback) {

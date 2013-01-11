@@ -90,11 +90,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       @toggleNewOrEdit "new"
 
     refreshFormModel: ->
-      log 'Refreshing model: '
-      @assetModel = Backbone.Model.extend({schema: @getFormFields()})
-      n = new @assetModel
-      log 's:'
-      log n.schema
+      @assetFormModel = Backbone.Model.extend({schema: @getFormFields()})
 
     listFetchIfNotLoaded: ->
       @loadRequests() unless @_listLoaded
@@ -210,7 +206,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
     listItemFormat: (item) ->
       templ = $("<li></li>")
       templ.html $("#assetItemTemplate").render(item)
-      templ.children(".assetItem").bind "click", (e) =>
+      templ.children(".assetItem").bind "click", (e) =>        
         target = $(e.currentTarget)
         href = target.attr("data-href")
         @editAsset target.attr("data-href")
@@ -275,9 +271,9 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       @configSelectLists().done =>
         asset = null
         if modelData?        
-          asset = new @assetModel(modelData)
+          asset = new @assetFormModel(modelData)
         else
-          asset = new @assetModel()
+          asset = new @assetFormModel()
         @asset = asset
         form = new Backbone.Form(model: asset).render()
         @form = form
@@ -302,10 +298,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       # TODO: this should not happen on EVERY new click.
       promise = new $.Deferred()
       ajaxRequests = []
-      log @assetModel
-      model = new @assetModel().schema
-      log 'sc'
-      log model
+      model = new @assetFormModel().schema
       selectLists = []
       for key, value of model
         selectLists.push value if value.options.length < 1 if value.type is "Select"
@@ -356,19 +349,16 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
 
       asset = @createFetchModel url
 
-      asset.get().done(->
+      asset.exec().done(=>
         modelData = {}
-        model = (new @assetModel()).schema # TODO: this might not be needed anymore
-        links = asset._links
+        model = new @assetFormModel().schema
+        links = asset.get('_links')
         for key of model
-          value = asset[key]
-          if value
+          value = asset.get(key)
+          if value?            
             if fields[key].type == 'Date'
               value = new Date(Date.parse(value))
-            if data[key]?
-              modelData[key] = value
-            else
-              @debug "Setting Key: " + key + " is undefined"
+            modelData[key] = value
           else
             rel = links[key]
             continue if not rel?
@@ -417,7 +407,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       options.headers = @headers unless @serviceGateway
       props = 
         url: url
-        get: ->
+        exec: ->
           return @fetch(options)
 
       fetchModel = Backbone.Model.extend(props)
