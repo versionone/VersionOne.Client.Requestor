@@ -224,6 +224,7 @@ Inside this script:
 
 * `requirejs.config` and `shim` coerces ordinary scripts to be good modular AMD citizens -- [See docs](http://requirejs.org/docs/api.html#config-shim).
 * `require([...], function() )` defines the required modules and calls back when loaded
+* Finally, wire up a jQuery document ready handler with `$()` and instantiate an instance of `v1AssetEditor`
 
 ### Notes
 RequireJS will load the list of modules passed to `require()`, and then pass each one into the function parameter as a single object conforming to the [AMD pattern](https://github.com/amdjs/amdjs-api/wiki/AMD). Note that I've only declared formal parameters for the first three, because I only need to reference them. However, and I'm not sure why, I did have to load these modules via main, rather than as requirements for `v1AssetEditor`, where they are really needed. I don't understand why.
@@ -269,4 +270,68 @@ require([
     	});
     }
 );
+```
+
+# `config.coffee`: simplified Backbone Forms configuration
+
+The first module passed to the initialization function in `scripts/main` was `../config`. 
+
+This module sets some host-specific URLs and also takes in the `fields` module that we discussed above. It does some clean up of this so that when Backbone Forms processes it has all the attributes it needs. For example, `optional: true` will *prevent* the additional of `field.validators = ['required']`
+
+### `config.coffee` full text:
+
+```coffeescript
+define ['./fields'], (fields) ->
+  showDebugMessages = true
+   
+  host = 'http://localhost';
+  service = 'http://localhost/VersionOne.Web/rest-1.v1/Data/';
+  versionOneAuth = 'admin:admin';
+
+  serviceGateway = false
+  
+  #var serviceGateway = 'http://localhost/v1requestor/Setup';
+
+  projectListClickTarget = 'new'
+  #projectListClickTarget = 'list'
+
+  configureFields = (obj) ->
+    for fieldGroupName, fieldGroup of obj
+      for fieldName, field of fieldGroup
+        if field.type == 'Select'
+          field.options = [] # Ajax will fill 'em in
+          field.editorAttrs =
+            'data-class': 'sel'
+            'data-assetName': field.assetName
+            'data-rel': fieldName
+        else
+          if field.optional == true          
+          else
+            field.validators = ['required']
+        if field.type == 'TextArea'
+          field.editorAttrs =
+            style: 'height:200px'
+        if field.autofocus == true
+          if not field.editorAttrs
+            field.editorAttrs = {}
+          field.editorAttrs.autofocus = 'autofocus'
+        # Delete properties, if they exist, from field
+        delete field.autofocus
+        delete field.optional
+
+  configureFields fields
+
+  assetName = "Request"
+  
+  options =
+    showDebug: showDebugMessages
+    host: host
+    service: service
+    serviceGateway: serviceGateway
+    versionOneAuth: versionOneAuth
+    assetName: assetName
+    formFields: fields
+    projectListClickTarget: projectListClickTarget
+
+  return options
 ```
