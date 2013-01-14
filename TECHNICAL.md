@@ -497,7 +497,11 @@ Before looking at the code, let's step through the events using Chrome's console
 
 ### Request generated
 
-Notice the Authorization header, which contains the Base64 encoded credentials
+In the Chrome console's Network tab, we can inspect the request and response:
+
+#### Headers
+
+Notice the Authorization header, which contains the Base64 encoded credentials. This string gets created using Chrome's `btoa` function, but if `options.serviceGateway` is defined, it will get that string fromm the gateway instead of hard-coding the credentials in the script. (I'm not pretending that this is secure, it's just for covenience right now)
 
 ```text
 GET /VersionOne.Web/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name HTTP/1.1
@@ -511,6 +515,19 @@ Referer: http://localhost/v1requestor/index.html
 Accept-Encoding: gzip,deflate,sdch
 Accept-Language: en-US,en;q=0.8
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
+```
+
+#### URL
+
+Various VersionOne API parameters comprise this request:
+
+* `sel=Name` -- return only the *Name* attribute from the remote resource
+* `page=100,0` -- return 100 items max, starting at page 0
+* `find='system'` -- search for the word `system`
+* `findin=Name` -- search for `find` within the `Name` attribute only
+
+```
+http://localhost/VersionOne.Web/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name
 ```
 
 ### Response received
