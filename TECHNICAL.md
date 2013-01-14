@@ -400,31 +400,18 @@ Key highlights from below:
 * [Backbone.js, RequireJS and jQuery Mobile](http://jquerymobile.com/test/docs/pages/backbone-require.html) -- not part of the 1.2.0 release, part of the upcoming release
 * [PhoneGap apps with jQuery Mobile](http://jquerymobile.com/demos/1.2.0/docs/pages/phonegap.html)
 
-## `v1AssetEditor.coffee`: initialization
+## `v1AssetEditor.coffee`: constructor and initialize
 
-# TODO Annotate this properly:
+### Summary
+The `constructor` and `initialize` methods take care of setting up initial event handlers, sourcing config data from a service gateway (if configured), and subscribing to various jQuery Mobile events and a couple of custom events that are produced by Backbone.Events.
 
-OUTLINE:
-
-* Basic configuration
-* Project list fetch
-* jQuery Promises for deferred loading
-* VersionOne API with JSON examples
-* Relationships fetching
-* newAsset
-* How Backbone Forms and its Schema / Model approach works
-* Console-play with the forms dynamically
-* editAsset
-
-Summary of this section:
-
+### Details
 * `constructor` creates some property bags and also "mixes in" the options supplied from the caller. [See the MixIn pattern](http://addyosmani.com/resources/essentialjsdesignpatterns/book/#mixinpatternjavascript)
 * If the `options` hash contained a `serviceGateway` property with a value != false, then it will attempt to source the credentials from that URL, rather than rely on hard-coded credentials. This is by no means a sophisticated or highly secure way to do authentication, but it allows the externally hosted code to use the HTTP API without needing to be served from the same web-server.
 * `initialize` does some basic jQuery click handler wireup for button handlers (TODO: implement a simple convention based wireup like Caliburn.Micro, and probably Durandal)
 * The `pageinit` and `pagebeforeshow` events are [jQuery Mobile Events](http://jquerymobile.com/demos/1.2.0/docs/api/events.html) that respond to those virtual events for the given pages.
 * The `@on "assetCreated", (that, asset) -> ...` and other one utilize [Backbone.Events](http://backbonejs.org/#Events) for simple, custom "publish/subcribe" type notification. In this case, the subscribing code will modify the List page when a Request object is created or modified. We'll see later how these events are published in the ajax callback handlers.
-
-
+* *Note*: at the very end of the script is ` _.extend VersionOneAssetEditor::, Backbone.Events`. This uses underscore.js's extension function to mixin Backbone.Events into the VersionOneAssetEditor class. I suppose I could have used that for my hand-rolled mixin above.
 
 ```coffeescript
 define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender"], (Backbone, _, toastr, $) ->
@@ -493,7 +480,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       @configureProjectSearch()
       @toggleNewOrEdit "new"
 ```
-
+# Project list fetch
 
 ```coffeescript
     refreshFormModel: ->
@@ -531,38 +518,22 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
           $.mobile.loading('hide')
         ).fail(@_ajaxFail)
 
-      @loadProjectIfPassedOnQueryString()
-
-    loadProjectIfPassedOnQueryString: ->
-      if window.location.href.indexOf("#list?") > -1
-        projectId = qs(window.location.href, "projectId")
-        if projectId?
-          scopeOid = projectId
-          scopeOid = "Scope:" + scopeOid  unless scopeOid.indexOf("Scope:") is 0
-          @loadRequests scopeOid, false
-      else if window.location.href.indexOf("#detail?") > -1
-        projectId = qs(window.location.href, "projectId")
-        if projectId?
-          scopeOid = projectId
-          scopeOid = "Scope:" + scopeOid  unless scopeOid.indexOf("Scope:") is 0
-          @setProject scopeOid
-          @newAsset()
-
     configureListPage: ->
       assets = $("#assets")
       assets.empty()
       assets.listview()
       @_listLoaded = false
 
-    _ajaxFail: (ex) ->
-      console.log "Error: "
-      console.log ex
-
     setProject: (projectIdref) ->
       @projectIdref = projectIdref
       @refreshFieldSet projectIdref
       #this.configureListPage();
       @_listLoaded = false
+```
+# jQuery Promises for deferred loading
+# VersionOne API with JSON examples
+
+``` 
 
     loadRequests: (projectIdref) ->
       @_listLoaded = true
@@ -673,7 +644,10 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         #var newItem = @listItemFormat(item);
         listItem.closest("li").replaceWith templ
       assets.listview "refresh"
+```
+newAsset
 
+```coffeescript
     newAsset: (modelData, href) ->
       @configSelectLists().done =>
         asset = null
@@ -692,7 +666,11 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         @changePage "#detail"
         @resetForm() unless modelData
         $("#detail").trigger "create"
-        
+```
+# How Backbone Forms and its Schema / Model approach works
+# Relationships fetching
+
+```coffeescript
     configSelectLists: ->    
       # Setup the data within select lists
       # TODO: this should not happen on EVERY new click.
@@ -741,7 +719,12 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
     resolveWhenAllDone: (promise, ajaxRequests) ->
       $.when.apply($, ajaxRequests).then ->
         promise.resolve()
+```
 
+Console-play with the forms dynamically
+editAsset
+
+```coffeescript
     editAsset: (href) ->
       fields = @getFormFields()
       
