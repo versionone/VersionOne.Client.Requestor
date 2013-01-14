@@ -338,10 +338,13 @@ define ['./fields'], (fields) ->
 
 # Highlights from `v1AssetEditor`
 
-I'm not going to claim that `v1AssetEditor.coffee` is a perfect, modern example of MV* style development. Far from it. As I listed above, there are a number of areas I think this can be improved, especially to take advantage of Backbone's features.
+I'm not going to claim that `v1AssetEditor.coffee` is a perfect, modern example of MV* style development. Far from it!
+
+As I listed above, there are a number of areas I think this can be improved, especially to take advantage of Backbone's features.
 
 That being said, I'll highlight how jQuery Mobile, the fields config, Backbone Forms, and the VersionOne JSON support work together to simplify creating and editing a VersionOne Request.
 
+And, leaving it at that, I'll ask for input and advice on how to evolve this into something more reusable for us as a team, and by extension, to external developers building on top of the VersionOne Platform and API.
 
 ## `index.html`: detail div (page) HTML
 
@@ -480,8 +483,72 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       @configureProjectSearch()
       @toggleNewOrEdit "new"
 ```
-# Project list fetch
+## POJSOs from V1 and Backbone Forms = approaching elegance
 
+At the heart of this app is [JSON](http://www.json.org/). VersionOne does not yet natively support the JSON format that we use in this app. But, the DLLs from VersionOne.SDK.Experimental add that support in an unobtrusive way with a simple `Web.config` change.
+
+Before looking at the code, let's step through the events using Chrome's console (F12 brings it up) to examine the HTTP requests and responses.
+
+## Search for a projects
+
+* Open `http://localhost/v1requestor/index.html`
+* Type `system` into the text box
+* Hit enter
+
+### Request generated
+
+Notice the Authorization header, which contains the Base64 encoded credentials
+
+```text
+GET /VersionOne.Web/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name HTTP/1.1
+Host: localhost
+Connection: keep-alive
+Authorization: Basic YWRtaW46YWRtaW4=
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11
+Accept: */*
+Referer: http://localhost/v1requestor/index.html
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: en-US,en;q=0.8
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
+```
+
+### Response received
+
+The response Content-Type header is `haljson`. [HAL is a proposed standard](http://stateless.co/hal_specification.html) for hypermedia documents.
+
+#### Headers
+
+```text
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Length: 186
+Content-Type: haljson; charset=utf-8
+Expires: -1
+Server: Microsoft-IIS/7.5
+X-Powered-By: ASP.NET
+Access-Control-Allow-Origin: *
+Date: Mon, 14 Jan 2013 22:34:20 GMT
+```
+
+#### Body
+
+```json
+[
+  {
+    "Name": "System (All Projects)",
+    "_links": {
+      "self": {
+        "href": "/VersionOne.Web/rest-1.v1/Data/Scope/0",
+        "id": "Scope:0"
+      }
+    }
+  }
+]
+```
+
+##
 ```coffeescript
     refreshFormModel: ->
       @assetFormModel = Backbone.Model.extend({schema: @getFormFields()})
