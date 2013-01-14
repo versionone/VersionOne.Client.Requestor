@@ -3,11 +3,12 @@ This describes the technical implementation of the VersionOne Requestor tool.
 # Technologies Used
 
 * VersionOne.SDK.Experimental Api Input / Output Translators -- converts JSON (HAL compliant) to V1 XML on inbound, and reverse on outbound
-* Backbone.js -- only utilizing Backbone.Events and models at a rudimentary level right now
+* RequireJS -- module loading
 * Backbone Forms -- dynamically creates the HTML form based on a lightweight "schema" defined in JS
 * jQueryMobile -- mobile-friendly HTML5 framework
+* Backbone.js -- only utilizing Backbone.Events and models at a rudimentary level right now
+* jsRender -- jQuery Templates successor
 * toastr -- simple "toast" status messages
-* RequireJS -- module loading
 * CoffeeScript -- love it, or leave it, that's your choice. I dig it.
 
 # Areas for Possible Improvement
@@ -93,8 +94,11 @@ Note the `subSchema` definition for the weapon attribute.
 And, [This example](http://jsfiddle.net/nXHSX/) is a classic dependent dropdown example.
 
 
+## VersionOne Customer and Project-Specific Field Configuration File
 
-## Customer and Project-Specific Field Configuration File
+So, how do we use Backbone Forms in the Requestor? We use it with a bit of help.
+
+### `fields.coffee` specifies form fields
 
 The file `fields.coffee` contains the set of fields and their datatype, plus a few other attributes. For scalar types, it's very simple. See the [Backbone Forms](https://github.com/powmedia/backbone-forms) documentation for possible values of the `type` attribute for form element types.
 
@@ -119,6 +123,16 @@ fieldsConfig =
     type: 'Select'
     assetName: 'Custom_Product'
 ```
+
+### `default:` sets up default form fields
+
+By default, a project will use the fields specified in the `defuault` property.
+
+### `Scope:NNNN`: sets up fields for a specific project
+
+To override that set, simply use the project scope value, like `Scope:173519`.
+
+Here's a complete example with both `default:` and an override:
 
 ```coffeescript
 define ->
@@ -176,4 +190,83 @@ define ->
         title: 'Request Impact'
         type: 'Select'
         assetName: 'Custom_Severity'
+```
+
+# RequireJS: loading modules
+
+RequireJS provides support for AMD (Asynchronous Module Definition) loading. [Learn details here](http://requirejs.org/docs/whyamd.html).
+
+## index.html: `data-main='scripts/main'` specifies the "entry point" for the application
+
+This is how we bootstrap the modules with RequireJS:
+
+* Include `scripts/require.js`
+* Specify the entry point using HTML5 `data-` attribute `data-main='scripts/main'`
+
+RequireJS automatically creates `main.js` from `main`.
+
+```html
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="Content/jquery.mobile-1.2.0.min.css" type="text/css" />
+    <link rel="stylesheet" href="Content/jquery.mobile.v1.css" type="text/css" />   
+    <link rel="stylesheet" href="Content/v1assetEditor.css" />
+    <link rel="stylesheet" href="Content/toastr.css" />
+    <link href="scripts/templates/bootstrap.css" rel="stylesheet" />
+    <script src='scripts/require.js' data-main='scripts/main' type='text/javascript'></script>
+</head>
+```
+
+## scripts/main.js: `require(...)` and `shim:` loading AMD friendly and AMD-challenged modules as one happy family
+
+Inside this script:
+
+* `requirejs.config` and `shim` coerces ordinary scripts to be good modular AMD citizens -- [See docs](http://requirejs.org/docs/api.html#config-shim).
+* `require([...], function() )` defines the required modules and calls back when loaded
+
+### Notes
+RequireJS will load the list of modules passed to `require()`, and then pass each one into the function parameter as a single object conforming to the [AMD pattern](https://github.com/amdjs/amdjs-api/wiki/AMD). Note that I've only declared formal parameters for the first three, because I only need to reference them. However, and I'm not sure why, I did have to load these modules via main, rather than as requirements for `v1AssetEditor`, where they are really needed. I don't understand why.
+
+### `scripts/main.js` full text:
+
+```javascript
+requirejs.config({
+  // The shim allows these non-AMD scripts to participate
+	// in the AMDified loading for other modules
+    shim: {
+    	'underscore': {
+    		exports: '_'
+    	}
+        ,'backbone': {
+            deps: ['underscore', 'jquery'],
+            exports: 'Backbone'
+        }
+        ,'jsrender' : {
+        	deps: ['jquery']
+        }
+    }
+});
+
+require([
+        '../config',
+        'v1assetEditor',
+        'jquery',
+        'backbone',
+        'backbone-forms',
+        'editors/list',
+        'templates/bootstrap', 
+    	'toastr',
+        'jsrender'
+    ],
+    function(
+        v1config,
+        v1assetEditor,
+        $)
+    {
+    	$(document).ready(function () {
+    	    var editor = new v1assetEditor(v1config);
+    	});
+    }
+);
 ```
