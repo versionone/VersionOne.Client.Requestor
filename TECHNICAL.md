@@ -404,6 +404,28 @@ Key highlights from below:
 
 # TODO Annotate this properly:
 
+OUTLINE:
+
+* Basic configuration
+* Project list fetch
+* jQuery Promises for deferred loading
+* VersionOne API with JSON examples
+* Relationships fetching
+* newAsset
+* How Backbone Forms and its Schema / Model approach works
+* Console-play with the forms dynamically
+* editAsset
+
+Summary of this section:
+
+* `constructor` creates some property bags and also "mixes in" the options supplied from the caller. [See the MixIn pattern](http://addyosmani.com/resources/essentialjsdesignpatterns/book/#mixinpatternjavascript)
+* If the `options` hash contained a `serviceGateway` property with a value != false, then it will attempt to source the credentials from that URL, rather than rely on hard-coded credentials. This is by no means a sophisticated or highly secure way to do authentication, but it allows the externally hosted code to use the HTTP API without needing to be served from the same web-server.
+* `initialize` does some basic jQuery click handler wireup for button handlers (TODO: implement a simple convention based wireup like Caliburn.Micro, and probably Durandal)
+* The `pageinit` and `pagebeforeshow` events are [jQuery Mobile Events](http://jquerymobile.com/demos/1.2.0/docs/api/events.html) that respond to those virtual events for the given pages.
+* The `@on "assetCreated", (that, asset) -> ...` and other one utilize [Backbone.Events](http://backbonejs.org/#Events) for simple, custom "publish/subcribe" type notification. In this case, the subscribing code will modify the List page when a Request object is created or modified. We'll see later how these events are published in the ajax callback handlers.
+
+
+
 ```coffeescript
 define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender"], (Backbone, _, toastr, $) ->
   
@@ -470,7 +492,10 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
 
       @configureProjectSearch()
       @toggleNewOrEdit "new"
+```
 
+
+```coffeescript
     refreshFormModel: ->
       @assetFormModel = Backbone.Model.extend({schema: @getFormFields()})
 
