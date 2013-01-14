@@ -335,3 +335,67 @@ define ['./fields'], (fields) ->
 
   return options
 ```
+
+# Highlights from `v1AssetEditor`
+
+I'm not going to claim that `v1AssetEditor.coffee` is a perfect, modern example of MV* style development. Far from it. As I listed above, there are a number of areas I think this can be improved, especially to take advantage of Backbone's features.
+
+That being said, I'll highlight how jQuery Mobile, the fields config, Backbone Forms, and the VersionOne JSON support work together to simplify creating and editing a VersionOne Request.
+
+
+## `index.html`: detail div (page) HTML
+
+While it's not necessary to really understand jQuery Mobile in depth to grok the rest of this article, 
+[you can view jQuery Mobile docs here](http://www.jquerymobile.com) to get a better understanding of how flexible and powerful it is.
+
+Conceptually, jQuery Mobile allows you to define a desktop-friendly, mobile-optimized HTML5 ready page using standard HTML elements plus additional HTMl5 `data-` attributes that, on load, it scans for and use to configure and `enhance` the page.
+
+You can create multiple "pages" by using `data-role='page'` on a simple `<div>` tag. And, more sophisticatedly, you can [dynamically creates pages and elements at run-time](http://jquerymobile.com/demos/1.2.0/docs/pages/page-dynamic.html).
+
+Key highlights from below:
+
+* `data-role="page"` sets up a div as a "page" that can be navigated to via hash tag, like `index.html#detail`
+* Other `data-` attributes configure various other aspects of jQueryMobile to enhance the standard HTML elements into desktop & mobile friendly presentations
+* The `<form>` and its contained `<div id="fields"></div>` element are where the form fields will get injected by Backbone Forms
+* Finally, the two buttonns in the footer get wired up to event handlers inside of the `v1AssetEditor` class
+
+```html
+<div data-role="page" id="detail" data-theme="b"> 
+    <div data-role="header" style="text-align:center;padding-top:5px" data-theme="b">
+        <div>&nbsp;
+            <img style="background:white;width:120px;padding:2px;margin-left:6px;" src="images/logo.png" border="0" align="left" /><span class="ui-block-b" style="font-size:120%;">&nbsp;&nbsp;Requestor App <span class='title'></span></span>
+        </div>
+        <div>&nbsp;
+            <fieldset class="ui-grid-a">
+                <div class="ui-block-a"><a href="#list" data-role="button" data-icon="arrow-u">List</a></div>
+                <div class="ui-block-b"><a href="#" data-role="button" class="new" data-icon="plus">New</a></div>
+            </fieldset>
+        </div>
+    </div>
+
+    <div data-role="content" class="sideGradient">      
+        <div id="assetFormDiv">
+            <form id="assetForm">
+                <div id="fields"></div>
+            </form> 
+        </div>
+        <br />            
+    </div>
+
+    <div data-role="footer" data-theme="b" data-position="fixed">
+        <fieldset class="ui-grid-a">
+            <div class="ui-block-a">
+                <a href="#" data-role="button" id="saveAndNew" data-icon="plus" data-mini="true">Save and New</a>
+            </div>            
+            <div class="ui-block-b">
+                <a href="#" data-role="button" id="save" data-icon="check" data-mini="true">Save</a>
+            </div>
+        </fieldset>
+    </div>    
+</div>​
+```
+
+### Additional jQuery Mobile references
+
+* [Backbone.js, RequireJS and jQuery Mobile](http://jquerymobile.com/test/docs/pages/backbone-require.html) -- not part of the 1.2.0 release, part of the upcoming release
+* [PhoneGap apps with jQuery Mobile](http://jquerymobile.com/demos/1.2.0/docs/pages/phonegap.html)
