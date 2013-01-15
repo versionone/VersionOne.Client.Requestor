@@ -10,12 +10,12 @@ The Requestor Tool implementation serves multiple goals:
 
 # Article Sections
 
-1. Technologies Overview
+1. Open Source Technologies Overview
 2. Hands on Demo with JSON Request & Response Inspection
 3. Backbone Forms and Model Binding Exercise
 4. Modular and Mobile Architecture Details
 
-# 1. Technologies Overview
+# 1. Open Source Technologies Overview
 
 **Note**: Skip this part if you just want to try the hands on demos and exercises first. But, please refer bcak to it later to see if you can help with suggestions regarding the areas for improvement. Thanks!
 
