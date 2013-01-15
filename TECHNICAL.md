@@ -131,7 +131,7 @@ Date: Mon, 14 Jan 2013 22:34:20 GMT
 
 ## 2. Select a project and fetch its Requests assets
 
-* Still with the Chrome console and Network tab open, click the 'System (All Projeccts)` result
+* Still with the Chrome Developer Tools and Network tab open, click the 'System (All Projeccts)` result
 * Click the `List` button to fetch the Request list
 
 ### Request URL generated
@@ -196,7 +196,7 @@ The response contains an array of JSON objects that contain only the Name and Re
 http://localhost/VersionOne.Web/rest-1.v1/Data/Request/2094?acceptFormat=haljson&sel=RequestedBy%2CName%2CDescription%2CPriority
 ```
 
-Again, various VersionOne API parameters comprise this URL:
+The VersionOne API parameters breakdown:
 
 * `/Data/Request/2094` -- the specific URL that uniquely identifies this Scope asset
 * `sel=RequestedBy,Name,Description,Priority` -- return just these four attributes
@@ -265,11 +265,6 @@ This time, the URL is nothing but the address of the asset, plus the `acceptForm
 **Note**: Because `Priority` is a Relation, there's no need to send the `Priority.Name`. Instead, it just sends a `_link` relation with the idref.
 
 *TODO* perhaps it would be more RESTful to require sending the URL as an `href` param instead of the shorter `idref`. Thoughts?
-
-Again, various VersionOne API parameters comprise this URL:
-
-* `/Data/Request/2094` -- the specific URL that uniquely identifies this Scope asset
-* `sel=RequestedBy,Name,Description,Priority` -- return just these four attributes
 
 ### Response received
 
