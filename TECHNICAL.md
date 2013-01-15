@@ -489,8 +489,9 @@ At the heart of this app is [JSON](http://www.json.org/). VersionOne does not ye
 
 Before looking at the code, let's step through the events using Chrome's console (F12 brings it up) to examine the HTTP requests and responses.
 
-## Search for a projects
+## 1. Search for projects by name
 
+* First, using Chrome, open the console by hitting `F12`, and select the Network tab
 * Open `http://localhost/v1requestor/index.html`
 * Type `system` into the text box
 * Hit enter
@@ -500,8 +501,6 @@ Before looking at the code, let's step through the events using Chrome's console
 In the Chrome console's Network tab, we can inspect the request and response:
 
 #### Headers
-
-Notice the Authorization header, which contains the Base64 encoded credentials. This string gets created using Chrome's `btoa` function, but if `options.serviceGateway` is defined, it will get that string fromm the gateway instead of hard-coding the credentials in the script. (I'm not pretending that this is secure, it's just for covenience right now)
 
 ```text
 GET /VersionOne.Web/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name HTTP/1.1
@@ -517,7 +516,13 @@ Accept-Language: en-US,en;q=0.8
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
 ```
 
+Notice the Authorization header, which contains the Base64 encoded credentials. This string gets created using Chrome's `btoa` function, but if `options.serviceGateway` is defined, it will get that string fromm the gateway instead of hard-coding the credentials in the script. (I'm not pretending that this is secure, it's just for covenience right now)
+
 #### URL
+
+```
+http://localhost/VersionOne.Web/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name
+```
 
 Various VersionOne API parameters comprise this request:
 
@@ -526,9 +531,6 @@ Various VersionOne API parameters comprise this request:
 * `find='system'` -- search for the word `system`
 * `findin=Name` -- search for `find` within the `Name` attribute only
 
-```
-http://localhost/VersionOne.Web/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name
-```
 
 ### Response received
 
@@ -564,6 +566,104 @@ Date: Mon, 14 Jan 2013 22:34:20 GMT
   }
 ]
 ```
+
+## 2. Select a project and fetch its Requests assets
+
+* Still with the Chrome console and Network tab open, click the 'System (All Projeccts)` result
+* Click the `List` button to fetch the Request list
+
+### Request URL generated
+
+```text
+http://localhost/VersionOne.Web/rest-1.v1/Data/Request?acceptFormat=haljson&where=Scope%3D'Scope%3A0'&sel=Name%2CRequestedBy&page=75%2C0&sort=-ChangeDate
+```
+
+Again, various VersionOne API parameters comprise this URL:
+
+* `where=Scope='Scope:0' -- return a Scope asset with the given id
+* `sel=Name,RequestedBy` -- return the Name and RequestedBy attributes of this Scope asset
+* `page=75,0` -- return 75 items max, starting at page 0
+* `sort=-ChangeDate` -- sort the results in desending order by the ChangeDate attribute
+
+### Response received
+
+The response contains an array of JSON objects that contain only the Name and RequestedBy attributes. This then gets used to populate the listview.
+
+```json
+[
+  {
+    "RequestedBy": "Blaine Stussy",
+    "Name": "Add the Custom_Team custom field to the Request form",
+    "_links": {
+      "self": {
+        "href": "/VersionOne.Web/rest-1.v1/Data/Request/2094",
+        "id": "Request:2094"
+      }
+    }
+  },
+  {
+    "RequestedBy": "Ian Buchanan",
+    "Name": "As an API Adopter, I can deploy the Requestor Tool easily",
+    "_links": {
+      "self": {
+        "href": "/VersionOne.Web/rest-1.v1/Data/Request/2093",
+        "id": "Request:2093"
+      }
+    }
+  },
+  {
+    "RequestedBy": "Blaine Stussy",
+    "Name": "Date fields should look better",
+    "_links": {
+      "self": {
+        "href": "/VersionOne.Web/rest-1.v1/Data/Request/2092",
+        "id": "Request:2092"
+      }
+    }
+  }
+]
+```
+
+## 3. Select a Request to edit
+
+* Now click the `Add the Custom_Team custom field to the Request form` request
+
+### Request URL generated
+
+```text
+http://localhost/VersionOne.Web/rest-1.v1/Data/Request/2094?acceptFormat=haljson&sel=RequestedBy%2CName%2CDescription%2CPriority
+```
+
+Again, various VersionOne API parameters comprise this URL:
+
+* `/Data/Request/2094` -- the specific URL that uniquely identifies this Scope asset
+* `sel=RequestedBy,Name,Description,Priority` -- return just these four attributes
+
+### Response received
+
+This time, we have several more fields, including the `Priority`, which is itself a `Relation`. By default, the VersionOne API projects the `Priority.Name` value into the result as well.
+
+```json
+{
+  "Description": "Please add the Custom_Team field to the Request form for the CapEx project, and only the CapEx project",
+  "Priority.Name": "High",
+  "Name": "Add the Custom_Team custom field to the Request form",
+  "RequestedBy": "Blaine Stussy",
+  "_links": {
+    "self": {
+      "href": "/VersionOne.Web/rest-1.v1/Data/Request/2094",
+      "id": "Request:2091"
+    },
+    "Priority": [
+      {
+        "href": "/VersionOne.Web/rest-1.v1/Data/RequestPriority/169",
+        "idref": "RequestPriority:169"
+      }
+    ]
+  }
+}
+```
+
 
 ##
 ```coffeescript
