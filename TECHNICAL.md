@@ -30,7 +30,7 @@ The Requestor Tool implementation serves multiple goals:
 
 # 1. Open Source Technologies Overview
 
-**Note**: Skip this part if you just want to try the hands on demos and exercises first. But, please refer bcak to it later to see if you can help with suggestions regarding the areas for improvement. Thanks!
+**Note**: Skip this part if you just want to try the hands on demos and exercises first. But, please refer back to it later to see if you can help with suggestions regarding the areas for improvement. Thanks!
 
 Just as the VersionOne API and Platform are open source, so are the technologies used in the Requestor tool. All of these are popular tools, many already in use by the VersionOne core team. Others are "up and coming", or tried and true libraries and frameworks in the web development and open source communities.
 
