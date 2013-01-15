@@ -48,20 +48,35 @@ Before even starting to examine code, let me say where I already believe improve
 
 At the heart of this app is [JSON](http://www.json.org/). VersionOne does not yet natively support the JSON format that we use in this app. But, the DLLs from VersionOne.SDK.Experimental add that support in an unobtrusive way with a simple `Web.config` change.
 
-Before looking at the code, let's step through the events using Chrome's console (F12 brings it up) to examine the HTTP requests and responses.
+Before looking at the code, let's step through the events using Chrome's Developer Tools (F12 brings them up) to examine the HTTP requests and responses.
 
 ## 1. Search for projects by name
 
-* First, using Chrome, open the console by hitting `F12`, and select the Network tab
+* First, using Chrome, open the Developer Tools by hitting `F12`, and select the Network tab
 * Open `http://localhost/v1requestor/index.html`
 * Type `system` into the text box
 * Hit enter
 
+Now, in the Chrome Developer Tools' Network tab, we can inspect the request and response:
+
 ### Request generated
 
-In the Chrome console's Network tab, we can inspect the request and response:
+#### URL
+
+```
+http://localhost/VersionOne.Web/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name
+```
+
+Various VersionOne API parameters comprise this request:
+
+* `sel=Name` -- return only the *Name* attribute from the remote resource
+* `page=100,0` -- return 100 items max, starting at page 0
+* `find='system'` -- search for the word `system`
+* `findin=Name` -- search for `find` within the `Name` attribute only
 
 #### Headers
+
+A look at the full headers:
 
 ```text
 GET /VersionOne.Web/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name HTTP/1.1
@@ -77,21 +92,7 @@ Accept-Language: en-US,en;q=0.8
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
 ```
 
-Notice the Authorization header, which contains the Base64 encoded credentials. This string gets created using Chrome's `btoa` function, but if `options.serviceGateway` is defined, it will get that string fromm the gateway instead of hard-coding the credentials in the script. (I'm not pretending that this is secure, it's just for covenience right now)
-
-#### URL
-
-```
-http://localhost/VersionOne.Web/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name
-```
-
-Various VersionOne API parameters comprise this request:
-
-* `sel=Name` -- return only the *Name* attribute from the remote resource
-* `page=100,0` -- return 100 items max, starting at page 0
-* `find='system'` -- search for the word `system`
-* `findin=Name` -- search for `find` within the `Name` attribute only
-
+Notice the Authorization header, which contains the Base64 encoded credentials. This string gets created using Chrome's `btoa` function, but if `options.serviceGateway` is defined, it will get that string from the gateway instead of hard-coding the credentials in the script. (I'm not pretending that this is secure, it's just for covenience right now)
 
 ### Response received
 
