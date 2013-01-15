@@ -408,12 +408,12 @@ default :
 
 ## 1. Generate a Simple JSON Object from the Form
 
-This will demonstrate how Backbone Forms simplifies the editing and JSON data-transfer-object (DTO) creation process for our request / response interactions.
+This step demonstrates how Backbone Forms produces simple, clean JSON objects (POJSOs?) from its fields.
 
 * Open Chrome's Console by hitting `F12` and select the Console tab
 * Load the Requestor tool
 * Follow the same steps from part one, up to step 3, to load an existing Request for edit
-* Now, in the Chrome Console tab, type: `v1RequestForm.getValue()` and hit enter
+* Now, in the Chrome Console tab, type: `JSON.stringify( v1RequestForm.getValue() )` and hit enter
 
 You should see something like this:
 
@@ -439,7 +439,7 @@ Given you have just completed the first step above, do this:
 
 Finally, given you've at least done step one above:
 
-* In the Console, type `v1RequestEditor.createDto()`. You should see something like:
+* In the Console, type `JSON.stringify( v1RequestEditor.createDto() )`. You should see something like:
 
 ```json
 {
