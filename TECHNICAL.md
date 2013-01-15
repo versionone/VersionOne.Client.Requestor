@@ -141,7 +141,7 @@ http://localhost/VersionOne.Web/rest-1.v1/Data/Request?acceptFormat=haljson&wher
 
 Again, various VersionOne API parameters comprise this URL:
 
-* `where=Scope='Scope:0' -- return a Scope asset with the given id
+* `where=Scope='Scope:0'` -- return a Scope asset with the given id
 * `sel=Name,RequestedBy` -- return the Name and RequestedBy attributes of this Scope asset
 * `page=75,0` -- return 75 items max, starting at page 0
 * `sort=-ChangeDate` -- sort the results in desending order by the ChangeDate attribute
