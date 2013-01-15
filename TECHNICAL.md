@@ -371,9 +371,13 @@ So, how do we use Backbone Forms in the Requestor?
 
 ### Form specification in fields.coffee
 
-The file `fields.coffee` contains the set of fields and their datatype, plus a few other attributes. For scalar types, it's very simple. See the [Backbone Forms](https://github.com/powmedia/backbone-forms) documentation for possible values of the `type` attribute for form element types.
+The file `fields.coffee` contains the set of fields and their HTML form element type, plus a few other attributes. 
+For scalar types, it's very simple.
 
-By default, a project will use the fields specified in the `defuault` property. To override that set for a specific project, simply add another property the scope id, like `Scope:173519`.
+By default, a project will use the fields specified in the `defuault` property. 
+
+**Note**: To override that set for a specific project, simply add another property, at the same level as `default`, 
+with the scope id, like `Scope:173519`. We'll cover this in a later section.
 
 Here's how the form we saw in part one gets specified:
 
@@ -403,8 +407,12 @@ default :
 * `assetName` -- specifies the VersionOne asset type for relations on an asset
 * `autofocus` -- specifies that a field should be automatically focused on load 
 * `optional` -- when true, allows an empty value for the field
- 
-**Note**: If you read the Backbone Forms documentation, you'll notice that `autofocus`, `optional`, and, of course `assetName` are not part of its API. That's because we pre-process these properties before passing this into Backbone Forms. We'll go into that in more detail in another section.
+
+See the [Backbone Forms](https://github.com/powmedia/backbone-forms) documentation for possible values of the `type` attribute for form element types.
+
+**Note**: If you do visit the Backbone Forms documentation, you'll notice that `autofocus`, `optional`, and, of course `assetName` are not part of its API. 
+That's because we pre-process these properties before passing this into Backbone Forms. 
+We'll go into that in more detail in another section.
 
 ## 1. Generate a Simple JSON Object from the Form
 
