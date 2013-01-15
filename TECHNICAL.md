@@ -66,7 +66,7 @@ Before looking at the code, let's step through the events using Chrome's Develop
 ## 1. Search for projects by name
 
 * First, using Chrome, open the Developer Tools by hitting `F12`, and select the Network tab
-* Open `http://localhost/v1requestor/index.html`
+* Open `http://eval.versionone.net/platformtest/v1requestor/index.html`
 * Type `system` into the text box
 * Hit enter
 
@@ -77,7 +77,7 @@ Now, in the Chrome Developer Tools' Network tab, we can inspect the HTTP request
 #### URL
 
 ```
-http://localhost/VersionOne.Web/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name
+http://eval.versionone.net/platformtest/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name
 ```
 
 Various VersionOne API parameters comprise this HTTP request:
@@ -92,14 +92,14 @@ Various VersionOne API parameters comprise this HTTP request:
 A look at the full headers:
 
 ```text
-GET /VersionOne.Web/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name HTTP/1.1
-Host: localhost
+GET /platformtest/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name HTTP/1.1
+Host: eval.versionone.net
 Connection: keep-alive
 Authorization: Basic YWRtaW46YWRtaW4=
 X-Requested-With: XMLHttpRequest
 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11
 Accept: */*
-Referer: http://localhost/v1requestor/index.html
+Referer: http://eval.versionone.net/platformtest/v1requestor/index.html
 Accept-Encoding: gzip,deflate,sdch
 Accept-Language: en-US,en;q=0.8
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
@@ -150,7 +150,7 @@ Date: Mon, 14 Jan 2013 22:34:20 GMT
 ### HTTP Request URL generated
 
 ```text
-http://localhost/VersionOne.Web/rest-1.v1/Data/Request?acceptFormat=haljson&where=Scope%3D'Scope%3A0'&sel=Name%2CRequestedBy&page=75%2C0&sort=-ChangeDate
+http://eval.versionone.net/platformtest/rest-1.v1/Data/Request?acceptFormat=haljson&where=Scope%3D'Scope%3A0'&sel=Name%2CRequestedBy&page=75%2C0&sort=-ChangeDate
 ```
 
 Again, various VersionOne API parameters comprise this URL:
@@ -167,32 +167,32 @@ The HTTP response contains an array of JSON objects that contain only the Name a
 ```json
 [
   {
-    "RequestedBy": "Blaine Stussy",
-    "Name": "Add the Custom_Team custom field to the Request form",
-    "_links": {
-      "self": {
-        "href": "/VersionOne.Web/rest-1.v1/Data/Request/2094",
-        "id": "Request:2094"
-      }
-    }
-  },
-  {
-    "RequestedBy": "Ian Buchanan",
-    "Name": "As an API Adopter, I can deploy the Requestor Tool easily",
-    "_links": {
-      "self": {
-        "href": "/VersionOne.Web/rest-1.v1/Data/Request/2093",
-        "id": "Request:2093"
-      }
-    }
-  },
-  {
-    "RequestedBy": "Blaine Stussy",
     "Name": "Date fields should look better",
+    "RequestedBy": "Blaine Stussy",
     "_links": {
       "self": {
-        "href": "/VersionOne.Web/rest-1.v1/Data/Request/2092",
-        "id": "Request:2092"
+        "href": "/platformtest/rest-1.v1/Data/Request/1152",
+        "id": "Request:1152"
+      }
+    }
+  },
+  {
+    "Name": "As an API Adopter, I can deploy the Requestor Tool easily",
+    "RequestedBy": "Ian Buchanan",
+    "_links": {
+      "self": {
+        "href": "/platformtest/rest-1.v1/Data/Request/1151",
+        "id": "Request:1151"
+      }
+    }
+  },
+  {
+    "Name": "Add the Custom_Team custom field to the Request form",
+    "RequestedBy": "Blaine Stussy",
+    "_links": {
+      "self": {
+        "href": "/platformtest/rest-1.v1/Data/Request/1150",
+        "id": "Request:1150"
       }
     }
   }
@@ -206,12 +206,12 @@ The HTTP response contains an array of JSON objects that contain only the Name a
 ### HTTP Request URL generated
 
 ```text
-http://localhost/VersionOne.Web/rest-1.v1/Data/Request/2094?acceptFormat=haljson&sel=RequestedBy%2CName%2CDescription%2CPriority
+http://eval.versionone.net/platformtest/rest-1.v1/Data/Request/1150?acceptFormat=haljson&sel=RequestedBy%2CName%2CDescription%2CPriority
 ```
 
 The VersionOne API parameters breakdown:
 
-* `/Data/Request/2094` -- the specific URL that uniquely identifies this Scope asset
+* `/Data/Request/1150` -- the specific URL that uniquely identifies this Scope asset
 * `sel=RequestedBy,Name,Description,Priority` -- return just these four attributes
 
 ### HTTP Response received
@@ -220,18 +220,18 @@ This time, we have several more fields, including the `Priority`, which is itsel
 
 ```json
 {
+  "RequestedBy": "Blaine Stussy",
+  "Name": "Add the Custom_Team custom field to the Request form",
   "Description": "Please add the Custom_Team field to the Request form for the CapEx project, and only the CapEx project",
   "Priority.Name": "High",
-  "Name": "Add the Custom_Team custom field to the Request form",
-  "RequestedBy": "Blaine Stussy",
   "_links": {
     "self": {
-      "href": "/VersionOne.Web/rest-1.v1/Data/Request/2094",
-      "id": "Request:2091"
+      "href": "/platformtest/rest-1.v1/Data/Request/1150",
+      "id": "Request:1150"
     },
     "Priority": [
       {
-        "href": "/VersionOne.Web/rest-1.v1/Data/RequestPriority/169",
+        "href": "/platformtest/rest-1.v1/Data/RequestPriority/169",
         "idref": "RequestPriority:169"
       }
     ]
@@ -253,7 +253,7 @@ Please add the Custom_Team field, between the Description and Priority fields, t
 
 #### URL
 ```text
-http://localhost/VersionOne.Web/rest-1.v1/Data/Request/2094?acceptFormat=haljson
+http://eval.versionone.net/platformtest/rest-1.v1/Data/Request/1150?acceptFormat=haljson
 ```
 
 This time, the URL is nothing but the address of the asset, plus the `acceptFormat` parameter to the backend service.
@@ -262,17 +262,17 @@ This time, the URL is nothing but the address of the asset, plus the `acceptForm
 
 ```json
 {
-  "RequestedBy": "Blaine Stussy",
-  "Name": "Add the Custom_Team custom field to the Request form",
-  "Description": "Please add the Custom_Team field, between the Description and Priority fields, to the Request form for the CapEx project, and only for the CapEx project",
-  "_links": {
-    "Scope": {
-      "idref": "Scope:0"
-    },
-    "Priority": {
-      "idref": "RequestPriority:169"
+    "RequestedBy": "Blaine Stussy",
+    "Name": "Add the Custom_Team custom field to the Request form",
+    "Description": "Please add the Custom_Team field, between the Description and Priority fields, to the Request form for the CapEx project, and only for the CapEx project",
+    "_links": {
+        "Scope": {
+            "idref": "Scope:0"
+        },
+        "Priority": {
+            "idref": "RequestPriority:169"
+        }
     }
-  }
 }
 ```
 **Note**: Because `Priority` is a Relation, there's no need to send the `Priority.Name`. Instead, it just sends a `_link` relation with the idref.
@@ -285,24 +285,24 @@ This time, we have several more fields, including the `Priority`, which is itsel
 
 ```json
 {
-  "Description": "Please add the Custom_Team field, between the Description and Priority fields, to the Request form for the CapEx project, and only for the CapEx project",
-  "Name": "Add the Custom_Team custom field to the Request form",
   "RequestedBy": "Blaine Stussy",
+  "Name": "Add the Custom_Team custom field to the Request form",
+  "Description": "Please add the Custom_Team field, between the Description and Priority fields, to the Request form for the CapEx project, and only for the CapEx project",
   "_links": {
     "self": {
-      "href": "/VersionOne.Web/rest-1.v1/Data/Request/2094/2745",
-      "id": "Request:2094:2745"
+      "href": "/platformtest/rest-1.v1/Data/Request/1150/1321",
+      "id": "Request:1150:1321"
     },
-    "Priority": [
-      {
-        "href": "/VersionOne.Web/rest-1.v1/Data/RequestPriority/169",
-        "idref": "RequestPriority:169"
-      }
-    ],
     "Scope": [
       {
-        "href": "/VersionOne.Web/rest-1.v1/Data/Scope/0",
+        "href": "/platformtest/rest-1.v1/Data/Scope/0",
         "idref": "Scope:0"
+      }
+    ],
+    "Priority": [
+      {
+        "href": "/platformtest/rest-1.v1/Data/RequestPriority/169",
+        "idref": "RequestPriority:169"
       }
     ]
   }
@@ -561,9 +561,9 @@ Now, do you remember the JSON response body from part one in step 4, the one wit
 ```json
   "_links": {
     "self": {
-      "href": "/VersionOne.Web/rest-1.v1/Data/Request/2094/2745",
-      "id": "Request:2094:2745"
-    },
+      "href": "/platformtest/rest-1.v1/Data/Request/1150/1321",
+      "id": "Request:1150:1321"
+    }
 ```
 
 The *normalize* functions simply remove the moment number from the `id` and `href` values in the `_links.self` object. This is important because we need to load the latest, momentless version of the asset on click.
@@ -577,24 +577,24 @@ Now, add your own, additional event handler like this:
 
 ```json
 {
-  "Description": "Backbone.Events is Awesome!",
-  "Name": "Add the Custom_Team custom field to the Request form",
   "RequestedBy": "Blaine Stussy",
+  "Name": "Add the Custom_Team custom field to the Request form",
+  "Description": "Backbone.Events is Awesome!",
   "_links": {
     "self": {
-      "href": "/VersionOne.Web/rest-1.v1/Data/Request/2094/2745",
-      "id": "Request:2094:2745"
+      "href": "/platformtest/rest-1.v1/Data/Request/1150/1322",
+      "id": "Request:1150:1322"
     },
-    "Priority": [
-      {
-        "href": "/VersionOne.Web/rest-1.v1/Data/RequestPriority/169",
-        "idref": "RequestPriority:169"
-      }
-    ],
     "Scope": [
       {
-        "href": "/VersionOne.Web/rest-1.v1/Data/Scope/0",
+        "href": "/platformtest/rest-1.v1/Data/Scope/0",
         "idref": "Scope:0"
+      }
+    ],
+    "Priority": [
+      {
+        "href": "/platformtest/rest-1.v1/Data/RequestPriority/169",
+        "idref": "RequestPriority:169"
       }
     ]
   }
