@@ -418,8 +418,8 @@ We'll go into that in more detail in another section.
 
 This step demonstrates how Backbone Forms produces simple, clean JSON objects (POJSOs?) from its fields.
 
-* Open Chrome's Console by hitting `F12` and select the Console tab
-* Load the Requestor tool
+* Open Chrome's Developer Tools by hitting `F12` and select the Console tab
+* Load the Requestor tool in the browser
 * Follow the same steps from part one, up to step 3, to load an existing Request for edit
 * Now, in the Chrome Console tab, type: `JSON.stringify( v1RequestForm.getValue() )` and hit enter
 
@@ -447,7 +447,7 @@ Given you have just completed the first step above, do this:
 
 Finally, given you've at least done step one above:
 
-* In the Console, type `JSON.stringify( v1RequestEditor.createDto() )`. You should see something like:
+* In the Console, type `JSON.stringify( v1AssetEditor.createDto() )`. You should see something like:
 
 ```json
 {
