@@ -481,7 +481,40 @@ Here's how we do that way back inside of `VersionOneAssetEditor.constructor`:
 	assetEditor.listItemReplace asset
 ```
 
-Remember the JSON response body from part one in step 4, the one with the moments in it? If not, here's a snippet from that:
+And, here's how the event is triggered from inside of the `saveAsset` method. The same pathway is used for both create and update, but different event names are passed in for publication.
+
+This section also ties together a lot of important architectural concepts, but we'll cover them in detail in the next section.
+
+```coffeescript
+createAsset: (assetName, callback) ->
+  url = @getAssetUrl(assetName)
+  @saveAsset url, "assetCreated", callback
+
+updateAsset: (href, callback) ->
+  url = @host + href + "?" + $.param(@queryOpts)
+  @saveAsset url, "assetUpdated", callback
+
+saveAsset: (url, eventType, callback) ->
+  validations = @form.validate()
+  if validations?
+    error "Please review the form for errors"
+    return
+  dto = @createDto()
+  debug "Dto:"
+  debug dto
+  request = @createRequest(
+    url: url
+    type: "POST"
+    data: JSON.stringify(dto)
+    contentType: @contentType
+  )
+  $.ajax(request).done((data) =>
+    @trigger eventType, @, data
+    callback data if callback
+  ).fail @_ajaxFail
+```
+
+Now, do you remember the JSON response body from part one in step 4, the one with the moments in it? If not, here's a snippet from that:
 
 ```json
   "_links": {
