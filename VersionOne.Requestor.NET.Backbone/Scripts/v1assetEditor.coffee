@@ -31,6 +31,8 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
     $.mobile.loading('hide')
   
   class VersionOneAssetEditor
+    # Events: assetCreated, assetUpdated, initialized, projectChanged
+
     constructor: (options) ->          
       continueSettingOptions = =>
         options.whereParamsForProjectScope =
@@ -62,6 +64,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
     initialize: ->
       @requestorName = ""
       @refreshFieldSet "default"
+      
       $(".new").click =>
         @newAsset()
 
@@ -89,7 +92,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         success "Save successful"
         that._normalizeIdWithoutMoment asset
         that._normalizeHrefWithoutMoment asset
-        that.listItemReplace asset
+        that.listItemReplace asset        
 
       @configureProjectSearch()
       @toggleNewOrEdit "new"
@@ -282,6 +285,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         @asset = asset
         form = new Backbone.Form(model: asset).render()
         @form = form
+        @trigger "assetFormCreated", @form
         $("#fields").html form.el
         if modelData?
           @toggleNewOrEdit "edit", href
@@ -472,11 +476,12 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
           unless field.type is "select"
             $(this).val ""
             $(this).textinput()    
-      # TODO: this is hard-coded
+      '''
       sel = $("[name='Priority']")
       sel.selectmenu()
       sel.val "RequestPriority:167"
       sel.selectmenu "refresh"
+      '''
 
     enumFields: (callback) ->
       for key, field of @getFormFields()

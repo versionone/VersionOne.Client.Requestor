@@ -32,7 +32,10 @@ require([
         $)
     {
     	$(document).ready(function () {
-    	    var editor = new v1assetEditor(v1config);
+    	    window.v1AssetEditor = new v1assetEditor(v1config);
+            window.v1AssetEditor.on("assetFormCreated", function(assetForm) {
+                window.vRequestForm = assetForm;
+            });
     	});
     }
 );

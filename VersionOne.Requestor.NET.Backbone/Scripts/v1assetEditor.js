@@ -389,6 +389,7 @@
             model: asset
           }).render();
           _this.form = form;
+          _this.trigger("assetFormCreated", _this.form);
           $("#fields").html(form.el);
           if (modelData != null) {
             _this.toggleNewOrEdit("edit", href);
@@ -641,7 +642,6 @@
       };
 
       VersionOneAssetEditor.prototype.resetForm = function() {
-        var sel;
         this.enumFields(function(key, field) {
           return $("[name='" + key + "']").each(function() {
             if (field.type !== "select") {
@@ -650,10 +650,7 @@
             }
           });
         });
-        sel = $("[name='Priority']");
-        sel.selectmenu();
-        sel.val("RequestPriority:167");
-        return sel.selectmenu("refresh");
+        return 'sel = $("[name=\'Priority\']")\nsel.selectmenu()\nsel.val "RequestPriority:167"\nsel.selectmenu "refresh"';
       };
 
       VersionOneAssetEditor.prototype.enumFields = function(callback) {
