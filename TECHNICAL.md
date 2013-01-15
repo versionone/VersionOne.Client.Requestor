@@ -13,7 +13,7 @@ The Requestor Tool implementation serves multiple goals:
 1. Open Source Technologies Overview
  - Technology List
  - Areas for Possible Improvement
-2. Hands on Demo with JSON Request & Response Inspection
+2. Hands on Demo with JSON HTTP Request & HTTP Response Inspection
  - Search for Projects by Name
  - Select a Project and Fetch its Request Assets
  - Select a Request to Edit
