@@ -467,6 +467,31 @@ Finally, given you've at least done step one above:
 
 This contains the `_links` property, which specifies the relation items necessary for the VersionOne API to properly process the request.
 
+Here's what `createDto` actually does:
+
+```coffeescript
+createDto: ->
+  dto = @form.getValue()
+
+  # TODO: hard-coded for test
+  dto._links = Scope:
+    idref: @projectIdref
+
+  $("#fields select").each ->
+    el = $(this)
+    id = el.attr("name")
+    val = el.val()
+    relationAssetName = el.attr("data-rel")
+    if relationAssetName
+      dto._links[relationAssetName] = idref: val
+      delete dto[id]
+  return dto
+```
+
+The most important part to note here is the iteration over the `select` items. This jQuery selector is getting all the INPUT elements of type SELECT, and then creating relation references in the special `_links` property of the DTO. Then, it simply removes the prpoerty from the JSON object that was magically created by Backbone Forms. If you compare the output from the previous step, you'll notice that Priority was part of the top-level JSON object, whereas now it is inside the `_links` object.
+
+That's really all that's needed to transform Backbone Forms' output into a VersionOne-compliant JSON DTO!
+
 ## 4. Create a new event handler to stringify the asset *"on update"*
 
 If you change the `RequestedBy` or `Name` (Title on screen) fields, then click the `List` button, you'll notice that these changes are already reflected in the list. But, you don't see any additional traffic on the Network tab when you do this. That's because we're using Backbone.Events to create our own event handler, which subscribes to a custom event called `assetUpdated`. 
