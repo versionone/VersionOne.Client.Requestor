@@ -40,6 +40,7 @@ Before even starting to examine code, let me say where I already believe improve
 * Explore use of Backbone.sync + localStorage. [See this project](http://documentcloud.github.com/backbone/docs/backbone-localstorage.html) -- This would be for people able to create requests "off line", saved to localStorage, then put them into VersionOne when they are ready to, or when they have a network connection
 * Throw in some "Infinite Genericization" of the "v1AssetEditor" -- something that is entirely model-driven and can edit any type of asset based on its Meta definition
 * Use of Jade for templates -- see this open-source project I'm working on for an example: [OpenEpi Mobile](http://www.github.com/JogoShugh/OpenEpi.com.jQueryMobile)
+* Replace underscore with "lo-dash" for performance? What about zepto.js instead of jQuery?
 
 # 2. Hands on Demo with JSON Request & Response Inspection
 
