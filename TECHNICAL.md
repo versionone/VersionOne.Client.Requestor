@@ -41,7 +41,7 @@ Before even starting to examine code, let me say where I already believe improve
 * Throw in some "Infinite Genericization" of the "v1AssetEditor" -- something that is entirely model-driven and can edit any type of asset based on its Meta definition
 * Use of Jade for templates -- see this open-source project I'm working on for an example: [OpenEpi Mobile](http://www.github.com/JogoShugh/OpenEpi.com.jQueryMobile)
 
-## 2. Hands on Demo with JSON Request & Response Inspection
+# 2. Hands on Demo with JSON Request & Response Inspection
 
 At the heart of this app is [JSON](http://www.json.org/). VersionOne does not yet natively support the JSON format that we use in this app. But, the DLLs from VersionOne.SDK.Experimental add that support in an unobtrusive way with a simple `Web.config` change.
 
@@ -305,15 +305,11 @@ Note the following about this response:
 
 # 3. Backbone Forms and Model Binding Exercise
 
-This exercise will show you how Backbone Forms is used to make the Request editor and to simplify, using Backbone models, the request / response interaction we just demonstrated.
-
-Backbone Forms is an open source library for Backbone.js that makes creating model-bound HTML forms dead simple.
-
-For a better understanding, take a look at the overview of [Backbone Forms](https://github.com/powmedia/backbone-forms) before proceding.
+Backbone Forms is an open source library for Backbone.js that makes creating model-bound HTML forms dead simple. This exercise will show you how Backbone Forms is used to make the Request editor and to simplify, using Backbone models, the request / response interaction we just demonstrated.
 
 ## Simple Backbone Forms Example
 
-Or, for a summary understanding, here's one way a simple form is defined with Backbone Forms:
+For a quick overview of what Backbone Forms does, take a look at this example from the project's documentation:
 
 ```html
 <!-- Seriously, this is it: -->
@@ -367,114 +363,49 @@ $(function() {
 
 [See it action here](http://jsfiddle.net/97U27/)
 
-### Cooler Twitter Bootstrappified Backbone Forms Example with Subschema Object List
+For a better understanding of the library, take a look at [Backbone Forms on Github](https://github.com/powmedia/backbone-forms).
 
-Or, [view this nice sample JSFiddle](http://jsfiddle.net/QY57e/) which uses Backbone Forms with the Twitter Bootstrap CSS and nested sub-models.
+## Requestor Tool Configuration for Backbone Forms
 
-Note the `subSchema` definition for the weapon attribute.
+So, how do we use Backbone Forms in the Requestor?
 
-### Dependent Dropdown Example
-
-And, [This example](http://jsfiddle.net/nXHSX/) is a classic dependent dropdown example.
-
-
-## VersionOne Customer and Project-Specific Field Configuration File
-
-So, how do we use Backbone Forms in the Requestor? We use it with a bit of help.
-
-### `fields.coffee` specifies form fields
+### `fields.coffee` specification
 
 The file `fields.coffee` contains the set of fields and their datatype, plus a few other attributes. For scalar types, it's very simple. See the [Backbone Forms](https://github.com/powmedia/backbone-forms) documentation for possible values of the `type` attribute for form element types.
 
-For VersionOne relations, here's an exampe:
+By default, a project will use the fields specified in the `defuault` property. To override that set for a specific project, simply add another property the scope id, like `Scope:173519`.
 
-With a built-in VersionOne asset, `RequestPrioerity`:
-
-```coffeescript
-fieldsConfig =
-  Priority:
-    title: 'Priority'
-    type: 'Select'
-    assetName: 'RequestPriority'
-```
-
-And, it's basically the same with a customer-created custom field:
+Here's how the form we saw in part one gets specified:
 
 ```coffeescript
-fieldsConfig =
-  Custom_ProductService:
-    title: 'Product/Service'
-    type: 'Select'
-    assetName: 'Custom_Product'
+default :
+	RequestedBy:
+		title: 'Requested By'
+		autofocus: true
+
+	Name:
+		title: 'Request Title'
+
+	Description:
+		title: 'Request Description (Project & Why needed)'
+		type: 'TextArea'
+		optional: true
+
+	Priority:
+		title: 'Priority'
+		type: 'Select'
+		assetName: 'RequestPriority'
 ```
 
-### `default:` sets up default form fields
+* The left-most property name must match an asset's attribute name
+* `title` -- will be used as the description label on the form
+* `type` -- specifies what kind of form element to use, defaulting to simple text box
+* `assetName` -- specifies the VersionOne asset type for relations on an asset
+* `autofocus` -- specifies that a field should be automatically focused on load 
+* `optional` -- when true, allows an empty value for the field
+ 
+*Note:* If you read the Backbone Forms documentation, you'll notice that `autofocus`, `optional`, and, of course `assetName` are not part of its API. That's because we pre-process these properties before passing this into Backbone Forms. We'll go into that in more detail in another section.
 
-By default, a project will use the fields specified in the `defuault` property.
-
-### `Scope:NNNN`: sets up fields for a specific project
-
-To override that set, simply use the project scope value, like `Scope:173519`.
-
-Here's a complete example with both `default:` and an override:
-
-```coffeescript
-define ->
-  fieldsConfig =
-    default :
-      RequestedBy:
-        title: 'Requested By'
-        autofocus: true
-
-      Name:
-        title: 'Request Title'
-
-      Description:
-        title: 'Request Description (Project & Why needed)'
-        type: 'TextArea'
-        optional: true
-
-      Priority:
-        title: 'Priority'
-        type: 'Select'
-        assetName: 'RequestPriority'
-
-    'Scope:173519':
-      RequestedBy:
-        title: 'Requested By'
-        autofocus: true
-        
-      Name:
-        title: 'Request Title'
-
-      Custom_RequestedETA:
-        title: 'Requested by (ETA)'
-        type: 'Date'
-
-      Description:
-        title: 'Request Description (Project & Why needed)'
-        type: 'TextArea'
-        optional: true
-
-      Custom_ProductService:
-        title: 'Product/Service'
-        type: 'Select'
-        assetName: 'Custom_Product'
-
-      Custom_Team2:
-        title: 'Team'
-        type: 'Select'
-        assetName: 'Custom_Team'
-
-      Custom_HWRequestedlistandcostperunit:
-        title: 'Capacity or HW Requested'
-        type: 'TextArea'
-
-      Custom_RequestImpact:
-        title: 'Request Impact'
-        type: 'Select'
-        assetName: 'Custom_Severity'
-```
 
 # RequireJS: loading modules
 
