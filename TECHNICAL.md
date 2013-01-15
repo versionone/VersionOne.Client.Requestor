@@ -494,7 +494,11 @@ That's really all that's needed to transform Backbone Forms' output into a Versi
 
 ## 4. Create a new event handler to stringify the asset *"on update"*
 
-If you change the `RequestedBy` or `Name` (Title on screen) fields, then click the `List` button, you'll notice that these changes are already reflected in the list. But, you don't see any additional traffic on the Network tab when you do this. That's because we're using Backbone.Events to create our own event handler, which subscribes to a custom event called `assetUpdated`. 
+If you change the `RequestedBy` or `Name` (Title on screen) fields, then click the `List` button, 
+you'll notice that these changes are already reflected in the list. 
+But, you don't see any additional traffic on the Network tab when you do this. 
+That's because we're using [Backbone.Events](http://backbonejs.org/#Events) to create our own event handler, 
+which subscribes to a custom event called `assetUpdated`. 
 
 Here's how we do that way back inside of `VersionOneAssetEditor.constructor`:
 
@@ -554,7 +558,7 @@ The *normalize* functions simply remove the moment number from the `id` and `hre
 Now, add your own, additional event handler like this:
 
 * Complete step one above, then:
-* From the Console, type: `v1AssetEditor.on('assetUpdated', function(asset) { console.log( JSON.stringify(asset) ); } )` and hit enter
+* From the Console, type: `v1AssetEditor.on('assetUpdated', function(assetEditor, asset){ console.log(JSON.stringify(asset)); })` and hit enter
 * Change the Deecription field on the form to `Backbone.Events is Awesome!` and hit `Save`
 * You should see this in the Console:
 
