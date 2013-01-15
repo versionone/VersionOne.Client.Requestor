@@ -15,7 +15,7 @@ The Requestor Tool implementation serves multiple goals:
 3. Backbone Forms and Model Binding Exercise
 4. Modular and Mobile Architecture Details
 
-# Technologies Overview
+# 1. Technologies Overview
 
 Just as the VersionOne API and Platform are open source, so are the technologies used in the Requestor tool. All of these are popular tools, many already in use by the VersionOne core team. Others are "up and coming", or tried and true libraries and frameworks in the web development and open source communities.
 
@@ -41,7 +41,7 @@ Before even starting to examine code, let me say where I already believe improve
 * Throw in some "Infinite Genericization" of the "v1AssetEditor" -- something that is entirely model-driven and can edit any type of asset based on its Meta definition
 * Use of Jade for templates -- see this open-source project I'm working on for an example: [OpenEpi Mobile](http://www.github.com/JogoShugh/OpenEpi.com.jQueryMobile)
 
-## Hands on Demo with JSON Request & Response Inspection
+## 2. Hands on Demo with JSON Request & Response Inspection
 
 At the heart of this app is [JSON](http://www.json.org/). VersionOne does not yet natively support the JSON format that we use in this app. But, the DLLs from VersionOne.SDK.Experimental add that support in an unobtrusive way with a simple `Web.config` change.
 
@@ -303,15 +303,15 @@ Note the following about this response:
 * The `_links.self.href` and `_links.self.id` properties contain the asset's `Moment`, which is a specific, very precise address of the asset. Since all asset changes are retained, this provides the exact location for this *version* of the asset. Note that if we now request the asset without the moment, the asset will still have the same state. However, someone else could change it before we do that. In case, we can always request this specific moment of the asset's state by using the moment-containing URL or id.
 * TODO: I am not sure why it returned the Scope as a relation.
 
+# 3. Backbone Forms and Model Binding Exercise
 
+This exercise will show you how Backbone Forms is used to make the Request editor and to simplify, using Backbone models, the request / response interaction we just demonstrated.
 
-# Technical Highlights
-
-## Backbone Forms
+Backbone Forms is an open source library for Backbone.js that makes creating model-bound HTML forms dead simple.
 
 For a better understanding, take a look at the overview of [Backbone Forms](https://github.com/powmedia/backbone-forms) before proceding.
 
-### Simple Backbone Forms Example
+## Simple Backbone Forms Example
 
 Or, for a summary understanding, here's one way a simple form is defined with Backbone Forms:
 
