@@ -299,7 +299,8 @@ This time, we have several more fields, including the `Priority`, which is itsel
 Important in this response:
 
 * It contains the same fields that we sent it, and only those fields
-* The `_links.self.href` and `_links.self.id` properties contain the asset's `Moment`, which is a specific, very precise address of the asset. Since all asset changes are retained, this provides the exact location for this *version* of the asset. Note that if we now request the asset without the moment, the asset will still have the same state. However, someone else could change it before we do that. In case, we can always request this specific moment of the asset's state by using the moment-containing URL or id.
+* The `_links.self.href` and `_links.self.id` properties contain the asset's `Moment`, which is a specific, very precise address of the asset. Since all asset changes are retained, this provides the exact location for this *version* of the asset. Note that if we now request the asset without the moment, the asset will still have the same state. However, someone else could change it before we do that. 
+In that case, we can always request this specific moment of the asset's state by using the moment-containing URL or id.
 * TODO: I am not sure why it returned the Scope as a relation.
 
 # 3. Backbone Forms and Model Binding Exercise
