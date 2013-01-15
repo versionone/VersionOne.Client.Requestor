@@ -35,12 +35,12 @@ Just as the VersionOne API and Platform are open source, so are the technologies
 
 Before even starting to examine code, let me say where I already believe improvements can be made so that you can keep these in mind, along with any other ideas you generate:
 
-* Break up the v1AssetEditor into a few smaller parts
+* Break up the VersionOneAssetEditor class into a few smaller parts
 * Reduce use of callbacks (already using Backbone.Events in a couple key places) and jQuery Promises
 * Better use of Backbone events, models, collections, views, routes, etc?
 * Possible simplification with the YAML query support Joe Koberg has created for the multiple dropdown lists -- which are populated from custom field values specific to a customer's project
 * Explore use of Backbone.sync + localStorage. [See this project](http://documentcloud.github.com/backbone/docs/backbone-localstorage.html) -- This would be for people able to create requests "off line", saved to localStorage, then put them into VersionOne when they are ready to, or when they have a network connection
-* Throw in some "Infinite Genericization" of the "v1AssetEditor" -- something that is entirely model-driven and can edit any type of asset based on its Meta definition
+* Throw in some "Infinite Genericization" of the VersionOneAssetEditor -- something that is entirely model-driven and can edit any type of asset based on its Meta definition
 * Use of Jade for templates -- see this open-source project I'm working on for an example: [OpenEpi Mobile](http://www.github.com/JogoShugh/OpenEpi.com.jQueryMobile)
 * Replace underscore with [lo-dash](http://lodash.com/) for performance? What about [zepto.js](http://zeptojs.com/) instead of jQuery?
 
