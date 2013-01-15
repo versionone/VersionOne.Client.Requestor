@@ -11,9 +11,22 @@ The Requestor Tool implementation serves multiple goals:
 # Article Sections
 
 1. Open Source Technologies Overview
+ - Technology List
+ - Areas for Possible Improvement
 2. Hands on Demo with JSON Request & Response Inspection
+ - Search for Projects by Name
+ - Select a Project and Fetch its Request Assets
+ - Select a Request to Edit
+ - Modify the Request and Save
 3. Backbone Forms and Model Binding Exercise
+ - Simple Backbone Forms Example
+ - Requestor Tool Configuration for Backbone Forms
+ - Generate a Simple JSON Object from the Form
+ - Modify the Form using the Backbone Model in the Developer Console
+ - Generate a VersionOne API-compatible JSON DTO in the Developer Console
+ - Create a new Event Handler to Stringify the Request Asset "on update"
 4. Modular and Mobile Architecture Details
+ - TODO
 
 # 1. Open Source Technologies Overview
 
@@ -44,7 +57,7 @@ Before even starting to examine code, let me say where I already believe improve
 * Use of Jade for templates -- see this open-source project I'm working on for an example: [OpenEpi Mobile](http://www.github.com/JogoShugh/OpenEpi.com.jQueryMobile)
 * Replace underscore with [lo-dash](http://lodash.com/) for performance? What about [zepto.js](http://zeptojs.com/) instead of jQuery?
 
-# 2. Hands on Demo with JSON Request & Response Inspection
+# 2. Hands on Demo with JSON HTTP Request & HTTP Response Inspection
 
 At the heart of this app is [JSON](http://www.json.org/). VersionOne does not yet natively support the JSON format that we use in this app. But, the DLLs from VersionOne.SDK.Experimental add that support in an unobtrusive way with a simple `Web.config` change.
 
@@ -57,9 +70,9 @@ Before looking at the code, let's step through the events using Chrome's Develop
 * Type `system` into the text box
 * Hit enter
 
-Now, in the Chrome Developer Tools' Network tab, we can inspect the request and response:
+Now, in the Chrome Developer Tools' Network tab, we can inspect the HTTP request and HTTP response:
 
-### Request generated
+### HTTP Request generated
 
 #### URL
 
@@ -67,7 +80,7 @@ Now, in the Chrome Developer Tools' Network tab, we can inspect the request and 
 http://localhost/VersionOne.Web/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name
 ```
 
-Various VersionOne API parameters comprise this request:
+Various VersionOne API parameters comprise this HTTP request:
 
 * `sel=Name` -- return only the *Name* attribute from the remote resource
 * `page=100,0` -- return 100 items max, starting at page 0
@@ -94,7 +107,7 @@ Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
 
 Notice the Authorization header, which contains the Base64 encoded credentials. This string gets created using Chrome's `btoa` function, but if `options.serviceGateway` is defined, it will get that string from the gateway instead of hard-coding the credentials in the script. (I'm not pretending that this is secure, it's just for covenience right now)
 
-### Response received
+### HTTP Response received
 
 The response Content-Type header is `haljson`. [HAL is a proposed standard](http://stateless.co/hal_specification.html) for hypermedia documents.
 
@@ -134,7 +147,7 @@ Date: Mon, 14 Jan 2013 22:34:20 GMT
 * Still with the Chrome Developer Tools and Network tab open, click the 'System (All Projeccts)` result
 * Click the `List` button to fetch the Request list
 
-### Request URL generated
+### HTTP Request URL generated
 
 ```text
 http://localhost/VersionOne.Web/rest-1.v1/Data/Request?acceptFormat=haljson&where=Scope%3D'Scope%3A0'&sel=Name%2CRequestedBy&page=75%2C0&sort=-ChangeDate
@@ -147,9 +160,9 @@ Again, various VersionOne API parameters comprise this URL:
 * `page=75,0` -- return 75 items max, starting at page 0
 * `sort=-ChangeDate` -- sort the results in desending order by the ChangeDate attribute
 
-### Response received
+### HTTP Response received
 
-The response contains an array of JSON objects that contain only the Name and RequestedBy attributes. This then gets used to populate the listview.
+The HTTP response contains an array of JSON objects that contain only the Name and RequestedBy attributes. This then gets used to populate the listview.
 
 ```json
 [
@@ -190,7 +203,7 @@ The response contains an array of JSON objects that contain only the Name and Re
 
 * Now click the `Add the Custom_Team custom field to the Request form` request
 
-### Request URL generated
+### HTTP Request URL generated
 
 ```text
 http://localhost/VersionOne.Web/rest-1.v1/Data/Request/2094?acceptFormat=haljson&sel=RequestedBy%2CName%2CDescription%2CPriority
@@ -201,7 +214,7 @@ The VersionOne API parameters breakdown:
 * `/Data/Request/2094` -- the specific URL that uniquely identifies this Scope asset
 * `sel=RequestedBy,Name,Description,Priority` -- return just these four attributes
 
-### Response received
+### HTTP Response received
 
 This time, we have several more fields, including the `Priority`, which is itself a `Relation`. By default, the VersionOne API projects the `Priority.Name` value into the result as well.
 
@@ -236,7 +249,7 @@ Please add the Custom_Team field, between the Description and Priority fields, t
 
 * Click the `Save` button
 
-### Request generated
+### HTTP Request generated
 
 #### URL
 ```text
@@ -266,7 +279,7 @@ This time, the URL is nothing but the address of the asset, plus the `acceptForm
 
 *TODO* perhaps it would be more RESTful to require sending the URL as an `href` param instead of the shorter `idref`. Thoughts?
 
-### Response received
+### HTTP Response received
 
 This time, we have several more fields, including the `Priority`, which is itself a `Relation`. By default, the VersionOne API projects the `Priority.Name` value into the result as well.
 
@@ -296,7 +309,7 @@ This time, we have several more fields, including the `Priority`, which is itsel
 }
 ```
 
-Important in this response:
+Important in this HTTP response:
 
 * It contains the same fields that we sent it, and only those fields
 * The `_links.self.href` and `_links.self.id` properties contain the asset's `Moment`, which is a specific, very precise address of the asset. Since all asset changes are retained, this provides the exact location for this *version* of the asset. Note that if we now request the asset without the moment, the asset will still have the same state. However, someone else could change it before we do that. 
