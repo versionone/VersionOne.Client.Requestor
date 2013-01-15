@@ -664,6 +664,82 @@ This time, we have several more fields, including the `Priority`, which is itsel
 }
 ```
 
+## 4. Modify the Request and save
+
+* Change the `Description` field to specify some more detail. I changed it to `Please add the Custom_Team field, between the Description and Priority fields, to the Request form for the CapEx project, and only for the CapEx project`
+* Click the `Save` button
+
+### Request generated
+
+#### URL
+```text
+http://localhost/VersionOne.Web/rest-1.v1/Data/Request/2094?acceptFormat=haljson
+```
+
+This time, the URL is nothing but the address of the asset, plus the `acceptFormat` parameter to the backend service.
+
+#### POST body
+
+```json
+{
+  "RequestedBy": "Blaine Stussy",
+  "Name": "Add the Custom_Team custom field to the Request form",
+  "Description": "Please add the Custom_Team field, between the Description and Priority fields, to the Request form for the CapEx project, and only for the CapEx project",
+  "_links": {
+    "Scope": {
+      "idref": "Scope:0"
+    },
+    "Priority": {
+      "idref": "RequestPriority:169"
+    }
+  }
+}
+```
+Note that because `Priority` is a Relation, there's no need to send the `Priority.Name`. Instead, it just sends a `_link` relation with the idref.
+
+*TODO* perhaps it would be more RESTful to require sending the URL as an `href` param instead of the shorter `idref`. Thoughts?
+
+Again, various VersionOne API parameters comprise this URL:
+
+* `/Data/Request/2094` -- the specific URL that uniquely identifies this Scope asset
+* `sel=RequestedBy,Name,Description,Priority` -- return just these four attributes
+
+### Response received
+
+This time, we have several more fields, including the `Priority`, which is itself a `Relation`. By default, the VersionOne API projects the `Priority.Name` value into the result as well.
+
+```json
+{
+  "Description": "Please add the Custom_Team field, between the Description and Priority fields, to the Request form for the CapEx project, and only for the CapEx project",
+  "Name": "Add the Custom_Team custom field to the Request form",
+  "RequestedBy": "Blaine Stussy",
+  "_links": {
+    "self": {
+      "href": "/VersionOne.Web/rest-1.v1/Data/Request/2094/2745",
+      "id": "Request:2094:2745"
+    },
+    "Priority": [
+      {
+        "href": "/VersionOne.Web/rest-1.v1/Data/RequestPriority/169",
+        "idref": "RequestPriority:169"
+      }
+    ],
+    "Scope": [
+      {
+        "href": "/VersionOne.Web/rest-1.v1/Data/Scope/0",
+        "idref": "Scope:0"
+      }
+    ]
+  }
+}
+```
+
+Note the following about this response:
+
+* It contains the same fields that we sent it, and only those fields
+* The `_links.self.href` and `_links.self.id` properties contain the asset's `Moment`, which is a specific, very precise address of the asset. Since all asset changes are retained, this provides the exact location for this *version* of the asset. Note that if we now request the asset without the moment, the asset will still have the same state. However, someone else could change it before we do that. In case, we can always request this specific moment of the asset's state by using the moment-containing URL or id.
+* TODO: I am not sure why it returned the Scope as a relation.
+
 
 ##
 ```coffeescript
