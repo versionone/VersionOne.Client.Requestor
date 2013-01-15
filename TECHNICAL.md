@@ -369,7 +369,7 @@ For a better understanding of the library, take a look at [Backbone Forms on Git
 
 So, how do we use Backbone Forms in the Requestor?
 
-### `fields.coffee` specification
+### Form specification in fields.coffee
 
 The file `fields.coffee` contains the set of fields and their datatype, plus a few other attributes. For scalar types, it's very simple. See the [Backbone Forms](https://github.com/powmedia/backbone-forms) documentation for possible values of the `type` attribute for form element types.
 
@@ -406,6 +406,60 @@ default :
  
 *Note:* If you read the Backbone Forms documentation, you'll notice that `autofocus`, `optional`, and, of course `assetName` are not part of its API. That's because we pre-process these properties before passing this into Backbone Forms. We'll go into that in more detail in another section.
 
+## 1. Generate a Simple JSON Object from the Form
+
+This will demonstrate how Backbone Forms simplifies the editing and JSON data-transfer-object (DTO) creation process for our request / response interactions.
+
+* Open Chrome's Console by hitting `F12` and select the Console tab
+* Load the Requestor tool
+* Follow the same steps from part one, up to step 3, to load an existing Request for edit
+* Now, in the Chrome Console tab, type: `v1RequestForm.getValue()` and hit enter
+
+You should see something like this:
+
+```json
+{
+  "RequestedBy": "Blaine Stussy",
+  "Name": "Add the Custom_Team custom field to the Request form",
+  "Description": "Please add the Custom_Team field, between the Description and Priority fields, to the Request form for the CapEx project, and only for the CapEx project",
+  "Priority": "RequestPriority:167"
+}
+```
+*Note*: `v1RequestForm` is a global variable set in `scripts/v1AssetEditor.js` for demonstration purposes only. Global variables are evil otherwise.
+
+## 2. Modify the Form using the Model
+
+Given you have just completed the first step above, do this:
+
+* In the Console, type: `v1RequestForm.setValue('RequestedBy', 'Your Name')`
+* Look at the RequestedBy field of the form. It should now say `Your Name`!
+* If you now type `v1RequestForm.getValue('RequestedBy')`, you'll see `Your Name`
+
+## 3. Generate a VersionOne API-compatible JSON DTO using the Editor 
+
+Finally, given you've at least done step one above:
+
+* In the Console, type `v1RequestEditor.createDto()`. You should see something like:
+
+```json
+{
+  "RequestedBy": "Your Name",
+  "Name": "Add the Custom_Team custom field to the Request form",
+  "Description": "Please add the Custom_Team field, between the Description and Priority fields, to the Request form for the CapEx project, and only for the CapEx project",
+  "_links": {
+    "Scope": {
+      "idref": "Scope:0"
+    },
+    "Priority": {
+      "idref": "RequestPriority:169"
+    }
+  }
+}
+```
+
+This contains the `_links` property, which specifies the relation items necessary for the VersionOne API to properly process the request.
+
+# TODO: refactor everything below!!! or remove
 
 # RequireJS: loading modules
 
