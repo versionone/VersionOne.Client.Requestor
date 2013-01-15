@@ -17,17 +17,19 @@ The Requestor Tool implementation serves multiple goals:
 
 # 1. Technologies Overview
 
+**Note**: Skip this part if you just want to try the hands on demos and exercises first. But, please refer bcak to it later to see if you can help with suggestions regarding the areas for improvement. Thanks!
+
 Just as the VersionOne API and Platform are open source, so are the technologies used in the Requestor tool. All of these are popular tools, many already in use by the VersionOne core team. Others are "up and coming", or tried and true libraries and frameworks in the web development and open source communities.
 
 ## Technology list
-* VersionOne.SDK.Experimental Api Input / Output Translators -- converts JSON (HAL compliant) to V1 XML on inbound, and reverse on outbound
-* RequireJS -- module loading
-* Backbone Forms -- dynamically creates the HTML form based on a lightweight "schema" defined in JS
-* jQueryMobile -- mobile-friendly HTML5 framework
-* Backbone.js -- only utilizing Backbone.Events and models at a rudimentary level right now
-* jsRender -- jQuery Templates successor
-* toastr -- simple "toast" status messages
-* CoffeeScript -- love it, or leave it, that's your choice. I dig it.
+* [VersionOne.SDK.Experimental Api Input / Output Translators](http://www.github.com/VersionOne/VersionOne.SDK.Experimental) -- converts JSON (HAL compliant) to V1 XML on inbound, and reverse on outbound
+* [RequireJS](http://requirejs.org) -- module loading
+* [Backbone Forms](https://github.com/powmedia/backbone-forms) -- dynamically creates the HTML form based on a lightweight "schema" defined in JS
+* [jQuery Mobile](http://www.jquerymobile.com) -- mobile-friendly HTML5 framework
+* [Backbone.js](http://backbonejs.org) -- only utilizing Backbone.Events and models at a rudimentary level right now
+* [jsRender](https://github.com/BorisMoore/jsrender) -- jQuery Templates successor
+* [toastr](https://github.com/CodeSeven/toastr) -- simple "toast" status messages
+* [CoffeeScript](http://coffeescript.org/) -- you may sip it, or sink it, that's your taster's choice. Me? I drink it.
 
 ## Areas for Possible Improvement
 
@@ -40,7 +42,7 @@ Before even starting to examine code, let me say where I already believe improve
 * Explore use of Backbone.sync + localStorage. [See this project](http://documentcloud.github.com/backbone/docs/backbone-localstorage.html) -- This would be for people able to create requests "off line", saved to localStorage, then put them into VersionOne when they are ready to, or when they have a network connection
 * Throw in some "Infinite Genericization" of the "v1AssetEditor" -- something that is entirely model-driven and can edit any type of asset based on its Meta definition
 * Use of Jade for templates -- see this open-source project I'm working on for an example: [OpenEpi Mobile](http://www.github.com/JogoShugh/OpenEpi.com.jQueryMobile)
-* Replace underscore with "lo-dash" for performance? What about zepto.js instead of jQuery?
+* Replace underscore with [lo-dash](http://lodash.com/) for performance? What about [zepto.js](http://zeptojs.com/) instead of jQuery?
 
 # 2. Hands on Demo with JSON Request & Response Inspection
 
@@ -259,7 +261,7 @@ This time, the URL is nothing but the address of the asset, plus the `acceptForm
   }
 }
 ```
-Note that because `Priority` is a Relation, there's no need to send the `Priority.Name`. Instead, it just sends a `_link` relation with the idref.
+**Note**: Because `Priority` is a Relation, there's no need to send the `Priority.Name`. Instead, it just sends a `_link` relation with the idref.
 
 *TODO* perhaps it would be more RESTful to require sending the URL as an `href` param instead of the shorter `idref`. Thoughts?
 
@@ -298,7 +300,7 @@ This time, we have several more fields, including the `Priority`, which is itsel
 }
 ```
 
-Note the following about this response:
+Important in this response:
 
 * It contains the same fields that we sent it, and only those fields
 * The `_links.self.href` and `_links.self.id` properties contain the asset's `Moment`, which is a specific, very precise address of the asset. Since all asset changes are retained, this provides the exact location for this *version* of the asset. Note that if we now request the asset without the moment, the asset will still have the same state. However, someone else could change it before we do that. In case, we can always request this specific moment of the asset's state by using the moment-containing URL or id.
@@ -405,7 +407,7 @@ default :
 * `autofocus` -- specifies that a field should be automatically focused on load 
 * `optional` -- when true, allows an empty value for the field
  
-*Note:* If you read the Backbone Forms documentation, you'll notice that `autofocus`, `optional`, and, of course `assetName` are not part of its API. That's because we pre-process these properties before passing this into Backbone Forms. We'll go into that in more detail in another section.
+**Note**: If you read the Backbone Forms documentation, you'll notice that `autofocus`, `optional`, and, of course `assetName` are not part of its API. That's because we pre-process these properties before passing this into Backbone Forms. We'll go into that in more detail in another section.
 
 ## 1. Generate a Simple JSON Object from the Form
 
@@ -426,7 +428,7 @@ You should see something like this:
   "Priority": "RequestPriority:167"
 }
 ```
-*Note*: `v1RequestForm` is a global variable set in `scripts/v1AssetEditor.js` for demonstration purposes only. Global variables are evil otherwise.
+**Note**: `v1RequestForm`, along with `v1AssetEditor`, are variables set into the global `window` object in `scripts/main.js` in a Backbone.Events based event handler, which we'll cover at the end of this exercise.
 
 ## 2. Modify the Form using the Model
 
@@ -459,6 +461,65 @@ Finally, given you've at least done step one above:
 ```
 
 This contains the `_links` property, which specifies the relation items necessary for the VersionOne API to properly process the request.
+
+## 4. Create a new event handler to stringify the asset *"on update"*
+
+If you change the `RequestedBy` or `Name` (Title on screen) fields, then click the `List` button, you'll notice that these changes are already reflected in the list. But, you don't see any additional traffic on the Network tab when you do this. That's because we're using Backbone.Events to create our own event handler, which subscribes to a custom event called `assetUpdated`. 
+
+Here's how we do that way back inside of `VersionOneAssetEditor.constructor`:
+
+```coffeescript
+@on "assetUpdated", (assetEditor, asset) ->
+	success "Save successful"
+	assetEditor._normalizeIdWithoutMoment asset
+	assetEditor._normalizeHrefWithoutMoment asset
+	assetEditor.listItemReplace asset
+```
+
+Remember the JSON response body from part one in step 4, the one with the moments in it? If not, here's a snippet from that:
+
+```json
+  "_links": {
+    "self": {
+      "href": "/VersionOne.Web/rest-1.v1/Data/Request/2094/2745",
+      "id": "Request:2094:2745"
+    },
+```
+
+The *normalize* functions simply remove the moment number from the `id` and `href` values in the `_links.self` object. This is important because we need to load the latest, momentless version of the asset on click.
+
+Now, add your own, additional event handler like this:
+
+* Complete step one above, then:
+* From the Console, type: `v1AssetEditor.on('assetUpdated', function(asset) { console.log( JSON.stringify(asset) ); } )` and hit enter
+* Change the Deecription field on the form to `Backbone.Events is Awesome!` and hit `Save`
+* You should see this in the Console:
+
+```json
+{
+  "Description": "Backbone.Events is Awesome!",
+  "Name": "Add the Custom_Team custom field to the Request form",
+  "RequestedBy": "Blaine Stussy",
+  "_links": {
+    "self": {
+      "href": "/VersionOne.Web/rest-1.v1/Data/Request/2094/2745",
+      "id": "Request:2094:2745"
+    },
+    "Priority": [
+      {
+        "href": "/VersionOne.Web/rest-1.v1/Data/RequestPriority/169",
+        "idref": "RequestPriority:169"
+      }
+    ],
+    "Scope": [
+      {
+        "href": "/VersionOne.Web/rest-1.v1/Data/Scope/0",
+        "idref": "Scope:0"
+      }
+    ]
+  }
+}
+```
 
 # TODO: refactor everything below!!! or remove
 
@@ -684,7 +745,7 @@ The `constructor` and `initialize` methods take care of setting up initial event
 * `initialize` does some basic jQuery click handler wireup for button handlers (TODO: implement a simple convention based wireup like Caliburn.Micro, and probably Durandal)
 * The `pageinit` and `pagebeforeshow` events are [jQuery Mobile Events](http://jquerymobile.com/demos/1.2.0/docs/api/events.html) that respond to those virtual events for the given pages.
 * The `@on "assetCreated", (that, asset) -> ...` and other one utilize [Backbone.Events](http://backbonejs.org/#Events) for simple, custom "publish/subcribe" type notification. In this case, the subscribing code will modify the List page when a Request object is created or modified. We'll see later how these events are published in the ajax callback handlers.
-* *Note*: at the very end of the script is ` _.extend VersionOneAssetEditor::, Backbone.Events`. This uses underscore.js's extension function to mixin Backbone.Events into the VersionOneAssetEditor class. I suppose I could have used that for my hand-rolled mixin above.
+* **Note**: at the very end of the script is ` _.extend VersionOneAssetEditor::, Backbone.Events`. This uses underscore.js's extension function to mixin Backbone.Events into the VersionOneAssetEditor class. I suppose I could have used that for my hand-rolled mixin above.
 
 ```coffeescript
 define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender"], (Backbone, _, toastr, $) ->
