@@ -18,7 +18,14 @@ The Requestor Tool implementation serves multiple goals:
  - Select a Project and Fetch its Request Assets
  - Select a Request to Edit
  - Modify the Request and Save
-3. Backbone Forms and Model Binding Exercise
+3. Exercise: Build a Simple Story Editor by Hand and Use jQuery for AJAX
+ - Get Familiar with JSFiddle
+ - Try out a GET Story HTTP request
+ - Try out a GET Story PUT request
+ - Create a Basic HTML Form to Edit a Story
+ - Wire Up Some jQuery Event Handlers to Submit the Story
+ - Conclusion: There's Got to be a Better Way!
+4. Exercise: Uding Backbone Forms and Playing with Model Binding
  - Simple Backbone Forms Example
  - Requestor Tool Configuration for Backbone Forms
  - Generate a Simple JSON Object from the Form
@@ -30,7 +37,9 @@ The Requestor Tool implementation serves multiple goals:
 
 # 1. Open Source Technologies Overview
 
-**Note**: Skip this part if you just want to try the hands on demos and exercises first. But, please refer back to it later to see if you can help with suggestions regarding the areas for improvement. Thanks!
+**Note**: Skip this part if you just want to try the hands on demos and exercises first. The first demo is of the Requestor tool itself, but the first exercise is actually a hand-crafted Story editor which will give you a better understanding of the REST API and how to use it with jQuery's AJAX support. The second exercise shows how the other, more advanced, open source libraries are used to make the Requestor tool.
+
+Even if you do skip straight into those, please refer back to this section later to see if you can help with suggestions regarding the areas for improvement. Thanks!
 
 Just as the VersionOne API and Platform are open source, so are the technologies used in the Requestor tool. All of these are popular tools, many already in use by the VersionOne core team. Others are "up and coming", or tried and true libraries and frameworks in the web development and open source communities.
 
@@ -316,7 +325,142 @@ Important in this HTTP response:
 In that case, we can always request this specific moment of the asset's state by using the moment-containing URL or id.
 * TODO: I am not sure why it returned the Scope as a relation.
 
-# 3. Backbone Forms and Model Binding Exercise
+
+
+# 3. Exercise: Build a Simple Story Editor by Hand and Use jQuery for AJAX
+ 
+This exercise will take you through building a very rudimentary Story editor using standard HTML and JavaScript. 
+The only third-party library it will depend on is jQuery, and only for simple event handling and AJAX support.
+
+## Get Familiar with JSFiddle
+
+We're going to use JSFiddle to build our form. So, do this:
+
+1. Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
+2. You'll see four panels: `HTML, JavaScript, CSS, and Result`
+
+In the HTML panel, type or paste this:
+
+```html
+<div id="error">
+  <h1>Error During AJAX Call:</h1>
+  <br />
+  <hr />
+  <br />
+  <p id="errorMessage">
+  </p> 
+</div>
+
+<div id="success">
+  <h1>Now, that's <b>beautiful JSON</b>:</h1>
+  <br />
+  <pre id="output"></pre>
+  <br />
+  <a id="link"></a>
+  <br/>
+  <br/>
+  Right click and select <code>Open link in new tab</code> to play with this request some more.    
+  </p>
+</div>
+```
+
+In the JavaScript panel, add this:
+
+```javascript
+var host = "http://eval.versionone.net";
+var service = host + "/platformtest/rest-1.v1/Data/"
+var assetQueryPath = "Scope/0?sel=Name,Owner.Name"
+var headers = {
+  Authorization: "Basic " + btoa("admin:admin"),
+  Accept: 'haljson'  
+};
+
+var settings = {
+  url: service + assetQueryPath,
+  headers: headers,
+  dataType: 'json'
+};
+
+$.ajax(settings)
+  .done(function(data) {
+    beautifulJson = JSON.stringify(data, null, 4);
+    
+    link = settings.url + '&acceptFormat=haljson';
+    
+    $('#link')
+      .attr('href', link)
+      .text(link);
+    
+    $('#error').hide();
+    
+    $('#output').text(beautifulJson);
+    $('#success')    
+      .css('visibility', 'visible')
+      .fadeIn();
+  })
+  .fail(function(jqXHR) {
+    $('#success').hide();
+    $('#errorMessage').html(jqXHR.responseText);
+    $('#error')
+      .css('visibility', 'visible')
+      .fadeIn();
+  });
+```
+
+And, for good measure, add this to the CSS panel:
+
+```css
+body {
+  margin: 10px
+}
+
+#error {
+  background: lightyellow;
+  border: 2px solid firebrick;
+  padding: 10px;
+  visibility: hidden;  
+}
+
+#success {
+  background: whitesmoke;
+  border: 2px solid firebrick;
+  padding: 10px;
+  visibility: hidden;
+}
+
+#output, #errorMessage {
+  font-size: 80%;  
+  border: 1px solid darkgray;
+  background: linen;
+  padding: 6px;
+}
+```
+
+ - Try out a GET Story HTTP request
+ - Try out a GET Story PUT request
+ - Create a Basic HTML Form to Edit a Story
+ - Wire Up Some jQuery Event Handlers to Submit the Story
+ - Conclusion: There's Got to be a Better Way!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 4. Exercise: Use Backbone Forms and Play with Model Binding
 
 Backbone Forms is an open source library for Backbone.js that makes creating model-bound HTML forms dead simple. This exercise will show you how Backbone Forms is used to make the Request editor and to simplify, using Backbone models, the request / response interaction we just demonstrated.
 
