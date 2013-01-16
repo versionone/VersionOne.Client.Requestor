@@ -338,6 +338,72 @@ We're going to use JSFiddle to build our form. So, do this:
 
 1. Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
 2. You'll see four panels: `HTML, JavaScript, CSS, and Result`
+3. We'll only use the JavaSript panel for now, so type this into it and then press `Run`:
+
+```javascript
+var host = "http://eval.versionone.net"; // Remote web server root
+var service = host + "/platformtest/rest-1.v1/Data/" // Path to the REST service
+var assetQueryPath = "Scope/0" // Location of an Asset to fetch
+var headers = { 
+  Authorization: "Basic " + btoa("admin:admin"), // Necessary to authenticate, since we won't have a login cookie from JSFiddle
+  Accept: 'haljson' // The format that we want the response in. Without this, we get XML.
+};
+
+var settings = { // Parameters jQuery's ajax function needs to make our GET request
+  url: service + assetQueryPath,
+  headers: headers,
+  dataType: 'json' // Hint to jQuery, that the response should be JSON data
+};
+
+$.ajax(settings)
+  .done(function(data) { // Callback for when the server responds properly  
+    beautifulJson = JSON.stringify(data, null, 4); // Pretty print our JSON with indentation        
+    $("body").html('<pre>' + beautifulJson + '</pre>'); // Tack it into the DOM
+    notAsPrettyJson = JSON.stringify(data);
+    console.log(notAsPrettyJson.length);
+  })
+  .fail(function(jqXHR) { // Callback for when the server "blows up". Change assetQueryPath to "SSSSScope/0" to see!
+    $('body').html(jqXHR.responseText);
+  });
+```
+
+Live: http://jsfiddle.net/2nfqa/1/
+
+For illustration purposes, try the same code, but without asking for JSON. This time, you'll get the raw XML format:
+
+```javascript
+var host = "http://eval.versionone.net";
+var service = host + "/platformtest/rest-1.v1/Data/";
+var assetQueryPath = "Scope/0";
+var headers = { 
+  Authorization: "Basic " + btoa("admin:admin")
+};
+
+var settings = {
+  url: service + assetQueryPath,
+  headers: headers,
+  dataType: 'text'
+};
+
+$.ajax(settings)
+  .done(function(data) {    
+    $("body").text(data);
+    console.log(data.length);
+  })
+  .fail(function(jqXHR) {
+    $('body').html(jqXHR.responseText);
+  });
+```
+
+Live: http://jsfiddle.net/cVSHD/
+
+## Extend our JSFiddle Example with Basic HTML
+
+http://jsfiddle.net/HtyNS/1/
+Again with JSFiddle, do this: 
+
+1. Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
+2. You'll see four panels: `HTML, JavaScript, CSS, and Result`
 
 In the HTML panel, type or paste this:
 
