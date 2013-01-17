@@ -762,103 +762,110 @@ JavaScript
 ```javascript
 var urlRoot = 'http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/';
 
-var headers = { 
-  Authorization: "Basic " + btoa("admin:admin"),
-  Accept: 'haljson'
+var headers = {
+    Authorization: "Basic " + btoa("admin:admin"),
+    Accept: 'haljson'
 };
 
 var fetchOptions = {
-	dataType: 'json',
-    headers: headers  	
+    dataType: 'json',
+    headers: headers
 };
 
 var saveOptions = {
-  contentType: 'haljson',
-  patch: true,
-  headers: headers
+    contentType: 'haljson',
+    patch: true,
+    headers: headers
 };
 
 var formSchema = {
-  	Name:  { 
-      help:'Enter a story name', title:'Story Name', validators: ['required'] 
-	},
-  	Description: { title: 'Description', help: 'Enter a brief description of the story', validators: ['required']
-  	},
-  Estimate: {
-    title: 'Estimate', help: 'Enter an estimated complexity between 1 and 5'
-  }
+    Name: {
+        help: 'Enter a story name',
+        title: 'Story Name',
+        validators: ['required']
+    },
+    Description: {
+        title: 'Description',
+        help: 'Enter a brief description of the story',
+        validators: ['required']
+    },
+    Estimate: {
+        title: 'Estimate',
+        help: 'Enter an estimated complexity between 1 and 5'
+    }
 };
 
 var form = null;
 
 function createForm(model) {
-	var settings = {schema:formSchema};
-  	function finish() {
-  		form = new Backbone.Form(settings);
-  		$('#editorFields').empty();
-  		$('#editorFields').append(form.render().el);
-      	$("#editor").fadeIn();
-  	}
-  	if (model) {    
-    	model.fetch(fetchOptions).done(function() {
+    var settings = {
+        schema: formSchema
+    };
+
+    function finish() {
+        form = new Backbone.Form(settings);
+        $('#editorFields').empty();
+        $('#editorFields').append(form.render().el);
+        $("#editor").fadeIn();
+    }
+    if (model) {
+        model.fetch(fetchOptions).done(function () {
             console.log(model);
-    		settings.model = model;
-          	finish();
-    	});    
-  	} else {
-    	finish();
-  	}
+            settings.model = model;
+            finish();
+        });
+    } else {
+        finish();
+    }
 }
 
 function bindDtoToForm(data) {
-  createForm(data);
+    createForm(data);
 }
 
 function createDtoFromForm(selector) {
-  return form.getValue();
+    return form.getValue();
 }
 
 var saveModel = false;
-var model = new (Backbone.Model.extend({
-  urlRoot: urlRoot,
-  url: function() {
-    if (saveModel)
-		return this.urlRoot + this.id;    
-    return this.urlRoot + this.id + '?sel='
-    	+ _.keys(formSchema).join(',')
-  }
+var model = new(Backbone.Model.extend({
+    urlRoot: urlRoot,
+    url: function () {
+        if (saveModel) return this.urlRoot + this.id;
+        return this.urlRoot + this.id + '?sel=' + _.keys(formSchema).join(',')
+    }
 }));
 
 
 model.id = '';
+
 function storyGet() {
     model.id = $('#StoryId').val();
-  	console.log(model.id);
-	if (model.id == '') 
-    {
-      return;
+    console.log(model.id);
+    if (model.id == '') {
+        return;
     }
     createForm(model);
 }
 
 function storySave() {
-  Backbone.emulateHTTP = true;
-  saveModel = true;
-  form.commit();
-  model.save(form.getValue(), saveOptions).done(function(data) {
-    console.log('Saved!');
-    console.log(data);
-  });
+    Backbone.emulateHTTP = true;
+    saveModel = true;
+    form.commit();
+    model.save(form.getValue(), saveOptions).done(function (data) {
+        console.log('Saved!');
+        console.log(data);
+    });
 }
 
 var storyId = '';
-$(function(){
-  var storyId = '';
-  
-  createForm();
-  
-  $("#storyGet").click(storyGet);  
-  $('#save').click(storySave);
+$(function () {
+    var storyId = '';
+
+    createForm();
+
+    $("#storyGet").click(storyGet);
+    $('#save').click(storySave);
 });
 ```
 
