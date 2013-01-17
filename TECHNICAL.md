@@ -335,8 +335,9 @@ The only third-party library it will depend on is jQuery, and only for simple ev
 We're going to use JSFiddle to build our form. So, do this:
 
 1. Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
-2. You'll see four panels: `HTML, JavaScript, CSS, and Result`
-3. We'll only use the JavaScript panel for now, so type this into it and then press `Run`:
+2. From the left side, under `Choose Framework`, leave `onLoad`, and select `jQuery` (Any version above 1.6)
+2. On the right, you'll see four panels: `HTML, JavaScript, CSS, and Result`
+4. We'll only use the JavaScript panel for now, so type this into it and then press `Run`:
 
 ```javascript
 var host = "http://eval.versionone.net"; // Remote web server root
@@ -401,7 +402,8 @@ http://jsfiddle.net/HtyNS/1/
 Again with JSFiddle, do this: 
 
 1. Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
-2. You'll see four panels: `HTML, JavaScript, CSS, and Result`
+2. Select 'jQuery' as a the framework on the left side.
+3. Next, in the HTML panel on the right, type or paste this:
 
 In the HTML panel, type or paste this:
 
@@ -428,7 +430,7 @@ In the HTML panel, type or paste this:
 </div>
 ```
 
-In the JavaScript panel, add this:
+4. In the JavaScript panel, add this:
 
 ```javascript
 var host = "http://eval.versionone.net";
@@ -471,7 +473,7 @@ $.ajax(settings)
   });
 ```
 
-And, for good measure, add this to the CSS panel:
+5. And, for good measure, add this to the CSS panel:
 
 ```css
 body {
@@ -500,17 +502,17 @@ body {
 }
 ```
 
-## Try Out Barebones GET Story HTTP Request
+## Issue a Barebones GET Story HTTP Request
 
 Now that we're comfortable with JSFiddle, let's start building our Barebones Story Editor!
 
-First, try this simple query in the web browser:
+1. Try this simple query in the web browser's address bar:
 
 ```text
 http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/1154?acceptFormat=haljson&sel=Name,Description,Estimate
 ```
 
-You should see some JSON similar to this:
+2. You should see some JSON similar to this:
 
 ```json
 {
@@ -529,9 +531,9 @@ You should see some JSON similar to this:
 Our Barebones Story Editor will feature *just* Name, Description, and Estimate, 
 so this query is enough for us to base our GET HTTP request on.
 
-## Try Out Barebones POST Story HTTP Request
+## Issue a Barebones POST Story HTTP Request
 
-Now, fire up another JSFiddle tab, and add this code to the JavaScript panel and run it:
+1. Now, fire up another JSFiddle tab, and, after selecting `jQuery` as your framework, add this code to the JavaScript panel and run it:
 
 ```javascript
 var host = "http://eval.versionone.net";
@@ -572,9 +574,10 @@ Notice also that the response from the server contains just those two attributes
 
 ## Create the Barebones Story Editor HTML Form
 
-Having explored all the major client-server interactions, let's now build the "simplest thing that could possibly work" to edit the Story.
+Having explored all the major client-server interactions, let's now 
+build the "simplest thing that could possibly work", to be agile, to edit the Story.
 
-Enter this into the HTML panel:
+1. Select `jQuery` as the framework from the left, then enter this into the HTML panel:
 
 ```html
 <html>
@@ -604,7 +607,7 @@ Enter this into the HTML panel:
 </html>
 ```
 
-Add this to the CSS panel:
+2. Add this to the CSS panel:
 
 ```css
 body 
@@ -638,7 +641,7 @@ textarea
 }
 ```
 
-And, to wrap it up, put this into the JavaScript panel then hit run:
+3. And, to wrap it up, put this into the JavaScript panel then hit run:
 
 ```javascript
 var host = "http://eval.versionone.net";
@@ -714,26 +717,18 @@ function createDtoFromForm(selector) {
 }
 ```
 
-That's it! You now have a complete Barebones Story Editor. Did you notice how easy it was to build up the DTO using the `createDtoFromForm` function? Well, it will be even easier than that when we add some Backbone to this and use Backbone Forms next!
+That's it! You now have a complete Barebones Story Editor. Did you notice how easy it was to build up the DTO 
+using the `createDtoFromForm` function? Well, it will be even easier than that when we add 
+some **Backbone** to this and use **Backbone Forms** next!
 
 http://jsfiddle.net/HtyNS/1/
-Again with JSFiddle, do this: 
 
-1. Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
-2. You'll see four panels: `HTML, JavaScript, CSS, and Result`
-
-In the HTML panel, type or paste this:
-
-```html
 
 
 
  - Create a Basic HTML Form to Edit a Story
  - Wire Up Some jQuery Event Handlers to Submit the Story
  - Conclusion: There's Got to be a Better Way!
-
-
-
 
 
 
