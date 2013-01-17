@@ -25,7 +25,10 @@ The Requestor Tool implementation serves multiple goals:
  - Create a Basic HTML Form to Edit a Story
  - Wire Up Some jQuery Event Handlers to Submit the Story
  - Conclusion: There's Got to be a Better Way!
-4. Exercise: Using Backbone Forms and Playing with Model Binding
+4. Exercise: Giving Some Backbone to the Barebones Story Editor
+ - Replace the Handmade HTML Form with Backbone Forms
+ - Replace `createStoryDto` with Backbone Forms' `getValue()` function
+5. Hands on Demo: Requestor Backbone Forms and Playing with Model Binding
  - Simple Backbone Forms Example
  - Requestor Tool Configuration for Backbone Forms
  - Generate a Simple JSON Object from the Form
@@ -720,6 +723,183 @@ using the `createDtoFromForm` function? Well, it will be even easier than that w
 some **Backbone** to this and use **Backbone Forms** next!
 
 http://jsfiddle.net/HtyNS/1/
+
+
+# 4. Exercise: Giving Some Backbone to the Barebones Story Editor
+ 
+Now that we've created our Barebones Editor by hand, it would be nice if we could make it easier to use and extend, right?
+
+After all, who wants to have to go in to a block of HTML and add a bunch of markup *just because you need another field from your domain to show up*? Not you? Not me, either.
+
+Instead, we'll refactor our code so that all we need to do is change a configuration 
+
+HERE IT IS: http://jsfiddle.net/eGzXV/2/
+
+HTML:
+```html
+<html>
+  	<head>
+  		<title>Barebones Story Editor</title>
+  	</head>
+	<body>
+		<h1>Barebones Story Editor</h1>
+		<br/>
+        <label for="StoryId">Enter a Story ID: </label><input type="text" id="StoryId" /> <input type="button" id="storyGet" value="Load Story" />        
+        <div id="editor">
+			<form id="editorForm">
+              <div id="editorFields"></div>
+            </form>
+            <input type="button" id="save" value="Save Story" />
+		</div>
+		<div id="message"></div>
+	</body>
+</html>
+```
+
+JavaScript
+
+```javascript
+var formSchema = {
+  	Name:  { 
+      help:'Enter a story name',
+      title:'Story Name', 
+      validators: ['required'] 
+	},
+  	Description: {
+      title: 'Description',
+      help: 'Enter a brief description of the story',
+      validators: ['required']
+  	},
+  Estimate: {
+    title: 'Estimate',
+    help: 'Enter an estimated complexity between 1 and 5'
+  }
+};
+
+var host = "http://eval.versionone.net";
+var service = host + "/platformtest/rest-1.v1/Data/";
+var assetPath = "Story/";
+var headers = { 
+  Authorization: "Basic " + btoa("admin:admin"),
+  Accept: 'haljson'
+};
+
+function getSelectList() {
+  var list = '';
+  	for (var fieldName in formSchema) {
+    	if (list != '') list+= ',';
+    	list += fieldName    
+  	}
+	return '?sel=' + list;
+};
+
+var form = null;
+
+function createForm(data) {
+  var settings = {schema:formSchema};
+  if (data) {
+    settings.data = data;
+  }
+  form = new Backbone.Form(settings);
+  $('#editorFields').empty();
+  $('#editorFields').append(form.render().el);  
+}
+
+function bindDtoToForm(data) {
+  createForm(data);
+}
+
+function createDtoFromForm(selector) {
+  return form.getValue();
+}
+
+function storyGet() {
+    storyId = $('#StoryId').val();
+	if (storyId == '') 
+    {
+      return;
+    }
+    url = service + assetPath + storyId +
+      getSelectList(),
+    $.ajax({
+      url: url,
+      type: 'GET',      
+      dataType: 'json',
+      headers: headers
+    }).done(function(data){
+    	bindDtoToForm(data);
+        $("#editor").show();
+    }).fail(function(jqXHR){
+      	alert('Error during get. See console for details.');
+      	console.log('Error:');
+      	console.log(jqXHR.responseText);
+    });
+}
+
+function storySave() {
+    var storyDto = createDtoFromForm("#editorForm input, #editorForm textarea");
+    $.ajax({
+      	url: service + assetPath + storyId,
+		type: 'POST',
+  		data: JSON.stringify(storyDto),
+  		dataType: 'json',
+  		contentType: 'haljson',
+  		headers: headers
+    }).done(function(data){
+      	$('#message').text('Save successful! You can load it in VersionOne and see the results of your labor.');
+		console.log(data);
+    }).fail(function(jqXHR){
+      	alert('Error during save. See console for message.');      
+      	console.log('Error on save:');
+      	console.log(jqXHR.responseText);     
+    });
+}
+
+var storyId = '';
+$(function(){
+  var storyId = '';
+  
+  createForm();  
+  
+  $("#storyGet").click(storyGet);  
+  $('#save').click(storySave);
+});
+```
+
+CSS
+```
+body 
+{
+	padding: 5px;
+  	font-family: sans-serif;
+}
+
+#editor
+{
+  	padding: 10px;
+  	border: 1px solid darkblue;
+  	background: whitesmoke;
+    display: none;
+}
+
+label 
+{
+	color: darkblue;
+}
+
+textarea 
+{
+  height:100px;
+}
+
+#message 
+{
+  margin-top: 5px;
+  color: darkgreen;
+}
+```
+ Replace the Handmade HTML Form with Backbone Forms
+ - Replace `createStoryDto` with Backbone Forms' `getValue()` function
 
 
 
