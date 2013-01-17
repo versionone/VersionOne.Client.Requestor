@@ -334,10 +334,10 @@ The only third-party library it will depend on is jQuery, and only for simple ev
 
 We're going to use JSFiddle to build our form. So, do this:
 
-1. Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
-2. From the left side, under `Choose Framework`, leave `onLoad`, and select `jQuery` (Any version above 1.6)
-2. On the right, you'll see four panels: `HTML, JavaScript, CSS, and Result`
-4. We'll only use the JavaScript panel for now, so type this into it and then press `Run`:
+* Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
+* From the left side, under `Choose Framework`, leave `onLoad`, and select `jQuery` (Any version above 1.6)
+* On the right, you'll see four panels: `HTML, JavaScript, CSS, and Result`
+* We'll only use the JavaScript panel for now, so type this into it and then press `Run`:
 
 ```javascript
 var host = "http://eval.versionone.net"; // Remote web server root
@@ -401,11 +401,9 @@ Live: http://jsfiddle.net/cVSHD/
 http://jsfiddle.net/HtyNS/1/
 Again with JSFiddle, do this: 
 
-1. Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
-2. Select 'jQuery' as a the framework on the left side.
-3. Next, in the HTML panel on the right, type or paste this:
-
-In the HTML panel, type or paste this:
+* Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
+* Select 'jQuery' as a the framework on the left side.
+* Next, in the HTML panel on the right, type or paste this:
 
 ```html
 <div id="error">
@@ -430,7 +428,7 @@ In the HTML panel, type or paste this:
 </div>
 ```
 
-4. In the JavaScript panel, add this:
+* In the JavaScript panel, add this:
 
 ```javascript
 var host = "http://eval.versionone.net";
@@ -473,7 +471,7 @@ $.ajax(settings)
   });
 ```
 
-5. And, for good measure, add this to the CSS panel:
+* And, for good measure, add this to the CSS panel:
 
 ```css
 body {
@@ -506,13 +504,13 @@ body {
 
 Now that we're comfortable with JSFiddle, let's start building our Barebones Story Editor!
 
-1. Try this simple query in the web browser's address bar:
+* Try this simple query in the web browser's address bar:
 
 ```text
 http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/1154?acceptFormat=haljson&sel=Name,Description,Estimate
 ```
 
-2. You should see some JSON similar to this:
+* You should see some JSON similar to this:
 
 ```json
 {
@@ -533,7 +531,7 @@ so this query is enough for us to base our GET HTTP request on.
 
 ## Issue a Barebones POST Story HTTP Request
 
-1. Now, fire up another JSFiddle tab, and, after selecting `jQuery` as your framework, add this code to the JavaScript panel and run it:
+* Now, fire up another JSFiddle tab, and, after selecting `jQuery` as your framework, add this code to the JavaScript panel and run it:
 
 ```javascript
 var host = "http://eval.versionone.net";
@@ -577,7 +575,7 @@ Notice also that the response from the server contains just those two attributes
 Having explored all the major client-server interactions, let's now 
 build the "simplest thing that could possibly work", to be agile, to edit the Story.
 
-1. Select `jQuery` as the framework from the left, then enter this into the HTML panel:
+* Select `jQuery` as the framework from the left, then enter this into the HTML panel:
 
 ```html
 <html>
@@ -607,7 +605,7 @@ build the "simplest thing that could possibly work", to be agile, to edit the St
 </html>
 ```
 
-2. Add this to the CSS panel:
+* Add this to the CSS panel:
 
 ```css
 body 
@@ -641,7 +639,7 @@ textarea
 }
 ```
 
-3. And, to wrap it up, put this into the JavaScript panel then hit run:
+* And, to wrap it up, put this into the JavaScript panel then hit run:
 
 ```javascript
 var host = "http://eval.versionone.net";
