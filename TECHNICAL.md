@@ -18,14 +18,14 @@ The Requestor Tool implementation serves multiple goals:
  - Select a Project and Fetch its Request Assets
  - Select a Request to Edit
  - Modify the Request and Save
-3. Exercise: Build a Simple Story Editor by Hand and Use jQuery for AJAX
+3. Exercise: Build a Simple "Barebones Story Editor" with HTML and jQuery
  - Get Familiar with JSFiddle
  - Try out a GET Story HTTP request
  - Try out a GET Story PUT request
  - Create a Basic HTML Form to Edit a Story
  - Wire Up Some jQuery Event Handlers to Submit the Story
  - Conclusion: There's Got to be a Better Way!
-4. Exercise: Uding Backbone Forms and Playing with Model Binding
+4. Exercise: Using Backbone Forms and Playing with Model Binding
  - Simple Backbone Forms Example
  - Requestor Tool Configuration for Backbone Forms
  - Generate a Simple JSON Object from the Form
@@ -325,8 +325,6 @@ Important in this HTTP response:
 In that case, we can always request this specific moment of the asset's state by using the moment-containing URL or id.
 * TODO: I am not sure why it returned the Scope as a relation.
 
-
-
 # 3. Exercise: Build a Simple Story Editor by Hand and Use jQuery for AJAX
  
 This exercise will take you through building a very rudimentary Story editor using standard HTML and JavaScript. 
@@ -338,7 +336,7 @@ We're going to use JSFiddle to build our form. So, do this:
 
 1. Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
 2. You'll see four panels: `HTML, JavaScript, CSS, and Result`
-3. We'll only use the JavaSript panel for now, so type this into it and then press `Run`:
+3. We'll only use the JavaScript panel for now, so type this into it and then press `Run`:
 
 ```javascript
 var host = "http://eval.versionone.net"; // Remote web server root
@@ -502,8 +500,124 @@ body {
 }
 ```
 
- - Try out a GET Story HTTP request
- - Try out a GET Story PUT request
+## Try Out Barebones GET Story HTTP Request
+
+Now that we're comfortable with JSFiddle, let's start building our Barebones Story Editor!
+
+First, try this simple query in the web browser:
+
+```text
+http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/1154?acceptFormat=haljson&sel=Name,Description,Estimate
+```
+
+You should see some JSON similar to this:
+
+```json
+{
+  "Name": "Tutorial Story",
+  "Description": "<p>Sample tutorial story</p>",
+  "Estimate": "",
+  "_links": {
+    "self": {
+      "href": "/platformtest/rest-1.v1/Data/Story/1154",
+      "id": "Story:1154"
+    }
+  }
+}
+```
+
+Our Barebones Story Editor will feature *just* Name, Description, and Estimate, 
+so this query is enough for us to base our GET HTTP request on.
+
+## Try Out Barebones POST Story HTTP Request
+
+Now, fire up another JSFiddle tab, and add this code to the JavaScript panel and run it:
+
+```javascript
+var host = "http://eval.versionone.net";
+var service = host + "/platformtest/rest-1.v1/Data/";
+var assetPath = "Story/1154";
+var headers = { 
+  Authorization: "Basic " + btoa("admin:admin"),
+  Accept: 'haljson'
+};
+
+var storyDto = {
+  Description: prompt('Enter a description', 'Changing description at time of ' + $.now()),
+  Estimate: prompt('Enter an estimate of 1 to 5', '2')
+};
+
+var settings = {	
+  url: service + assetPath,
+  type: 'POST',
+  data: JSON.stringify(storyDto),
+  dataType: 'json',
+  contentType: 'haljson',
+  headers: headers
+};
+
+$.ajax(settings)
+  .done(function(data) {
+    beautifulJson = JSON.stringify(data, null, 4);
+    $("body").html('<pre>' + beautifulJson + '</pre>');
+  })
+  .fail(function(jqXHR) {
+    $('body').html(jqXHR.responseText);
+  });
+```
+
+This time, we pass a few more settings to jQuery, such as the `POST` HTTP method, and, of course, 
+a stringified DTO object with two properties that will overwrite those properties on the asset. 
+Notice also that the response from the server contains just those two attributes.
+
+## Create the Barebones Story Editor HTML Form
+
+Having explored all the major client-server interactions, let's now build the "simplest thing that could possibly work" to edit the Story.
+
+Enter this into the HTML panel:
+
+```html
+<html>
+  	<head>
+  		<title>Barebones Story Editor</title>
+  	</head>
+	<body>
+		<h1>Barebones Story Editor</h1>
+		<br/>
+		<form>
+          		<label for="StoryId">Enter a Story ID: </label><input type="text" id="StoryId" /> <button id="storyGet">Load Story</button>
+        	</form>
+        	<div id="editor">
+			<form>
+				<label for="Name">Story Name:</label><br />
+				<input type="text" id="Name" name="Name">
+                		<br/>
+                		<label for="Name">Description:</label><br /> 
+                		<textarea id="Description" name="Description"></textarea>
+                		<br/>                  
+                		<label for="Estimate">Estimate:</label><br />
+                		<input type="text" id="Estimate" name="Estimate" />
+                		<br/>
+				<button id="storySave">Save Story</button>
+            		</form>
+		</div>
+	</body>
+</html>
+```
+
+
+http://jsfiddle.net/HtyNS/1/
+Again with JSFiddle, do this: 
+
+1. Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
+2. You'll see four panels: `HTML, JavaScript, CSS, and Result`
+
+In the HTML panel, type or paste this:
+
+```html
+
+
+
  - Create a Basic HTML Form to Edit a Story
  - Wire Up Some jQuery Event Handlers to Submit the Story
  - Conclusion: There's Got to be a Better Way!
