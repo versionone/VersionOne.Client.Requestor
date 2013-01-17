@@ -733,7 +733,7 @@ After all, who wants to have to go in to a block of HTML and add a bunch of mark
 
 Instead, we'll refactor our code so that all we need to do is change a configuration 
 
-HERE IT IS: http://jsfiddle.net/eGzXV/2/
+HERE IT IS: http://jsfiddle.net/eGzXV/7/
 
 HTML:
 ```html
@@ -754,55 +754,60 @@ HTML:
 		<div id="message"></div>
 	</body>
 </html>
+
 ```
 
 JavaScript
 
 ```javascript
-var formSchema = {
-  	Name:  { 
-      help:'Enter a story name',
-      title:'Story Name', 
-      validators: ['required'] 
-	},
-  	Description: {
-      title: 'Description',
-      help: 'Enter a brief description of the story',
-      validators: ['required']
-  	},
-  Estimate: {
-    title: 'Estimate',
-    help: 'Enter an estimated complexity between 1 and 5'
-  }
-};
+var urlRoot = 'http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/';
 
-var host = "http://eval.versionone.net";
-var service = host + "/platformtest/rest-1.v1/Data/";
-var assetPath = "Story/";
 var headers = { 
   Authorization: "Basic " + btoa("admin:admin"),
   Accept: 'haljson'
 };
 
-function getSelectList() {
-  var list = '';
-  	for (var fieldName in formSchema) {
-    	if (list != '') list+= ',';
-    	list += fieldName    
-  	}
-	return '?sel=' + list;
+var fetchOptions = {
+	dataType: 'json',
+    headers: headers  	
+};
+
+var saveOptions = {
+  contentType: 'haljson',
+  patch: true,
+  headers: headers
+};
+
+var formSchema = {
+  	Name:  { 
+      help:'Enter a story name', title:'Story Name', validators: ['required'] 
+	},
+  	Description: { title: 'Description', help: 'Enter a brief description of the story', validators: ['required']
+  	},
+  Estimate: {
+    title: 'Estimate', help: 'Enter an estimated complexity between 1 and 5'
+  }
 };
 
 var form = null;
 
-function createForm(data) {
-  var settings = {schema:formSchema};
-  if (data) {
-    settings.data = data;
-  }
-  form = new Backbone.Form(settings);
-  $('#editorFields').empty();
-  $('#editorFields').append(form.render().el);  
+function createForm(model) {
+	var settings = {schema:formSchema};
+  	function finish() {
+  		form = new Backbone.Form(settings);
+  		$('#editorFields').empty();
+  		$('#editorFields').append(form.render().el);
+      	$("#editor").fadeIn();
+  	}
+  	if (model) {    
+    	model.fetch(fetchOptions).done(function() {
+            console.log(model);
+    		settings.model = model;
+          	finish();
+    	});    
+  	} else {
+    	finish();
+  	}
 }
 
 function bindDtoToForm(data) {
@@ -813,53 +818,44 @@ function createDtoFromForm(selector) {
   return form.getValue();
 }
 
+var saveModel = false;
+var model = new (Backbone.Model.extend({
+  urlRoot: urlRoot,
+  url: function() {
+    if (saveModel)
+		return this.urlRoot + this.id;    
+    return this.urlRoot + this.id + '?sel='
+    	+ _.keys(formSchema).join(',')
+  }
+}));
+
+
+model.id = '';
 function storyGet() {
-    storyId = $('#StoryId').val();
-	if (storyId == '') 
+    model.id = $('#StoryId').val();
+  	console.log(model.id);
+	if (model.id == '') 
     {
       return;
     }
-    url = service + assetPath + storyId +
-      getSelectList(),
-    $.ajax({
-      url: url,
-      type: 'GET',      
-      dataType: 'json',
-      headers: headers
-    }).done(function(data){
-    	bindDtoToForm(data);
-        $("#editor").show();
-    }).fail(function(jqXHR){
-      	alert('Error during get. See console for details.');
-      	console.log('Error:');
-      	console.log(jqXHR.responseText);
-    });
+    createForm(model);
 }
 
 function storySave() {
-    var storyDto = createDtoFromForm("#editorForm input, #editorForm textarea");
-    $.ajax({
-      	url: service + assetPath + storyId,
-		type: 'POST',
-  		data: JSON.stringify(storyDto),
-  		dataType: 'json',
-  		contentType: 'haljson',
-  		headers: headers
-    }).done(function(data){
-      	$('#message').text('Save successful! You can load it in VersionOne and see the results of your labor.');
-		console.log(data);
-    }).fail(function(jqXHR){
-      	alert('Error during save. See console for message.');      
-      	console.log('Error on save:');
-      	console.log(jqXHR.responseText);     
-    });
+  Backbone.emulateHTTP = true;
+  saveModel = true;
+  form.commit();
+  model.save(form.getValue(), saveOptions).done(function(data) {
+    console.log('Saved!');
+    console.log(data);
+  });
 }
 
 var storyId = '';
 $(function(){
   var storyId = '';
   
-  createForm();  
+  createForm();
   
   $("#storyGet").click(storyGet);  
   $('#save').click(storySave);
@@ -872,7 +868,7 @@ body
 {
 	padding: 5px;
   	font-family: sans-serif;
-}
+}  
 
 #editor
 {
@@ -898,6 +894,10 @@ textarea
   color: darkgreen;
 }
 ```
+
+#TODO: below is all disorganized right now
+
+
  Replace the Handmade HTML Form with Backbone Forms
  - Replace `createStoryDto` with Backbone Forms' `getValue()` function
 
@@ -908,6 +908,108 @@ textarea
  - Wire Up Some jQuery Event Handlers to Submit the Story
  - Conclusion: There's Got to be a Better Way!
 
+```javascript
+var urlRoot = 'http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/';
+
+var headers = { 
+  Authorization: "Basic " + btoa("admin:admin"),
+  Accept: 'haljson'
+};
+
+var fetchOptions = {
+	dataType: 'json',
+    headers: headers  	
+};
+
+var saveOptions = {
+  contentType: 'haljson',
+  patch: true,
+  headers: headers
+};
+
+var formSchema = {
+  	Name:  { 
+      help:'Enter a story name', title:'Story Name', validators: ['required'] 
+	},
+  	Description: { title: 'Description', help: 'Enter a brief description of the story', validators: ['required']
+  	},
+  Estimate: {
+    title: 'Estimate', help: 'Enter an estimated complexity between 1 and 5'
+  }
+};
+
+var form = null;
+
+function createForm(model) {
+	var settings = {schema:formSchema};
+  	function finish() {
+  		form = new Backbone.Form(settings);
+  		$('#editorFields').empty();
+  		$('#editorFields').append(form.render().el);
+      	$("#editor").fadeIn();
+  	}
+  	if (model) {    
+    	model.fetch(fetchOptions).done(function() {
+            console.log(model);
+    		settings.model = model;
+          	finish();
+    	});    
+  	} else {
+    	finish();
+  	}
+}
+
+function bindDtoToForm(data) {
+  createForm(data);
+}
+
+function createDtoFromForm(selector) {
+  return form.getValue();
+}
+
+var saveModel = false;
+var model = new (Backbone.Model.extend({
+  urlRoot: urlRoot,
+  url: function() {
+    if (saveModel)
+		return this.urlRoot + this.id;    
+    return this.urlRoot + this.id + '?sel='
+    	+ _.keys(formSchema).join(',')
+  }
+}));
+
+
+model.id = '';
+function storyGet() {
+    model.id = $('#StoryId').val();
+  	console.log(model.id);
+	if (model.id == '') 
+    {
+      return;
+    }
+    createForm(model);
+}
+
+function storySave() {
+  Backbone.emulateHTTP = true;
+  saveModel = true;
+  form.commit();
+  model.save(form.getValue(), saveOptions).done(function(data) {
+    console.log('Saved!');
+    console.log(data);
+  });
+}
+
+var storyId = '';
+$(function(){
+  var storyId = '';
+  
+  createForm();
+  
+  $("#storyGet").click(storyGet);  
+  $('#save').click(storySave);
+});
+```
 
 
 
