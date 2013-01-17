@@ -605,6 +605,29 @@ Enter this into the HTML panel:
 </html>
 ```
 
+Add this to the CSS panel:
+
+```css
+body 
+{
+	padding: 5px;
+}
+
+#editor
+{
+  	padding: 10px;
+  	border: 1px solid darkblue;
+  	background: whitesmoke;
+	display: none;
+}
+```
+
+And, to wrap it up, put this into the JavaScript panel then hit run:
+
+```javascript
+
+
+```
 
 http://jsfiddle.net/HtyNS/1/
 Again with JSFiddle, do this: 
