@@ -1013,7 +1013,8 @@ The HTML is the same:
 Here's the refactored JavaScript:
 
 ```javascript
-/*
+// JSFiddle: http://jsfiddle.net/hW8Ck/9/
+/* 
 // Use this to snag fields from the query string:
 function qs(key) {
     key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
@@ -1025,6 +1026,8 @@ function qs(key) {
 function qs(key) {
     return prompt('Which attributes do you want to edit?', 'Name,Description,Estimate');
 }
+
+Backbone.emulateHTTP = true; // Force backbone to use POST, not PUT on .save(...)
 
 var siteRoot = 'http://eval.versionone.net/platformtest/';
 var urlRoot = siteRoot + 'rest-1.v1/Data/Story/';
@@ -1063,6 +1066,27 @@ var saveOptions = {
     headers: headers
 };
 
+var storyModel = Backbone.Model.extend({
+  	isSaving: false,
+  	urlRoot: urlRoot,
+    url: function () {
+        if (this.isSaving) return this.urlRoot + this.id;
+        return this.urlRoot + this.id 
+        	+ '?sel=' + _.keys(formSchema).join(',');
+    },
+	save: function(attributes, options) {
+		options || (options = saveOptions);
+		return Backbone.Model.prototype.save
+        	.call(this, attributes, options);
+	},
+  	fetch: function(options) {
+      options || (options = fetchOptions);
+      return Backbone.Model.prototype.fetch
+      	.call(this, options);
+  	}
+});
+var model = new storyModel();
+
 function loadMeta(callback) {
     var selectFields = qs('sel');
     if (!selectFields) {
@@ -1092,9 +1116,9 @@ function loadMeta(callback) {
               	var formField = field;
             	return $.ajax(l10nUrl + '?' 
 					+ item.DisplayName)
-					.done(function(data) {
-                  		formField.title = data;
-                	});
+				.done(function(data) {
+                	formField.title = data;
+				});
             };
       		titleRequests.push(titleRequest);
         });        
@@ -1135,33 +1159,20 @@ function createDtoFromForm(selector) {
     return form.getValue();
 }
 
-var saveModel = false;
-var model = new(Backbone.Model.extend({
-    urlRoot: urlRoot,
-    url: function () {
-        if (saveModel) return this.urlRoot + this.id;
-        return this.urlRoot + this.id + '?sel=' + _.keys(formSchema).join(',')
-    }
-}));
-
-model.id = '';
-
 function storyGet() {
     model.id = $('#StoryId').val();
-    console.log(model.id);
     if (model.id == '') {
         return;
     }
     createForm(model);
 }
 
-function storySave() {
-    Backbone.emulateHTTP = true;
-    saveModel = true;
+function storySave() {  	
     form.commit();
-    model.save(form.getValue(), saveOptions).done(function (data) {
-        console.log('Saved!');
-        console.log(data);
+  	model.isSaving = true;
+    model.save(form.getValue()).done(function (data) {
+      	model.isSaving = false;
+		console.log(data);
     });
 }
 
@@ -1208,7 +1219,7 @@ textarea
   color: darkgreen;
 }
 ```
-You can try this out here: [MetaMorformizer](http://jsfiddle.net/hW8Ck/8/)
+You can try this out here: [MetaMorformizer](http://jsfiddle.net/hW8Ck/9/)
 
 #TODO: below is all disorganized right now
 
