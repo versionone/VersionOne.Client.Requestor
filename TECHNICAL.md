@@ -902,6 +902,302 @@ textarea
 }
 ```
 
+# MetaMorformizer: Into the Blue Yonder!
+
+There's another aspect to the VersionOne API that can take us up to an even higher level of abstraction.
+Right now, you might feel like you're still in a cocoon, like a caterpillar, eager to fly.
+
+You can break free, you can undergo metamorphosis!
+
+Enter: the V1 Meta API.
+
+The V1 Meta API allows us to query the physical definition of the asset types within V1. 
+So, here's how we get the meta for the `Story` asset type:
+
+```text
+http://evel.versionone.net/platformtest/meta.v1/Story?accept=application/json
+```
+
+Distilled down to our three stooges, Name, Description, and Estimate, we have:
+
+```javascript
+{
+    "Story.Name": {
+        "_type": "AttributeDefinition",
+        "Name": "Name",
+        "Token": "Story.Name",
+        "DisplayName": "AttributeDefinition'Name'Story",
+        "AttributeType": "Text",
+        "IsReadOnly": false,
+        "IsRequired": true,
+        "IsMultivalue": false,
+        "IsCanned": true,
+        "IsCustom": false,
+        "Base": {
+            "href": "/versionone.web/meta.v1/BaseAsset/Name",
+            "tokenref": "BaseAsset.Name"
+        },
+        "OrderByAttribute": {
+            "href": "/versionone.web/meta.v1/Story/Name",
+            "tokenref": "Story.Name"
+        }
+    },
+    "Story.Description": {
+        "_type": "AttributeDefinition",
+        "Name": "Description",
+        "Token": "Story.Description",
+        "DisplayName": "AttributeDefinition'Description'Story",
+        "AttributeType": "LongText",
+        "IsReadOnly": false,
+        "IsRequired": false,
+        "IsMultivalue": false,
+        "IsCanned": true,
+        "IsCustom": false,
+        "Base": {
+            "href": "/versionone.web/meta.v1/BaseAsset/Description",
+            "tokenref": "BaseAsset.Description"
+        },
+        "OrderByAttribute": {
+            "href": "/versionone.web/meta.v1/Story/Description",
+            "tokenref": "Story.Description"
+        }
+    },
+    "Story.Estimate": {
+        "_type": "AttributeDefinition",
+        "Name": "Estimate",
+        "Token": "Story.Estimate",
+        "DisplayName": "AttributeDefinition'Estimate'Story",
+        "AttributeType": "Numeric",
+        "IsReadOnly": false,
+        "IsRequired": false,
+        "IsMultivalue": false,
+        "IsCanned": true,
+        "IsCustom": false,
+        "Base": {
+            "href": "/versionone.web/meta.v1/PrimaryWorkitem/Estimate",
+            "tokenref": "PrimaryWorkitem.Estimate"
+        },
+        "OrderByAttribute": {
+            "href": "/versionone.web/meta.v1/Story/Estimate",
+            "tokenref": "Story.Estimate"
+        }
+    }
+}
+```
+
+Armed with this, we can now *dynamically create* even the `formSchema` itself, and, what's more, 
+we can even dynamically supply the field names on the query string or in a `prompt` dialog.
+
+The HTML is the same:
+
+```html
+<html>
+  	<head>
+  		<title>Barebones Story Editor</title>
+  	</head>
+	<body>
+		<h1>Barebones Story Editor</h1>
+		<br/>
+        <label for="StoryId">Enter a Story ID: </label><input type="text" id="StoryId" /> <input type="button" id="storyGet" value="Load Story" />        
+        <div id="editor">
+			<form id="editorForm">
+              <div id="editorFields"></div>
+            </form>
+            <input type="button" id="save" value="Save Story" />
+		</div>
+		<div id="message"></div>
+	</body>
+</html>
+```
+
+Here's the refactored JavaScript:
+
+```javascript
+/*
+// Use this to snag fields from the query string:
+function qs(key) {
+    key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
+    var match = location.search.match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"));
+    return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+}
+*/
+// This simulates getting field names from the query string:
+function qs(key) {
+    return prompt('Which attributes do you want to edit?', 'Name,Description,Estimate');
+}
+
+var siteRoot = 'http://eval.versionone.net/platformtest/';
+var urlRoot = siteRoot + 'rest-1.v1/Data/Story/';
+var metaUrl = siteRoot + 'meta.v1/Story?accept=application/json';
+
+var formSchema = {};
+var form = null;
+
+var v1AtttributeTypeToBackboneFormsFieldMap = {
+    'LongText': {
+        type: 'TextArea'
+    },
+    'Text': {
+        type: 'Text'
+    },
+    'Numeric': {
+        type: 'Text',
+        validators: [/^\d+$/]
+    }
+};
+
+var headers = {
+    Authorization: "Basic " + btoa("admin:admin"),
+    Accept: 'haljson'
+};
+
+var fetchOptions = {
+    dataType: 'json',
+    headers: headers
+};
+
+var saveOptions = {
+    contentType: 'haljson',
+    patch: true,
+    headers: headers
+};
+
+function loadMeta(callback) {
+    var selectFields = qs('sel');
+    if (!selectFields) {
+        selectFields = ['Name', 'Description', 'Estimate'];
+    } else {
+        selectFields = selectFields.split(',');
+    }
+    $.ajax(metaUrl).done(function (data) {
+        var attributeNames = _.map(selectFields, function (fieldName) {
+            return "Story." + fieldName;
+        });
+        attribs = _.pick(data.Attributes, attributeNames);
+        _.each(attribs, function (item, index) {
+            var field = {};
+            var mixThemInProps = v1AtttributeTypeToBackboneFormsFieldMap[item.AttributeType];
+            _.extend(field, mixThemInProps);
+            var isRequired = item.IsRequired;
+            if (isRequired) {
+                if (!field.validators) {
+                    field.validators = [];
+                }
+                field.validators.push('required');
+            }
+            field.title = item.Name; // You could get fancier here...
+            formSchema[item.Name] = field;
+        });
+        callback();
+    });
+}
+
+function createForm(model) {
+    var settings = {
+        schema: formSchema
+    };
+
+    function finish() {
+        form = new Backbone.Form(settings);
+        $('#editorFields').empty();
+        $('#editorFields').append(form.render().el);
+        $("#editor").fadeIn();
+    }
+    if (model) {
+        model.fetch(fetchOptions).done(function () {
+            console.log(model);
+            settings.model = model;
+            finish();
+        });
+    } else {
+        console.log('Loading a new form without data');
+        finish();
+    }
+}
+
+function bindDtoToForm(data) {
+    createForm(data);
+}
+
+function createDtoFromForm(selector) {
+    return form.getValue();
+}
+
+var saveModel = false;
+var model = new(Backbone.Model.extend({
+    urlRoot: urlRoot,
+    url: function () {
+        if (saveModel) return this.urlRoot + this.id;
+        return this.urlRoot + this.id + '?sel=' + _.keys(formSchema).join(',')
+    }
+}));
+
+model.id = '';
+
+function storyGet() {
+    model.id = $('#StoryId').val();
+    console.log(model.id);
+    if (model.id == '') {
+        return;
+    }
+    createForm(model);
+}
+
+function storySave() {
+    Backbone.emulateHTTP = true;
+    saveModel = true;
+    form.commit();
+    model.save(form.getValue(), saveOptions).done(function (data) {
+        console.log('Saved!');
+        console.log(data);
+    });
+}
+
+var storyId = '';
+$(function () {
+    loadMeta(function () {
+        createForm();
+        $("#storyGet").click(storyGet);
+        $('#save').click(storySave);
+    });
+});
+```
+
+And, the CSS stays the same:
+
+```css
+body 
+{
+	padding: 5px;
+  	font-family: sans-serif;
+}  
+
+#editor
+{
+  	padding: 10px;
+  	border: 1px solid darkblue;
+  	background: whitesmoke;
+    display: none;
+}
+
+label 
+{
+	color: darkblue;
+}
+
+textarea 
+{
+  height:100px;
+}
+
+#message 
+{
+  margin-top: 5px;
+  color: darkgreen;
+}
+```
+
+
 #TODO: below is all disorganized right now
 
 
