@@ -1200,14 +1200,6 @@ function createForm(model) {
     }
 }
 
-function bindDtoToForm(data) {
-    createForm(data);
-}
-
-function createDtoFromForm(selector) {
-    return form.getValue();
-}
-
 function storyGet() {
     $('#storyGet').attr('disabled', 'disabled');
     $('#editor').fadeOut();
@@ -1367,7 +1359,7 @@ blockquote span {
   	border: 2px solid darkgray;
 }  
 ```
-You can try this out here: [MetaMorformizer](http://jsfiddle.net/hW8Ck/12/)
+You can try this out here: [MetaMorformizer](http://jsfiddle.net/hW8Ck/19/)
 
 #TODO: below is all disorganized right now
 
