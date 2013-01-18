@@ -1029,6 +1029,7 @@ function qs(key) {
 var siteRoot = 'http://eval.versionone.net/platformtest/';
 var urlRoot = siteRoot + 'rest-1.v1/Data/Story/';
 var metaUrl = siteRoot + 'meta.v1/Story?accept=application/json';
+var l10nUrl = siteRoot + 'loc.v1';
 
 var formSchema = {};
 var form = null;
@@ -1070,6 +1071,7 @@ function loadMeta(callback) {
         selectFields = selectFields.split(',');
     }
     $.ajax(metaUrl).done(function (data) {
+      	var titleRequests = [];
         var attributeNames = _.map(selectFields, function (fieldName) {
             return "Story." + fieldName;
         });
@@ -1085,10 +1087,20 @@ function loadMeta(callback) {
                 }
                 field.validators.push('required');
             }
-            field.title = item.Name; // You could get fancier here...
             formSchema[item.Name] = field;
+          	var titleRequest = function() {
+              	var formField = field;
+            	return $.ajax(l10nUrl + '?' 
+					+ item.DisplayName)
+					.done(function(data) {
+                  		formField.title = data;
+                	});
+            };
+      		titleRequests.push(titleRequest);
+        });        
+      	 $.when.apply(null, titleRequests).done(function() {
+            callback();
         });
-        callback();
     });
 }
 
