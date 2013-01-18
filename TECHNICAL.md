@@ -1032,9 +1032,6 @@ var urlRoot = siteRoot + 'rest-1.v1/Data/Story/';
 var metaUrl = siteRoot + 'meta.v1/Story?accept=application/json';
 var l10nUrl = siteRoot + 'loc.v1';
 
-var formSchema = {};
-var form = null;
-
 var v1AtttributeTypeToBackboneFormsFieldMap = {
     'LongText': {
         type: 'TextArea'
@@ -1064,11 +1061,12 @@ var saveOptions = {
     headers: headers
 };
 
+var formSchema = {};
+var form = null;
 var storyModel = Backbone.Model.extend({
-  	isSaving: false,
   	urlRoot: urlRoot,
     url: function () {
-        if (this.isSaving) return this.urlRoot + this.id;
+        if (!this.isNew()) return this.urlRoot + this.id;
         return this.urlRoot + this.id 
         	+ '?sel=' + _.keys(formSchema).join(',');
     },
@@ -1169,9 +1167,7 @@ function storySave() {
     if (form.validate() !== null)
     	return; 
   	form.commit();
-  	model.isSaving = true;
     model.save(form.getValue()).done(function (data) {
-      	model.isSaving = false;
 		$('#message')
         	.text('Save successful!')
         	.fadeIn()
@@ -1179,7 +1175,6 @@ function storySave() {
     });
 }
 
-var storyId = '';
 $(function () {
     loadMeta(function () {
         createForm();
@@ -1268,7 +1263,7 @@ textarea
   color: #555;
 }
 ```
-You can try this out here: [MetaMorformizer](http://jsfiddle.net/hW8Ck/11/)
+You can try this out here: [MetaMorformizer](http://jsfiddle.net/hW8Ck/12/)
 
 #TODO: below is all disorganized right now
 
