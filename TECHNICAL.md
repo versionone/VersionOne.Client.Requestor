@@ -902,23 +902,28 @@ textarea
 }
 ```
 
-# MetaMorformizer: Into the Blue Yonder!
+# MetaMorformizer: Into Wild the Blue Yonder!
 
-There's another aspect to the VersionOne API that can take us up to an even higher level of abstraction.
+There's another aspect to the VersionOne API that can take us up to an even higher level of abstraction and mastery.
 Right now, you might feel like you're still in a cocoon, like a caterpillar, eager to fly.
 
-You can break free, you can undergo metamorphosis!
+With the VersionOne Meta and Localization APIs you can break free. You can undergo metamorphosis!
 
-Enter: the V1 Meta API.
+## VersionOne Meta API
 
-The V1 Meta API allows us to query the physical definition of the asset types within V1. 
-So, here's how we get the meta for the `Story` asset type:
+The [VersionOne Meta API](http://community.versionone.com/sdk/Documentation/MetaAPI.aspx) 
+allows us to query information about the VersionOne Information Model. Quoting from the main documenatation source:
+
+> The Meta API provides a facility for retrieving information about the VersionOne business objects. 
+> This includes getting information about the asset types, attribute definitions, relationships and operations. 
+
+So, here's a URL you can type in your browser's address bar to get the meta information for the `Story` asset type:
 
 ```text
 http://evel.versionone.net/platformtest/meta.v1/Story?accept=application/json
 ```
 
-Distilled down to our three stooges, Name, Description, and Estimate, we have:
+Distilled down to our three stooges, `Name, Description, Estimate`, we have:
 
 ```javascript
 {
@@ -984,27 +989,85 @@ Distilled down to our three stooges, Name, Description, and Estimate, we have:
     }
 }
 ```
+## VersionOne Localization API
+
+The `Name, Description, Estimate` attributes are all one word identifiers, 
+so they can serve as nice titles for fields too, but what if we want to add the `RequestedBy` attribute? 
+Do you, as a programmer, want to search and prefix capital letters, after the first character, with a space? 
+You might say, "Hey, that should be easy, let me try it out!", like I did:
+
+```javascript
+javascript:alert('RequestedByAndEvenMore'.replace(/([A-Z])/g, ' $1').substring(1) == 'Requested By And Even More')
+```
+
+http://community.versionone.com/sdk/Documentation/LocalizationAPI.aspx
+
+
+Notice the property `DisplayName` from above:
+
+```text
+AttributeDefinition'Name'Story
+```
+This value can be passed to the Localization API to get the label for the field title. TODO: finish this
+
 
 Armed with this, we can now *dynamically create* even the `formSchema` itself, and, what's more, 
 we can even dynamically supply the field names on the query string or in a `prompt` dialog.
 
-The HTML is nearly the same, but a bit improved for the messaging:
+The HTML has lots of improvements, and some instructional text, plus a hard-coded subset of the possible Story attributes: of 
 
 ```html
 <html>
-  	<head>
-  		<title>MetaMorformizer Story Editor</title>
-  	</head>
-	<body>
-		<h1>MetaMorformizer Story Editor</h1>
-		<br/>
-        <label for="StoryId">Enter a Story ID: </label><input type="text" id="StoryId" /> <input type="button" id="storyGet" value="Load Story" class='bbf-load' />        
+    
+    <head>
+        <title>VersionOne MetaMorformizer Story Editor</title>
+    </head>
+    
+    <body>
+        	<h1>VersionOne MetaMorformizer Story Editor</h1>
+An intermediate / advanced example of using the VersionOne HTTP API with
+        the open source jQuery, Backbone, and Backbone Forms libraries.
+        <br/>
+        <br/>
+        <div style='border: 1px solid darkgray;padding:5px;background:linen'>
+            	<h3>Instructions</h3>
+
+            <ol>
+                <li>1: Click <code>Load Story</code> and then hit <code>OK</code>
+                    <br/>
+                    <blockquote><i><span>Result</span>: Story details should load with values for <code>Name,Description,Estimate</code></blockquote></li>
+          <li>2: Modify the story then hit <code>Save Story</code><br/><br/></li>
+          <li>3: Click <code>Load Story</code> and set the fields to <code>Name,Description,Estimate,<b>RequestedBy</b></code></li>
+		</ol>
+      </div>
+          
+	<div class='editorDiv'>
         <div id="editor">
+            
 			<form id="editorForm">
+                <fieldset>
+                    <legend> VersionOne MetaMorfomizer Story Editor</legend>
               <div id="editorFields"></div>
+                </fieldset>
             </form>
-            <input type="button" id="save" value="Save Story" />&nbsp;<span id="message"></span>
-		</div>		
+            <input type="button" id="save" value="Save Story" />&nbsp;<span id="message"></span><img id='saveSpinner' height='20' width='20' src="https://www12.v1host.com/s/12.3.5.45/css/images/loaders/ajax-loader.gif" />
+		</div>
+        
+      <label for="StoryId"><b>Which Story do you want to edit?</b></label><input type="text" id="StoryId" value='1154' /> 
+      <br />
+      <label for="Fields"><b>Which attributes?</b></label>
+      <select id='attributes' multiple='true'>
+        <option value='Name'>Name</option>
+        <option value='Description'>Description</option>
+        <option value='Estimate'>Estimate</option>
+        <option value='RequestedBy'>Requested By</option>
+        <option value='Benefits'>Benefits</option>
+        <option value='ToDo'>To Do</option>
+      </select>
+      <br />
+      <input type="button" id="storyGet" value="Load Story" class='bbf-load' /> 
+      <img id='spinner' class='bbf-load' height='20' width='20' src="https://www12.v1host.com/s/12.3.5.45/css/images/loaders/ajax-loader.gif" />
+          </div>
 	</body>
 </html>
 ```
@@ -1022,7 +1085,7 @@ function qs(key) {
 */
 // This simulates getting field names from the query string:
 function qs(key) {
-    return prompt('Which attributes do you want to edit?', 'Name,Description,Estimate');
+    return 'Name,Description,Estimate';
 }
 
 Backbone.emulateHTTP = true; // Force backbone to use POST, not PUT on .save(...)
@@ -1064,35 +1127,28 @@ var saveOptions = {
 var formSchema = {};
 var form = null;
 var storyModel = Backbone.Model.extend({
-  	urlRoot: urlRoot,
+    urlRoot: urlRoot,
     url: function () {
         if (!this.isNew()) return this.urlRoot + this.id;
-        return this.urlRoot + this.id 
-        	+ '?sel=' + _.keys(formSchema).join(',');
+        return this.urlRoot + this.id + '?sel=' + _.keys(formSchema).join(',');
     },
-	save: function(attributes, options) {
-		options || (options = saveOptions);
-		return Backbone.Model.prototype.save
-        	.call(this, attributes, options);
-	},
-  	fetch: function(options) {
-      options || (options = fetchOptions);
-      return Backbone.Model.prototype.fetch
-      	.call(this, options);
-  	}
+    save: function (attributes, options) {
+        options || (options = saveOptions);
+        return Backbone.Model.prototype.save.call(this, attributes, options);
+    },
+    fetch: function (options) {
+        options || (options = fetchOptions);
+        return Backbone.Model.prototype.fetch.call(this, options);
+    }
 });
 var model = new storyModel();
 
 function loadMeta(callback) {
-    var selectFields = qs('sel');
-    if (!selectFields) {
-        selectFields = ['Name', 'Description', 'Estimate'];
-    } else {
-        selectFields = selectFields.split(',');
-    }
+    formSchema = {}; // reset the schema
+    var attributes = getSelectedAttributesNames();
     $.ajax(metaUrl).done(function (data) {
-      	var titleRequests = [];
-        var attributeNames = _.map(selectFields, function (fieldName) {
+        var titleRequests = [];
+        var attributeNames = _.map(attributes, function (fieldName) {
             return "Story." + fieldName;
         });
         attribs = _.pick(data.Attributes, attributeNames);
@@ -1108,17 +1164,16 @@ function loadMeta(callback) {
                 field.validators.push('required');
             }
             formSchema[item.Name] = field;
-          	var titleRequest = function() {
-              	var formField = field;
-            	return $.ajax(l10nUrl + '?' 
-					+ item.DisplayName)
-				.done(function(data) {
-                	formField.title = data;
-				});
+            var titleRequest = function () {
+                var formField = field;
+                return $.ajax(l10nUrl + '?' + item.DisplayName)
+                    .done(function (data) {
+                    formField.title = data;
+                });
             };
-      		titleRequests.push(titleRequest);
-        });        
-      	 $.when.apply(null, titleRequests).done(function() {
+            titleRequests.push(titleRequest);
+        });
+        $.when.apply(null, titleRequests).done(function () {
             callback();
         });
     });
@@ -1137,12 +1192,10 @@ function createForm(model) {
     }
     if (model) {
         model.fetch(fetchOptions).done(function () {
-            console.log(model);
             settings.model = model;
             finish();
         });
     } else {
-        console.log('Loading a new form without data');
         finish();
     }
 }
@@ -1156,35 +1209,59 @@ function createDtoFromForm(selector) {
 }
 
 function storyGet() {
-    model.id = $('#StoryId').val();
-    if (model.id == '') {
-        return;
-    }
-    createForm(model);
+    $('#storyGet').attr('disabled', 'disabled');
+    $('#editor').fadeOut();
+    $('#spinner').fadeIn();
+    loadMeta(function () {
+        model.id = $('#StoryId').val();
+        if (model.id == '') {
+            return;
+        }
+        createForm(model);
+        $('#editor').delay(1000).fadeIn();
+        $('#spinner').fadeOut(function () {
+            $('#storyGet').removeAttr('disabled');
+        });
+    });
 }
 
-function storySave() {  	
-    if (form.validate() !== null)
-    	return; 
-  	form.commit();
+function storySave() {
+    if (form.validate() !== null) return;
+    form.commit();
+    $('#save').attr('disabled', true);
+    $('#message').hide();
+    $('#saveSpinner').fadeIn();
     model.save(form.getValue()).done(function (data) {
-		$('#message')
-        	.text('Save successful!')
-        	.fadeIn()
-        	.delay(3000).fadeOut(1500);
+        $('#saveSpinner').fadeOut(function () {
+            $('#save').attr('disabled', false);
+            $('#message')
+                .text('Save successful!')
+                .fadeIn()
+                .delay(1500).fadeOut(1500);
+        });
     });
+}
+
+function getSelectedAttributesNames() {
+    var attributes = [];
+    $('#attributes option:selected').each(function () {
+        attributes.push($(this).attr('value'));
+    });
+    return attributes;
 }
 
 $(function () {
-    loadMeta(function () {
-        createForm();
-        $("#storyGet").click(storyGet);
-        $('#save').click(storySave);
+    var initialFields = qs('sel').split(',');
+    _.each(initialFields, function (field) {
+        var option = $('option[value="' + field + '"]');
+        option.attr('selected', 'selected');
     });
+    $('#save').click(storySave);
+    $("#storyGet").click(storyGet);
 });
 ```
 
-And, the CSS has some improvement:
+And, the CSS has some improvements as well:
 
 ```css
 body 
@@ -1199,6 +1276,7 @@ body
   	border: 1px solid darkblue;
   	background: whitesmoke;
     display: none;
+    margin-bottom: 15px;
 }
 
 label 
@@ -1262,6 +1340,32 @@ textarea
   padding: 4px;
   color: #555;
 }
+
+/* Custom */
+
+#spinner, #saveSpinner {
+  display: none;
+}
+
+blockquote {
+  font-size: 75%;
+  font-weight: bold;
+}
+
+blockquote code {
+  	font-size: 75%;
+	background: beige;
+}
+
+blockquote span {
+  color: darkgreen;
+}
+
+.editorDiv {
+	margin-top: 10px;
+  	padding: 10px;
+  	border: 2px solid darkgray;
+}  
 ```
 You can try this out here: [MetaMorformizer](http://jsfiddle.net/hW8Ck/12/)
 
