@@ -988,33 +988,32 @@ Distilled down to our three stooges, Name, Description, and Estimate, we have:
 Armed with this, we can now *dynamically create* even the `formSchema` itself, and, what's more, 
 we can even dynamically supply the field names on the query string or in a `prompt` dialog.
 
-The HTML is the same:
+The HTML is nearly the same, but a bit improved for the messaging:
 
 ```html
 <html>
   	<head>
-  		<title>Barebones Story Editor</title>
+  		<title>MetaMorformizer Story Editor</title>
   	</head>
 	<body>
-		<h1>Barebones Story Editor</h1>
+		<h1>MetaMorformizer Story Editor</h1>
 		<br/>
         <label for="StoryId">Enter a Story ID: </label><input type="text" id="StoryId" /> <input type="button" id="storyGet" value="Load Story" />        
         <div id="editor">
 			<form id="editorForm">
               <div id="editorFields"></div>
             </form>
-            <input type="button" id="save" value="Save Story" />
-		</div>
-		<div id="message"></div>
+            <input type="button" id="save" value="Save Story" />&nbsp;<span id="message"></span>
+		</div>		
 	</body>
 </html>
+
 ```
 
 Here's the refactored JavaScript:
 
 ```javascript
-// JSFiddle: http://jsfiddle.net/hW8Ck/9/
-/* 
+/*
 // Use this to snag fields from the query string:
 function qs(key) {
     key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
@@ -1168,11 +1167,16 @@ function storyGet() {
 }
 
 function storySave() {  	
-    form.commit();
+    if (form.validate() !== null)
+    	return; 
+  	form.commit();
   	model.isSaving = true;
     model.save(form.getValue()).done(function (data) {
       	model.isSaving = false;
-		console.log(data);
+		$('#message')
+        	.text('Save successful!')
+        	.fadeIn()
+        	.delay(3000).fadeOut(1500);
     });
 }
 
