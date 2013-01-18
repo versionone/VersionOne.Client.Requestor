@@ -998,7 +998,7 @@ The HTML is nearly the same, but a bit improved for the messaging:
 	<body>
 		<h1>MetaMorformizer Story Editor</h1>
 		<br/>
-        <label for="StoryId">Enter a Story ID: </label><input type="text" id="StoryId" /> <input type="button" id="storyGet" value="Load Story" />        
+        <label for="StoryId">Enter a Story ID: </label><input type="text" id="StoryId" /> <input type="button" id="storyGet" value="Load Story" class='bbf-load' />        
         <div id="editor">
 			<form id="editorForm">
               <div id="editorFields"></div>
@@ -1007,7 +1007,6 @@ The HTML is nearly the same, but a bit improved for the messaging:
 		</div>		
 	</body>
 </html>
-
 ```
 
 Here's the refactored JavaScript:
@@ -1190,7 +1189,7 @@ $(function () {
 });
 ```
 
-And, the CSS stays the same:
+And, the CSS has some improvement:
 
 ```css
 body 
@@ -1219,11 +1218,57 @@ textarea
 
 #message 
 {
-  margin-top: 5px;
+  font-weight: bold;
   color: darkgreen;
 }
+
+/* From Backbone Forms github site */
+
+/* Date */
+.bbf-date .bbf-date {
+  width: 4em
+}
+
+.bbf-date .bbf-month {
+  width: 9em;
+}
+
+.bbf-date .bbf-year {
+  width: 5em;
+}
+
+
+/* DateTime */
+.bbf-datetime select {
+  width: 4em;
+}
+
+
+/* List */
+.bbf-list .bbf-add, .bbf-load {
+  margin-top: -10px
+}
+
+.bbf-list li {
+  margin-bottom: 5px
+}
+
+.bbf-list .bbf-del {
+  margin-left: 4px
+}
+
+
+/* List.Modal */
+.bbf-list-modal {
+  cursor: pointer;
+  border: 1px solid #ccc;
+  width: 208px;
+  border-radius: 3px;
+  padding: 4px;
+  color: #555;
+}
 ```
-You can try this out here: [MetaMorformizer](http://jsfiddle.net/hW8Ck/9/)
+You can try this out here: [MetaMorformizer](http://jsfiddle.net/hW8Ck/11/)
 
 #TODO: below is all disorganized right now
 
