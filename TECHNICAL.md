@@ -1046,7 +1046,7 @@ An intermediate / advanced example of using the VersionOne HTTP API with
             
 			<form id="editorForm">
                 <fieldset>
-                    <legend> VersionOne MetaMorfomizer Story Editor</legend>
+                    <legend> VersionOne MetaMorformizer Story Editor</legend>
               <div id="editorFields"></div>
                 </fieldset>
             </form>
