@@ -1028,53 +1028,74 @@ The HTML has lots of improvements, and some instructional text, plus a hard-code
 An intermediate / advanced example of using the VersionOne HTTP API with
         the open source jQuery, Backbone, and Backbone Forms libraries.
         <br/>
+        <br/>This example uses all three core VersionOne APIs: Meta, Localization,
+        and Data.
+        <a href="http://community.versionone.com/sdk/documentation/coreapi.aspx"
+        target="_blank">Learn more here about the APIs</a>.
+        <br/>
         <br/>
         <div style='border: 1px solid darkgray;padding:5px;background:linen'>
-            	<h3>Instructions</h3>
+             <h3>Instructions</h3>
 
             <ol>
-                <li>1: Click <code>Load Story</code> and then hit <code>OK</code>
+                <li>1: Click <code>Load Story</code>
+
                     <br/>
-                    <blockquote><i><span>Result</span>: Story details should load with values for <code>Name,Description,Estimate</code></blockquote></li>
-          <li>2: Modify the story then hit <code>Save Story</code><br/><br/></li>
-          <li>3: Click <code>Load Story</code> and set the fields to <code>Name,Description,Estimate,<b>RequestedBy</b></code></li>
-		</ol>
-      </div>
-          
-	<div class='editorDiv'>
-        <div id="editor">
-            
-			<form id="editorForm">
-                <fieldset>
-                    <legend> VersionOne MetaMorformizer Story Editor</legend>
-              <div id="editorFields"></div>
-                </fieldset>
-            </form>
-            <input type="button" id="save" value="Save Story" />&nbsp;<span id="message"></span><img id='saveSpinner' height='20' width='20' src="https://www12.v1host.com/s/12.3.5.45/css/images/loaders/ajax-loader.gif" />
-		</div>
-        
-      <label for="StoryId"><b>Which Story do you want to edit?</b></label><input type="text" id="StoryId" value='1154' /> 
-      <br />
-      <label for="Fields"><b>Which attributes?</b></label>
-      <select id='attributes' multiple='true'>
-        <option value='Name'>Name</option>
-        <option value='Description'>Description</option>
-        <option value='Estimate'>Estimate</option>
-        <option value='RequestedBy'>Requested By</option>
-        <option value='Benefits'>Benefits</option>
-        <option value='ToDo'>To Do</option>
-      </select>
-      <br />
-      <input type="button" id="storyGet" value="Load Story" class='bbf-load' /> 
-      <img id='spinner' class='bbf-load' height='20' width='20' src="https://www12.v1host.com/s/12.3.5.45/css/images/loaders/ajax-loader.gif" />
-          </div>
-	</body>
+                    <blockquote><i><span>Result</span>: Story details should load with values for the attributes selected in the <code>Which attributes?</code> list</i>
+                    </blockquote>
+                </li>
+                <li>2: Modify the story and click <code>Save Story</code>
+
+                    <br/>
+                    <blockquote><i><span>Result</span>: Story will be saved back to VersionOne</i>
+                    </blockquote>
+                </li>
+                <li>3: Select some different fields from the <code>Which attributes?</code> list
+                    and repeat from step 1</li>
+            </ol>
+        </div>
+        <div class='editorDiv'>
+            <div id="editor">
+                <form id="editorForm">
+                    <fieldset>
+                        <legend>VersionOne MetaMorformizer Story Editor</legend>
+                        <div id="editorFields"></div>
+                    </fieldset>
+                </form>
+                <input type="button" id="save" value="Save Story" />&nbsp;<span id="message"></span>
+                <img id='saveSpinner' height='20' width='20'
+                src="https://www12.v1host.com/s/12.3.5.45/css/images/loaders/ajax-loader.gif"
+                />
+            </div>
+            <label for="StoryId"><b>Which Story do you want to edit?</b>
+            </label>
+            <input type="text" id="StoryId" value='1154' />
+            <br />
+            <label for="Fields"><b>Which attributes?</b>
+            </label>
+            <select id='attributes' multiple='true'>
+                <option value='Name'>Name</option>
+                <option value='Description'>Description</option>
+                <option value='Estimate'>Estimate</option>
+                <option value='RequestedBy'>Requested By</option>
+                <option value='Benefits'>Benefits</option>
+                <option value='ToDo'>To Do</option>
+            </select>
+            <br />
+            <input type="button" id="storyGet" value="Load Story" class='bbf-load'
+            />
+            <img id='spinner' class='bbf-load' height='20' width='20' src="https://www12.v1host.com/s/12.3.5.45/css/images/loaders/ajax-loader.gif"
+            />
+        </div>
+    </body>
+
 </html>
 ```
 
 Here's the refactored JavaScript:
 
 ```javascript
+// http://documentcloud.github.com/backbone/backbone-min.js
 /*
 // Use this to snag fields from the query string:
 function qs(key) {
@@ -1122,6 +1143,12 @@ var saveOptions = {
     contentType: 'haljson',
     patch: true,
     headers: headers
+    /*
+    setXHttpMethodOverride: function(xhr, name, value) {
+        xhr.setRequestHeader(name, value);
+        console.log(name + ': ' + value);
+    }
+    */
 };
 
 var formSchema = {};
@@ -1223,7 +1250,7 @@ function storySave() {
     $('#save').attr('disabled', true);
     $('#message').hide();
     $('#saveSpinner').fadeIn();
-    model.save(form.getValue()).done(function (data) {
+    var xhr = model.save(form.getValue()).done(function (data) {
         $('#saveSpinner').fadeOut(function () {
             $('#save').attr('disabled', false);
             $('#message')
@@ -1256,110 +1283,63 @@ $(function () {
 And, the CSS has some improvements as well:
 
 ```css
-body 
-{
-	padding: 5px;
-  	font-family: sans-serif;
-}  
-
-#editor
-{
-  	padding: 10px;
-  	border: 1px solid darkblue;
-  	background: whitesmoke;
+body {
+    padding: 5px;
+    font-family: sans-serif;
+}
+#editor {
+    padding: 10px;
+    border: 1px solid darkblue;
+    background: whitesmoke;
     display: none;
     margin-bottom: 15px;
 }
-
-label 
-{
-	color: darkblue;
+label { color: darkblue }
+textarea { height: 100px }
+#message {
+    font-weight: bold;
+    color: darkgreen;
 }
-
-textarea 
-{
-  height:100px;
-}
-
-#message 
-{
-  font-weight: bold;
-  color: darkgreen;
-}
-
 /* From Backbone Forms github site */
-
 /* Date */
-.bbf-date .bbf-date {
-  width: 4em
-}
-
-.bbf-date .bbf-month {
-  width: 9em;
-}
-
-.bbf-date .bbf-year {
-  width: 5em;
-}
-
-
+.bbf-date .bbf-date { width: 4em }
+.bbf-date .bbf-month { width: 9em }
+.bbf-date .bbf-year { width: 5em }
 /* DateTime */
-.bbf-datetime select {
-  width: 4em;
-}
-
-
+.bbf-datetime select { width: 4em }
 /* List */
-.bbf-list .bbf-add, .bbf-load {
-  margin-top: -10px
-}
-
-.bbf-list li {
-  margin-bottom: 5px
-}
-
-.bbf-list .bbf-del {
-  margin-left: 4px
-}
-
-
+.bbf-list .bbf-add,
+.bbf-load { margin-top: -10px }
+.bbf-list li { margin-bottom: 5px }
+.bbf-list .bbf-del { margin-left: 4px }
 /* List.Modal */
 .bbf-list-modal {
-  cursor: pointer;
-  border: 1px solid #ccc;
-  width: 208px;
-  border-radius: 3px;
-  padding: 4px;
-  color: #555;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    width: 208px;
+    border-radius: 3px;
+    padding: 4px;
+    color: #555;
 }
-
 /* Custom */
-
-#spinner, #saveSpinner {
-  display: none;
-}
-
+#spinner,
+#saveSpinner { display: none }
 blockquote {
-  font-size: 75%;
-  font-weight: bold;
+    font-size: 75%;
+    font-weight: bold;
 }
-
 blockquote code {
-  	font-size: 75%;
-	background: beige;
+    font-size: 75%;
+    background: beige;
 }
-
-blockquote span {
-  color: darkgreen;
-}
-
+blockquote span { color: darkgreen }
 .editorDiv {
-	margin-top: 10px;
-  	padding: 10px;
-  	border: 2px solid darkgray;
-}  
+    margin-top: 10px;
+    padding: 10px;
+    border: 2px solid darkgray;
+}
 ```
-You can try this out here: [MetaMorformizer](http://jsfiddle.net/hW8Ck/19/)
+You can try this out here: [MetaMorformizer](http://jsfiddle.net/v7cBn/7/)
 
 #TODO: below is all disorganized right now
 
