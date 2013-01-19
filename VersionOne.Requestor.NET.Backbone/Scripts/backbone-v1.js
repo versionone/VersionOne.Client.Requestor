@@ -1413,13 +1413,14 @@
     if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
       params.type = 'POST';
       if (options.emulateJSON) params.data._method = type;
-      var beforeSend = options.beforeSend;
-      options.beforeSend = function(xhr) {
-        console.log('Here is the setRequestHeader:');
-        console.log(xhr.setRequestHeader);
-        xhr.setRequestHeader('X-HTTP-Method-Override', type);
-        if (beforeSend) return beforeSend.apply(this, arguments);
-      };
+      var setXHttpMethodOverride = options.setXHttpMethodOverride;
+      if (!setXHttpMethodOverride) {
+        var beforeSend = options.beforeSend;
+        options.beforeSend = function(xhr) {       
+          xhr.setRequestHeader('X-HTTP-Method-Override', type);
+          if (beforeSend) return beforeSend.apply(this, arguments);
+        };
+      }
     }
 
     // Don't process data on a non-GET request.
