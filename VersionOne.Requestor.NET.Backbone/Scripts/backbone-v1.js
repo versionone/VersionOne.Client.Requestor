@@ -1413,18 +1413,21 @@
     if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
       params.type = 'POST';
       if (options.emulateJSON) params.data._method = type;
-      if (_.isFunction(options.setXHttpMethodOverride)) {
+      if (_.isUndefined(options.setXHttpMethodOverride) || options.setXHttpMethodOverride === true) {
+        var beforeSend = options.beforeSend;
+        options.beforeSend = function(xhr) {       
+          xhr.setRequestHeader('X-HTTP-Method-Override', type);
+          if (beforeSend) return beforeSend.apply(this, arguments);
+        };
+      } 
+      else if (_.isFunction(options.setXHttpMethodOverride)) {
+        var beforeSend = options.beforeSend;
+        options.beforeSend = function(xhr) {
           options.setXHttpMethodOverride(xhr, type);
-      } else {
-        if (_.isUndefined(options.setXHttpMethodOverride) || options.setXHttpMethodOverride === true) {
-          var beforeSend = options.beforeSend;
-          options.beforeSend = function(xhr) {       
-            xhr.setRequestHeader('X-HTTP-Method-Override', type);
-            if (beforeSend) return beforeSend.apply(this, arguments);
-          };
-        }
+          if (beforeSend) return beforeSend.apply(this, arguments);
+        };
       }
-    }
+    }    
 
     // Don't process data on a non-GET request.
     if (params.type !== 'GET' && !options.emulateJSON) {
