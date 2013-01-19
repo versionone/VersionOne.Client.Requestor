@@ -1413,8 +1413,9 @@
     if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
       params.type = 'POST';
       if (options.emulateJSON) params.data._method = type;
-      var setXHttpMethodOverride = options.setXHttpMethodOverride;
-      if (!setXHttpMethodOverride) {
+      if (options.setXHttpMethodOverride) {
+        options.setXHttpMethodOverride(xhr, type);
+      } else {
         var beforeSend = options.beforeSend;
         options.beforeSend = function(xhr) {       
           xhr.setRequestHeader('X-HTTP-Method-Override', type);
