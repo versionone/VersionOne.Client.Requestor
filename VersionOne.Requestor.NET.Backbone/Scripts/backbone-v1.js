@@ -1418,20 +1418,14 @@
       }      
       var beforeSend = options.beforeSend;
       options.beforeSend = function(xhr) {
-        if (_.isFunction(options.setXHttpMethodOverride)) 
+        if (_.isFunction(options.setXHttpMethodOverride)) {
           setRequestHeader = options.setXHttpMethodOverride;
+        }
         if (options.setXHttpMethodOverride !== false) {
           setRequestHeader(xhr, 'X-HTTP-Method-Override', type);
         }
         if (beforeSend) return beforeSend.apply(this, arguments);
       };
-      else if (_.isFunction(options.setXHttpMethodOverride)) {
-        var beforeSend = options.beforeSend;
-        options.beforeSend = function(xhr) {
-          options.setXHttpMethodOverride(xhr, type);
-          if (beforeSend) return beforeSend.apply(this, arguments);
-        };
-      }
     }    
 
     // Don't process data on a non-GET request.
