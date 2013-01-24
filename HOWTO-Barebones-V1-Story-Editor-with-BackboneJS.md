@@ -261,64 +261,68 @@ build the "simplest thing that could possibly work", to be agile, to edit the St
 * Select `jQuery` as the framework from the left, then enter this into the HTML panel:
 
 ```html
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
 <html>
-  	<head>
-  		<title>Barebones Story Editor</title>
-  	</head>
-	<body>
-		<h1>Barebones Story Editor</h1>
-		<br/>
-        <label for="StoryId">Enter a Story ID: </label><input type="text" id="StoryId" /> <input type="button" id="storyGet" value="Load Story" />        
-        <div id="editor">
-			<form id="editorForm">
-				<label for="Name">Story Name:</label><br />
-				<input type="text" id="Name" name="Name">
-                <br/>
-                <label for="Name">Description:</label><br /> 
-                <textarea id="Description" name="Description"></textarea>
-                <br/>                  
-                <label for="Estimate">Estimate:</label><br />
-                <input type="text" id="Estimate" name="Estimate" />
-                <br/>				
-            </form>
-            <input type="button" id="save" value="Save Story" />
-		</div>
-		<div id="message"></div>
-	</body>
+<head>
+  <title>Barebones Story Editor</title>
+</head>
+
+<body>
+  <h1>Barebones Story Editor</h1><br>
+  <label for="StoryId">Enter a Story ID:</label>
+
+  <form>
+    <input id="StoryId" type="text" value="1154">
+    <input id="storyGet" type="button" value="Load Story">
+    <br/>
+    <br/>
+  </form>
+
+  <div id="editor">
+    <form id="editorForm" name="editorForm">
+      <label for="Name">Story Name:</label><br>
+      <input id="Name" name="Name" type="text"><br>
+      <label for="Name">Description:</label><br>
+      <textarea id="Description" name="Description">
+</textarea><br>
+      <label for="Estimate">Estimate:</label><br>
+      <input id="Estimate" name="Estimate" type="text"><br>
+    </form>
+    <input id="save" type="button" value="Save Story">
+  </div>
+
+  <div id="message"></div>
+</body>
 </html>
 ```
 
 * Add this to the CSS panel:
 
 ```css
-body 
-{
-	padding: 5px;
-  	font-family: sans-serif;
+body {
+  padding: 5px;
+  font-family: sans-serif;
 }
 
-#editor
-{
-  	padding: 10px;
-  	border: 1px solid darkblue;
-  	background: whitesmoke;
-    display: none;
+#editor {
+  padding: 10px;
+  border: 1px solid #00008B;
+  background: #F5F5F5;
+  display: none;
 }
 
-label 
-{
-	color: darkblue;
+label {
+  color: #00008B;
 }
 
-textarea 
-{
-  height:100px;
+textarea {
+  height: 100px;
 }
 
-#message 
-{
+#message {
   margin-top: 5px;
-  color: darkgreen;
+  color: #006400;
 }
 ```
 
@@ -329,67 +333,63 @@ var host = "http://eval.versionone.net";
 var service = host + "/platformtest/rest-1.v1/Data/";
 var assetPath = "Story/";
 var select = "?sel=Name,Description,Estimate"
-var headers = { 
+var headers = {
   Authorization: "Basic " + btoa("admin:admin"),
   Accept: 'haljson'
 };
 
-$(function(){
+$(function () {
   var storyId = '';
-  
-  $("#storyGet").click(function(e) {
+  $("#storyGet").click(function (e) {
     storyId = $('#StoryId').val();
-	if (storyId == '') 
-    {
+    if (storyId == '') {
       return;
     }
     url = service + assetPath + storyId + select
     $.ajax({
       url: url,
-      type: 'GET',      
+      type: 'GET',
       dataType: 'json',
       headers: headers
-    }).done(function(data){
-    	bindDtoToForm(data);
-        $("#editor").show();
-    }).fail(function(jqXHR){
-      	alert('Error during get. See console for details.');
-      	console.log('Error:');
-      	console.log(jqXHR.responseText);
+    }).done(function (data) {
+      bindDtoToForm(data);
+      $("#editor").show();
+    }).fail(function (jqXHR) {
+      alert('Error during get. See console for details.');
+      console.log('Error:');
+      console.log(jqXHR.responseText);
     });
   });
   
-  $('#save').click(function(){
+  $('#save').click(function () {
     var storyDto = createDtoFromForm("#editorForm input, #editorForm textarea");
     $.ajax({
-      	url: service + assetPath + storyId,
-		type: 'POST',
-  		data: JSON.stringify(storyDto),
-  		dataType: 'json',
-  		contentType: 'haljson',
-  		headers: headers
-    }).done(function(data){
-      	$('#message').text('Save successful! You can load it in VersionOne and see the results of your labor.');
-		console.log(data);
-    }).fail(function(jqXHR){
-      	alert('Error during save. See console for message.');      
-      	console.log('Error on save:');
-      	console.log(jqXHR.responseText);     
+      url: service + assetPath + storyId,
+      type: 'POST',
+      data: JSON.stringify(storyDto),
+      dataType: 'json',
+      contentType: 'haljson',
+      headers: headers
+    }).done(function (data) {
+      $('#message').text('Save successful! You can load it in VersionOne and see the results of your labor.');
+      console.log(data);
+    }).fail(function (jqXHR) {
+      alert('Error during save. See console for message.');
+      console.log('Error on save:');
+      console.log(jqXHR.responseText);
     });
   });
 });
 
 function bindDtoToForm(data) {
-  console.log ("data:" + data);
   for (var key in data) {
-    console.log(key);
     $("#" + key).val(data[key]);
   }
 }
 
 function createDtoFromForm(selector) {
   var dto = {};
-  $(selector).each(function() {
+  $(selector).each(function () {
     var item = $(this);
     var id = item.attr('id');
     dto[id] = item.val();
@@ -397,9 +397,74 @@ function createDtoFromForm(selector) {
   return dto;
 }
 ```
+* Here's a version of this final section in CoffeeScript
+
+```coffee
+host = "http://eval.versionone.net"
+service = host + "/platformtest/rest-1.v1/Data/"
+assetPath = "Story/"
+select = "?sel=Name,Description,Estimate"
+headers =
+  Authorization: "Basic " + btoa("admin:admin")
+  Accept: "haljson"
+
+$ ->
+  storyId = ""
+  $("#storyGet").click (e) ->
+    storyId = $("#StoryId").val()
+    return  if storyId is ""
+    url = service + assetPath + storyId + select
+    $.ajax(
+      url: url
+      type: "GET"
+      dataType: "json"
+      headers: headers
+    ).done((data) ->
+      bindDtoToForm data
+      $("#editor").show()
+    ).fail (jqXHR) ->
+      alert "Error during get. See console for details."
+      console.log "Error:"
+      console.log jqXHR.responseText
+
+  $("#save").click ->
+    storyDto = createDtoFromForm("#editorForm input, #editorForm textarea")
+    $.ajax(
+      url: service + assetPath + storyId
+      type: "POST"
+      data: JSON.stringify(storyDto)
+      dataType: "json"
+      contentType: "haljson"
+      headers: headers
+    ).done((data) ->
+      $("#message").text "Save successful! You can load it in VersionOne and see the results of your labor."
+      console.log data
+    ).fail (jqXHR) ->
+      alert "Error during save. See console for message."
+      console.log "Error on save:"
+      console.log jqXHR.responseText
+
+bindDtoToForm = (data) ->
+  for key of data
+    $("#" + key).val data[key]
+    
+createDtoFromForm = (selector) ->
+  dto = {}
+  $(selector).each ->
+    item = $(this)
+    id = item.attr("id")
+    dto[id] = item.val()
+  dto        
+```
+
+# Conclusion
 
 That's it! You now have a complete Barebones Story Editor. Did you notice how easy it was to build up the DTO 
 using the `createDtoFromForm` function? Well, it will be even easier than that when we add 
-some **Backbone** to this and use **Backbone Forms** next!
+some **Backbone** to this and use **Backbone Forms** in the next episode!
 
-http://jsfiddle.net/HtyNS/1/
+Live JSFiddle: [VersionOne API: Barebones Editor Step 5: Putting it all together: The Barebones Editor!](http://jsfiddle.net/JoshGough/8fKLd/)
+Live JSFiddle with CoffeeScript: [VersionOne API: Barebones Editor Step 5: Putting it all together: The Barebones Editor in CoffeeScript!](http://jsfiddle.net/JoshGough/sQ4Ya/)
+# Related Resources
+
+TODO: add some...
