@@ -8,7 +8,7 @@ requests and respones. We're also adding support for [YAML](http://en.wikipedia.
 an even cleaner and simpler data format than JSON (JSON is actually a subset of YAML). 
 But, since JSON is the native format for JavaScript data, we'll examine that here.
 
-**By following this how-to, you will:**
+**In this how-to, you will:**
 
 * Explore our VersionOne Data API's JSON support by using a sample app running on our public test instance
 * Understand how to use API parameters to search for Project Assets (Scope Assets) and shape the output
