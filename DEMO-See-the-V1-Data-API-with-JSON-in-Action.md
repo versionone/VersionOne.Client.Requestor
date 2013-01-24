@@ -1,16 +1,18 @@
-# See the VersionOne Data API with JSON in Action
+# See the VersionOne Data API with JSON Support in Action
 
 The VersionOne team is hard at work trying to make it easier for you to program against 
 our [Core API](http://community.versionone.com/sdk/documentation/coreapi.aspx). 
 
-As part of that, we're adding stronger support for simplified JSON requests and respones. Note that
-we're also adding support for YAML, which is even cleaner and simpler to write than is JSON. 
-But, JSON is the native format for JavaScript data, so we'll examine that here.
+As part of that, we're adding stronger support for simplified [JSON](http://en.wikipedia.org/wiki/JSON) 
+requests and respones. We're also adding support for [YAML](http://en.wikipedia.org/wiki/YAML), 
+an even cleaner and simpler data format than JSON (JSON is actually a subset of YAML). 
+But, since JSON is the native format for JavaScript data, we'll examine that here.
 
 **By following this how-to, you will:**
 
 * Explore our VersionOne Data API's JSON support by using a sample app running on our public test instance
-* Understand how to use VersionOne Data API parameters to search for Project Assets (Scope Assets) and shape the output
+* Understand how to use API parameters to search for Project Assets (Scope Assets) and shape the output
+* See how to format JSON requests for sending POST to the API to update Assets
 * Learn some handy tools in Google Chrome for inspecting HTTP requests and responses
 
 **What you'll need:**
@@ -32,8 +34,8 @@ Chrome's Developer Tools to examine the HTTP requests and responses.
 
 ## 1. Search for projects by name
 
-* First, using Chrome, open the Developer Tools by hitting `F12`, and select the Network tab
-* Open `http://eval.versionone.net/platformtest/v1requestor/index.html`
+* First, open Chrome, then open the Developer Tools by hitting `F12`, and select the Network tab
+* Open [`http://eval.versionone.net/platformtest/v1requestor/index.html`](http://eval.versionone.net/platformtest/v1requestor/index.html)
 * Type `system` into the text box
 * Hit `Enter`
 
@@ -47,12 +49,12 @@ Now, in the Chrome Developer Tools' Network tab, we can inspect the HTTP request
 http://eval.versionone.net/platformtest/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name
 ```
 
-Various VersionOne API parameters comprise this HTTP request:
+Various VersionOne Data API parameters comprise this HTTP request:
 
-* `sel=Name` -- return only the *Name* attribute from the remote resource
-* `page=100,0` -- return 100 items max, starting at page 0
-* `find='system'` -- search for the word `system`
-* `findin=Name` -- search for `find` within the `Name` attribute only
+* `sel=Name` *return only the `Name` attribute from the remote resource*
+* `page=100,0` *return 100 items max, starting at page 0*
+* `find='system'` *search for the word `system`*
+* `findin=Name` *search for `find` parameter's value within the `Name` attribute only*
 
 #### Headers
 
@@ -72,11 +74,11 @@ Accept-Language: en-US,en;q=0.8
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
 ```
 
-Notice the Authorization header, which contains the Base64 encoded credentials. This string gets created using Chrome's `btoa` function, but if `options.serviceGateway` is defined, it will get that string from the gateway instead of hard-coding the credentials in the script. (I'm not pretending that this is secure, it's just for covenience right now)
-
 ### HTTP Response received
 
-The response Content-Type header is `haljson`. [HAL is a proposed standard](http://stateless.co/hal_specification.html) for hypermedia documents.
+The response Content-Type header is `haljson`. [HAL is a proposed standard](http://stateless.co/hal_specification.html) 
+for hypermedia documents. The format of the JSON returned in this sample aims to comply with HAL. 
+Where you see `acceptFormat=haljson`, that's how the server knows we want the data returned in that format.
 
 #### Headers
 
@@ -120,12 +122,12 @@ Date: Mon, 14 Jan 2013 22:34:20 GMT
 http://eval.versionone.net/platformtest/rest-1.v1/Data/Request?acceptFormat=haljson&where=Scope%3D'Scope%3A0'&sel=Name%2CRequestedBy&page=75%2C0&sort=-ChangeDate
 ```
 
-Again, various VersionOne API parameters comprise this URL:
+Again, various VersionOne Data API parameters comprise this URL:
 
-* `where=Scope='Scope:0'` -- return a Scope asset with the given id
-* `sel=Name,RequestedBy` -- return the Name and RequestedBy attributes of this Scope asset
-* `page=75,0` -- return 75 items max, starting at page 0
-* `sort=-ChangeDate` -- sort the results in desending order by the ChangeDate attribute
+* `where=Scope='Scope:0'` *return a Scope asset with the given id*
+* `sel=Name,RequestedBy` *return the Name and RequestedBy attributes of this Scope asset*
+* `page=75,0` *return 75 items max, starting at page 0*
+* `sort=-ChangeDate` *sort the results in desending order by the ChangeDate attribute*
 
 ### HTTP Response received
 
@@ -178,8 +180,8 @@ http://eval.versionone.net/platformtest/rest-1.v1/Data/Request/1150?acceptFormat
 
 The VersionOne API parameters breakdown:
 
-* `/Data/Request/1150` -- the specific URL that uniquely identifies this Scope asset
-* `sel=RequestedBy,Name,Description,Priority` -- return just these four attributes
+* `/Data/Request/1150` *the specific URL that uniquely identifies this Scope asset*
+* `sel=RequestedBy,Name,Description,Priority` *return just these four attributes*
 
 ### HTTP Response received
 
@@ -244,11 +246,16 @@ This time, the URL is nothing but the address of the asset, plus the `acceptForm
 ```
 **Note**: Because `Priority` is a Relation, there's no need to send the `Priority.Name`. Instead, it just sends a `_link` relation with the idref.
 
-*TODO* perhaps it would be more RESTful to require sending the URL as an `href` param instead of the shorter `idref`. Thoughts?
+**Question:** for [RESTafarians](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven) out there, what do you think about this: would be more RESTful to 
+require sending the full address of the `href` param, that is `/platformtest/rest-1.v1/Data/RequestPriority/169`, 
+instead of the shorter, non-address value from `idref`? See Roy Fielding's blog post 
+[REST APIs must be hypertext-driven](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven) 
+for more background.
 
 ### HTTP Response received
 
-This time, we have several more fields, including the `Priority`, which is itself a `Relation`. By default, the VersionOne API projects the `Priority.Name` value into the result as well.
+This time, we have several more fields, including the `Priority`, which is itself a `Relation`. 
+By default, the VersionOne API projects the `Priority.Name` value into the result as well.
 
 ```json
 {
@@ -281,5 +288,38 @@ Important in this HTTP response:
 * It contains the same fields that we sent it, and only those fields
 * The `_links.self.href` and `_links.self.id` properties contain the asset's `Moment`, which is a specific, very precise address of the asset. Since all asset changes are retained, this provides the exact location for this *version* of the asset. Note that if we now request the asset without the moment, the asset will still have the same state. However, someone else could change it before we do that. 
 In that case, we can always request this specific moment of the asset's state by using the moment-containing URL or id.
-* TODO: I am not sure why it returned the Scope as a relation.
+* **NOTE**: I am not sure why it returned the Scope as a relation.
 
+# Conclusion
+
+I hope you found this useful as a gentle introduction to the VersionOne Data API using JSON! But, might
+you be itching to start coding against the API yourself, using familiar open source JS libs like 
+jQuery and Backbone.js? If so, then stay tuned for the next how-to example, which will show exactly that!
+
+# Related Resources
+
+Here are some links for code and also some reading that can help you understand REST better. 
+Have some ideas for how the VersionOne API can be more RESTful and more useful to you? Let us know!
+
+* [VersionOne.SDK.Experimental SDK repo](http://www.github.com/versionone/VersionOne.SDK.Experimental) - 
+source code and instructions for adding this JSON support to your own on-premise VersionOne instance. 
+(Contact us if you use hosted)
+* [VersionOne Data API SDK Documentation](http://community.versionone.com/sdk/Documentation/DataAPI.aspx) -
+detailed information and various examples of using the HTTP API in its native XML format
+* [REST APIs must be hypertext-driven](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven) - 
+Roy Fielding's blog post about proper REST api design
+* [HAL - Hypertext Application Language](http://stateless.co/hal_specification.html) - 
+Mike Kelly's proposed standard a 'lean hypermedia type'
+* [Stefan Tilkov on REST and Hypermedia, ROCA, WebSockets vs. HTTP](http://www.infoq.com/interviews/tilkov-rest-hypermedia) -
+December 2012 interview about recent REST trends and related techniques from Goto conference
+* [InfoQ Explores: REST](http://www.infoq.com/minibooks/emag-03-2010-rest) - 
+Compiliation book of prominent articles from InfoQ
+* [Building Web Services the REST Way](http://www.xfront.com/REST-Web-Services.html) - Roger Costello's 
+excellent article on RESTful services
+* [REST FEST conference and video archive](http://www.restfest.org/) - Mike Amundsen's REST FEST conference and 
+video archive, with tons of great talks and information on RESTful design
+* [Building Hypermedia APIs with HTML5 and Node](http://www.amazon.com/Building-Hypermedia-APIs-HTML5-Node/dp/1449306578) - 
+Mike Amundsen's book on hypermedia design
+* [REST Fundamentals Pluralsight Video Course](http://pluralsight.com/training/Courses/TableOfContents/rest-fundamentals) - 
+Howard Dierking's excellent REST course on Pluralsight. Interestingly, it uses an agile tracking board as the domain. Don't 
+go using his ideas to build a tool that's better than VersionOne, now, you hear?
