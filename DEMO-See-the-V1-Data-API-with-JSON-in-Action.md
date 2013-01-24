@@ -11,8 +11,8 @@ But, since JSON is the native format for JavaScript data, we'll examine that her
 **In this how-to, you will:**
 
 * Explore our VersionOne Data API's JSON support by using a sample app running on our public test instance
-* Understand how to use API parameters to search for Project Assets (Scope Assets) and shape the output
-* See how to format JSON requests for sending POST to the API to update Assets
+* Understand how to use HTTP GET with API parameters to search for Assets and shape and constrain the output
+* See how use HTTP POST with JSON-formatted to update Assets
 * Learn some handy tools in Google Chrome for inspecting HTTP requests and responses
 
 **What you'll need:**
