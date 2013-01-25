@@ -67,7 +67,7 @@ several JavaScript client-side UI frameworks: Backbone.js, Spine.js, Knockout.js
 
 I already gave you the demo, but don't be a cheater. Keep going and build it step-by-step now:
 
-## 1. HTML Skeleton
+## 1. Create an HTML Skeleton
 
 Get started by doing this:
 
@@ -128,12 +128,12 @@ This replaces the much more verbose HTML from before:
 </div>
 ```
 
-## 2. Refactored JavaScript Code
+## 2. Add some vertebrae to the JavaScript with Backbone.js and friends
 
-The JavaScript code is so small, 75 lines, that you can just type or paste it in all at once. Each section has 
-comments to explain its purpose. So, when you type it in, don't feel like you need to type the comments again, 
-unless you feel that will help you learn better. Sometimes that can help. *It might help you find bugs in my code 
-or comments, for sure ;-)*
+The refactored JavaScript code is so small, 75 lines, that you can just type or paste it in all at once. 
+Each line has comments to explain its purpose. I encourage you to type, not paste the code, but don't feel like 
+you need to type the comments again, unless you feel that will help you learn better. Sometimes that can help. 
+***It might help you find bugs in my code or comments, for sure ;-)***
 
 ```javascript
 var StoryFormSchema = { // Backbone.Form will generate an HTML form based on this schema
