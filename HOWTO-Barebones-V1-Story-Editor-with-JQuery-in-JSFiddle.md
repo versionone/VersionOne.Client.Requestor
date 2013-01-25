@@ -463,8 +463,9 @@ That's it! You now have a complete Barebones Story Editor. Did you notice how ea
 using the `createDtoFromForm` function? Well, it will be even easier than that when we add 
 some **Backbone** to this and use **Backbone Forms** in the next episode!
 
-Live JSFiddle: [VersionOne API: Barebones Editor Step 5: Putting it all together: The Barebones Editor!](http://jsfiddle.net/JoshGough/8fKLd/)
-Live JSFiddle with CoffeeScript: [VersionOne API: Barebones Editor Step 5: Putting it all together: The Barebones Editor in CoffeeScript!](http://jsfiddle.net/JoshGough/sQ4Ya/)
+* Live JSFiddle: [VersionOne API: Barebones Editor Step 5: Putting it all together: The Barebones Editor!](http://jsfiddle.net/JoshGough/8fKLd/)
+* Live JSFiddle with CoffeeScript: [VersionOne API: Barebones Editor Step 5: Putting it all together: The Barebones Editor in CoffeeScript!](http://jsfiddle.net/JoshGough/sQ4Ya/)
+
 # Related Resources
 
 TODO: add some...
