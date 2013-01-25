@@ -43,18 +43,22 @@ Now, in the Chrome Developer Tools' Network tab, we can inspect the HTTP request
 
 ### HTTP Request generated
 
+The URL created should look something like this:
+
 #### URL
 
 ```
 http://eval.versionone.net/platformtest/rest-1.v1/Data/Scope?acceptFormat=haljson&sel=Name&page=100%2C0&find='system'&findin=Name
 ```
 
-Various VersionOne Data API parameters comprise this HTTP request:
+Let's examine the URL in more detail. In order for the VersionOne Data API comprise this HTTP request:
 
 * `sel=Name` *return only the `Name` attribute from the remote resource*
 * `page=100,0` *return 100 items max, starting at page 0*
 * `find='system'` *search for the word `system`*
 * `findin=Name` *search for `find` parameter's value within the `Name` attribute only*
+
+These parameters, taken together, tell the API what to do in order
 
 #### Headers
 
