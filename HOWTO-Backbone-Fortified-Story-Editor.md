@@ -78,25 +78,27 @@ Get started by doing this:
 
 ```html
 <html>
-<head>
-  <title>Barebones Story Editor</title>
-</head>
-<body>
-  <h1>Barebones Story Editor</h1><br>
-  <label for="storyId">Enter a Story ID:</label>
-  <form>
-    <input id="storyId" type="text"> <input id="storyLoad" type="button" value="Load Story">
-  </form>
-  <div id="editor">
-    <form id="editorForm" name="editorForm">
-      <h4>Story Details</h4>
-      <hr>
-      <div id="editorFields"></div>
-    </form>
-    <input id="storySave" type="button" value="Save Story">
-  </div>
-  <div id="message"></div>
-</body>
+  <head>
+    <title>Backbone-Fortified VersionOne Story Editor</title>
+  </head>
+  <body>
+    <h1>Backbone-Fortified VersionOne Story Editor</h1>
+    <div id="editor">
+      <form id="editorForm">
+        <h4>Story Details</h4>
+        <hr />
+        <div id="editorFields"></div>
+      </form>
+      <button id="storySave">Save Story</button> <span id="message"></span><span id="error"></span>
+    </div>
+    <h2>Enter a Story ID</h2>
+    <input type="text" id="storyId" value="1154" /> (Hint: use 1154 if don't know another...)
+    <br />
+    <button id="storyLoad">Load Story</button>
+    <hr/>
+    Visit the <a href="http://community.versionone.com/default.aspx">VersionOne Community</a> for more open source tools and APIs. Download code and <b>get involved</b> at <a href="http://www.github.com/VersionOne" target="_blank">VersionOne on GitHub</a>!
+    <br/>
+  </body>
 </html>
 ```
 
