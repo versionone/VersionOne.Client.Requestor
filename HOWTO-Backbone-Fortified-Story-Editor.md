@@ -11,12 +11,17 @@ Let's revamp the last sample so that all it takes to add a new field is a simple
 In the process, we'll incorporate some great and popular JavaScript libraries to reduce the amount
 of custom code we need to write and maintain.
 
-In this how-to, you will:
+**In this how-to, you will:***
 
 * Refactor the Barebones Story Editor to become fortified with the popular Backbone.js library
 * Learn how to extend Backbone.Model and override functions to work with HTTP APIs
 * Learn the Backbone Forms library for creating HTML forms automagically from simple JS-based schemas
 * Use some handy features of Underscore.js, Backbone's counterpart library for functional utilities
+
+**What you'll need:**
+
+* Like before, I've tested these in Google Chrome and Firefox, but not other browsers yet. Please 
+let me know if you find issues in other browsers.
 
 # Introduction and Live Finished JSFiddle Example
 
@@ -60,8 +65,9 @@ But, don't be a cheater. Keep going and build it step-by-step now:
 
 Get started by doing this:
 
-* Using Google Chrome, start a new JSFiddle at [http://www.JSFiddle.net](http://www.JSFiddle.net), 
-and select `jQuery` as your framework (v1.6+)
+* Using Google Chrome, browse to the empty fiddle template at 
+[http://jsfiddle.net/JoshGough/tU2Ww/](http://jsfiddle.net/JoshGough/tU2Ww/)
+* Click `Fork` at the top, which will create a new copy for you to use
 * Type or paste the following HTML into the HTML panel of the fiddle:
 
 ```html
@@ -117,10 +123,87 @@ This replaces the much more verbose HTML from before:
 </div>
 ```
 
-## 
+## Refactored JavaScript Code
+
+The JavaScript code is so small, 75 lines, that you can just type or paste it in all at once. Each section has 
+comments to explain its purpose:
 
 ```javascript
+var StoryFormSchema = { // Backbone.Form will use this object to create an HTML form from
+  Name: { validators: ['required'] }, // Name is required
+  Description: 'TextArea', // Since these next three are not required, we only specify the data type
+  Benefits: 'TextArea',
+  Estimate: 'Number',
+  RequestedBy: {} // Will default to 'Text'
+};
 
+var storyForm = null; // Instance of the schema declared above, created when we click 'Load Story'
+var urlRoot = 'http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/'; // V1 API URL base
+var headers = { Authorization: 'Basic ' + btoa('admin:admin'), Accept: 'haljson' }; // For authentication
+Backbone.emulateHTTP = true; // Tells Backbone to issue a POST instead of a PUT HTTP method for updates
+
+var StoryModel = Backbone.Model.extend({ // 
+  urlRoot: urlRoot,
+  url: function () {
+    if (this.hasChanged() && !this.isNew()) return this.urlRoot + this.id;
+    return this.urlRoot + this.id + '?sel=' + _.keys(storyForm.schema).join(',');
+  },
+  fetch: function(options) {
+    options || (options = {});
+    _.defaults(options, {dataType: 'json', headers: headers});
+    return Backbone.Model.prototype.fetch.call(this, options);
+  },
+  save: function(attributes, options) {
+    options || (options = {});
+    _.defaults(options, {contentType: 'haljson', patch: true, headers: headers});
+    return Backbone.Model.prototype.save.call(this, attributes, options);
+  }
+});
+var storyModel = new StoryModel();
+
+function createForm(model) {
+  var finish = function() {
+    storyForm = new Backbone.Form(settings);
+    $('#editorFields').empty();
+    $('#editorFields').append(storyForm.render().el);
+    if (model) $('#editor').fadeIn();
+  };
+  var settings = {schema: StoryFormSchema};
+  if (model) {
+    model.fetch().done(function(data) {
+      settings.model = model;
+      finish();
+    });
+  } else finish();
+};
+
+function storyLoad() {
+  storyModel.id = $('#storyId').val();
+  if (storyModel.id === '') {
+    alert('Please enter a story id first');
+    return;
+  }
+  createForm(storyModel);
+};
+
+function storySave() {
+  if (storyForm.validate() != null) return;
+  storyForm.commit();
+  storyModel.save(storyForm.getValue()).done(function(data) {
+    $('#error').hide();
+    $('#message').text('Story saved!').fadeIn().delay(2500).fadeOut();
+  }).fail(function(jqXHR) {
+    $('#message').hide();
+    $('#error').text('Error during save! See console for details.').fadeIn().delay(5e3).fadeOut();
+    console.log(jqXHR);
+  });
+};
+
+$(function() {
+  createForm();
+  $('#storyGet').click(storyLoad);
+  $('#save').click(storySave);
+});
 ```
 
 CSS
