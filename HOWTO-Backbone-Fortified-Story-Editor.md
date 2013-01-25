@@ -266,8 +266,8 @@ You're done! You can run the sample now and try out the next step, if you'd like
 
 # 3. Exercise: Transform the Story Editor into a Request Editor
 
-You may remember from the first article that the V1 Requestor app allows you to search for projects, load existing 
-Requests, and edit them, or add brand new ones.
+You may remember from the first article that the [V1 Requestor App](http://eval.versionone.net/platformtest/v1requestor/index.html) 
+allows you to search for projects, load existing Requests, and edit them, or add brand new ones.
 
 A Request in the VersionOne API is something similar to a Story, but it is less formal. It represents the kinds of
 things that a product owner or client says they want, like "I need a new button for printing".
@@ -305,9 +305,10 @@ post in greater detail. For now, what's above is all you'll need to know to get 
 
 ## See current requests
 
-Now, to see a list of Requests currently in the public instance, you can of course use the V1 Requester app, but 
-you can also use the VersionOne Data API that we now all know and love from this and previous articles, and which 
-you will, of course, be using from code anyway.
+Now, to see a list of Requests currently in the public instance, you can of course use the 
+[V1 Requester App](http://eval.versionone.net/platformtest/v1requestor/index.html) but you can also use the 
+VersionOne Data API that we now all know and love from this and previous articles, and which you will, of course, 
+be using *from code anyway*!
 
 To manually browse the results, go here:
 
