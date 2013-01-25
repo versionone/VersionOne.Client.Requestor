@@ -19,7 +19,7 @@ But, since JSON is the native format for JavaScript data, we'll examine that her
 
 Just Google Chrome. Most of this will work in other browsers, but you'll have to use their own developer tools.
 
-## Introduction VersionOne Data API's JSON Support
+## Introduction to the VersionOne Data API's JSON Support
 
 At the heart of the sample app we'll examine is [JSON](http://www.json.org/). 
 VersionOne does not yet natively support the JSON format that we use in this app. 
