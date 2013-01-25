@@ -21,7 +21,8 @@ binding function to populate the form from a JSON DTO fetched from the API
 We're going to use JSFiddle to build our form. So, do this:
 
 * Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
-* From the left side, under `Choose Framework`, leave `onLoad`, and select `jQuery` (Any version above 1.6)
+* From the left side, under `Choose Framework`, `onLoad` should be preselected (leave it this way)
+* Then select the most recent version of `jQuery`
 * On the right, you'll see four panels: `HTML, JavaScript, CSS, and Result`
 * We'll only use the JavaScript panel for now, so type this into it and then press `Run`:
 
