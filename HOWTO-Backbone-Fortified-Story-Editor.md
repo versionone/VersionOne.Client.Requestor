@@ -20,8 +20,8 @@ reduce the amount of [boilerplate code](http://en.wikipedia.org/wiki/Boilerplate
 
 **What you'll need:**
 
-* Like before, I've tested these in Google Chrome and Firefox, but not other browsers yet. Please 
-let me know if you find issues in other browsers.
+* Like before, I've tested these in Google Chrome, but not other browsers yet. Please let me know if you find 
+issues in other browsers.
 
 # Introduction and Live Finished JSFiddle Example
 
