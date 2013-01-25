@@ -24,7 +24,7 @@ Just Google Chrome. Most of this will work in other browsers, but you'll have to
 At the heart of the sample app we'll examine is [JSON](http://www.json.org/). 
 VersionOne does not yet natively support the JSON format that we use in this app. 
 But, the DLLs from the [VersionOne.SDK.Experimental repo](http://www.github.com/versionone/VersionOne.SDK.Experimental) 
-repo add that support in an unobtrusive way in conjunction with a simple `Web.config` change. 
+add that support in an unobtrusive way in conjunction with a simple `Web.config` change. 
 We'll also incorporate this support directly into the Core product 
 for "out of the box" support in future releases. However, if you're interested in using this support on your 
 own instance right now, then please contact us.
