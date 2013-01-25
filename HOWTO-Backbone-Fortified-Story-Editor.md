@@ -8,13 +8,13 @@ After all, who wants to have to go in to a block of HTML and add a bunch of mark
 ***just because you need another field from your domain to show up***? Not you? Not me, either.
 
 Let's revamp the last sample so that all it takes to add a new field is a **simple** configuration change 
-the top of a small script. In the process, we'll incorporate some great and popular JavaScript libraries to 
-reduce the amount of custom code we need to write and maintain!
+at the top of a small script. In the process, we'll incorporate some great and popular JavaScript libraries to 
+reduce the amount of [boilerplate code](http://en.wikipedia.org/wiki/Boilerplate_code) we need to write and maintain!
 
 **In this how-to, you will:***
 
-* Refactor the Barebones Story Editor to become fortified with the popular Backbone.js library
-* Learn how to extend Backbone.Model and override functions to work with HTTP APIs
+* Refactor the Barebones Story Editor to become ***fortified*** with the popular Backbone.js open source library
+* Learn how to extend Backbone.Model and override its functions to work with existing HTTP APIs
 * Learn the Backbone Forms library for creating HTML forms automagically from simple JS-based schemas
 * Use some handy features of Underscore.js, Backbone's counterpart library for functional utilities
 
@@ -25,8 +25,11 @@ let me know if you find issues in other browsers.
 
 # Introduction and Live Finished JSFiddle Example
 
-These days, you haven't really lived the JavaScript life unless you are using some (or all?) of the hot and popular
-JavaScript libraries. If you're reading this, then you probably know the list even better than I do. Here are a few 
+Want to skip my speel and go straight to the live demo? Be my guest: [Backbone-Fortified VersionOne Story Editor].
+(http://jsfiddle.net/JoshGough/8XApF/)
+
+So, how can you learn to build similar apps of your own? Well, these days, you haven't really lived the JavaScript life unless you are using some (or all?) of the hot and popular
+JavaScript libraries. If you're reading this, then maybe you know the list even better than I do. Here are a few 
 popular ones I know of:
 
 * [Backbone.js](http://backbonejs.org/)
@@ -45,11 +48,12 @@ The list goes on, and on, and on! These libraries serve a multitude of purposes,
 "MV*" approach to cliet-side JavaScript development, with many of them providing strong support for consuming and
 updating HTTP and REST-based server side APIs.
 
-I don't have experience with all of these, but the VersionOne development team has been using several of these, 
-notably Backbone.js. So, in this article, we're going to leverage Backbone.js, its sidekick Underscore.js, and 
-a library named Backbone Forms that extends Backbone with form-creation and validation magical powers.
+I don't have experience with all of these, but the [VersionOne Development Team](https://github.com/versionone) 
+has been using several of these, notably Backbone.js. So, in this article, we're going to leverage Backbone.js, 
+its sidekick Underscore.js, and a library named Backbone Forms that extends Backbone with form-creation and 
+validation ***magical powers***.
 
-## Learn you some JS libraries for great good
+## Learn you a JS library for great good
 
 However, if you are new to these libraries and want to go further in depth, I encourage you to check out these links:
 
@@ -58,10 +62,9 @@ between 7 frameworks: Backbone.js, Ember.js, Meteor.js, AngularJS, Spine.js, Can
 * [Client UI Smackdown](http://www.infoq.com/presentations/JavaScript-Frameworks-Review) - Craig Walls reviews 
 several JavaScript client-side UI frameworks: Backbone.js, Spine.js, Knockout.js, Knockback.js, Sammy.js. 
 
-Moving on! Here's our completed Backbone-Fortified VersionOne Story Editor: 
-[http://jsfiddle.net/JoshGough/8XApF/](http://jsfiddle.net/JoshGough/8XApF/)
+## Moving on! 
 
-But, don't be a cheater. Keep going and build it step-by-step now:
+I already gave you the demo, but don't be a cheater. Keep going and build it step-by-step now:
 
 ## 1. HTML Skeleton
 
@@ -124,10 +127,12 @@ This replaces the much more verbose HTML from before:
 </div>
 ```
 
-## Refactored JavaScript Code
+## 2. Refactored JavaScript Code
 
 The JavaScript code is so small, 75 lines, that you can just type or paste it in all at once. Each section has 
-comments to explain its purpose:
+comments to explain its purpose. So, when you type it in, don't feel like you need to type the comments again, 
+unless you feel that will help you learn better. Sometimes that can help. *It might help you find bugs in my code 
+or comments, for sure ;-)*
 
 ```javascript
 var StoryFormSchema = { // Backbone.Form will generate an HTML form based on this schema
@@ -255,3 +260,72 @@ textarea {
   color: red;
 }
 ```
+
+You're done! You can run the sample now and try out the next step, if you'd like.
+
+# 3. Exercise: Transform the Story Editor into a Request Editor
+
+You may remember from the first article that the V1 Requestor app allows you to search for projects, load existing 
+Requests, and edit them, or add brand new ones.
+
+A Request in the VersionOne API is something similar to a Story, but it is less formal. It represents the kinds of
+things that a product owner or client says they want, like "I need a new button for printing".
+
+We'll explore the technical details of that app in a future article, but for now, try to modify our Story Editor to 
+become a simple Request Editor. 
+
+Features you should add:
+
+1. Load a Request by id, similar to loading a Story by id
+2. The form should contain fields for `Name, Description, Reference, RequestedBy, and Resolution` 
+3. Create a new feature: Add Request, which blanks out the form and lets you create a new Request. Hint: check out 
+the [Backbone.js documentation for `save`](http://backbonejs.org/#Model-save](http://backbonejs.org/#Model-save), paying attention to the `create` information.
+
+## Let's Get Meta(physical)
+
+For some more hints on getting started, you can browse the VersionOne Meta API for a Request here to see that the
+data types are for the fields listed above.
+
+[http://eval.versionone.net/platformtest/meta.v1/Request?xsl=api.xsl](http://eval.versionone.net/platformtest/meta.v1/Request?xsl=api.xsl)
+
+From that, you can see a lot of attributes and relationships, starting with:
+
+* Owner : Relation to Member
+* * Scope : Relation to Scope
+* Description : LongText
+* * Name : Text
+* Reference : Text
+* RequestedBy : Text
+* Order : Rank
+* Resolution : LongText
+
+It goes on, and on from there. We have not discussed the Meta API yet, but that will be the subject of the next 
+post in greater detail. For now, what's above is all you'll need to know to get started.
+
+## See current requests
+
+Now, to see a list of Requests currently in the public instance, you can of course use the V1 Requester app, but 
+you can also use the VersionOne Data API that we now all know and love from this and previous articles, and which 
+you will, of course, be using from code anyway.
+
+To manually browse the results, go here:
+
+[http://eval.versionone.net/platformtest/rest-1.v1/Data/Request?acceptFormat=haljson](http://eval.versionone.net/platformtest/rest-1.v1/Data/Request?acceptFormat=haljson)
+
+**Note:** If you get prompted to enter authentication credentials, use admin / admin.
+
+Give it a try. Let us know what you come up with by sending us a link to your JSFiddle!
+
+# Conclusion
+
+That concludes this article. I hope you've learned more about the VersionOne Data API, but more importantly, I hope
+you are intrigued by Backbone.js and Backbone Forms and will find use for them in your own development, whether that 
+be against the VersionOne APIs or your own systems.
+
+In our next article, we'll cover the Meta and Localization APIs in more detail by further refactoring our Story Editor. 
+This time, we'll create the form schema entirely based upon a simple list of attributes like `Name, Description, Estimate`. 
+Stay tuned!
+
+# Related Resources
+
+TODO
