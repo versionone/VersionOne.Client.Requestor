@@ -3,12 +3,21 @@
 This exercise will take you through building a very rudimentary Story editor using standard HTML and JavaScript. 
 The only third-party library it will depend on is jQuery, and only for simple event handling and AJAX support.
 
+# In this how-to, you will:
+
+* Get familiar with the JSFiddle online editor
+* Use jQuery.ajax to issue both GET and POST (fetch, update) HTTP Requests to the VersionOne Data API
+* Create a simple HTML form that lets you edit a VersionOne Story asset
+* Build a simple, but fully functional, DTO [(Data Transfer Object)](http://martinfowler.com/eaaCatalog/dataTransferObject.html) 
+binding function to populate the form from a JSON DTO fetched from the API
+* Build a simple, and still fully function, function to create a JSON DTO from the HTML form for sending back to the server
+
 # What you'll need:
 
 * I've tested this in Google Chrome and Firefox, but not in other browsers, 
 so if you run into any snags, please let me know
 
-## Get Familiar with JSFiddle
+## 1. Get Familiar with JSFiddle
 
 We're going to use JSFiddle to build our form. So, do this:
 
@@ -74,7 +83,7 @@ $.ajax(settings)
 
 Live JSFiddle: [VersionOne API: Barebones Editor Step 2: Use jQuery to Fetch a Project Asset as XML](http://jsfiddle.net/JoshGough/vvQZ2/)
 
-## Extend our JSFiddle Example with Basic HTML
+## 2. Extend our JSFiddle Example with Basic HTML
 
 Now, let's add some HTML to this thing, shall we?
 
@@ -181,7 +190,7 @@ body {
 Live JSFiddle: [VersionOne API: Barebones Editor Step 3: Render a JSON Asset with Basic HTML](http://jsfiddle.net/JoshGough/34VJc/
 )
 
-## Issue a Barebones GET Story HTTP Request
+## 3. Issue a Barebones GET Story HTTP Request
 
 Now that we're comfortable with JSFiddle, let's start building our Barebones Story Editor!
 
@@ -210,7 +219,7 @@ http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/1154?acceptFormat=h
 Our Barebones Story Editor will feature *just* Name, Description, and Estimate, 
 so this query is enough for us to base our GET HTTP request on.
 
-## Issue a Barebones POST Story HTTP Request
+## 4. Issue a Barebones POST Story HTTP Request
 
 * Now, fire up another JSFiddle tab, and, after selecting `jQuery` as your framework, add this code to the JavaScript panel and run it:
 
@@ -253,7 +262,7 @@ Notice also that the response from the server contains just those two attributes
 
 Live JSFiddle: [VersionOne API: Barebones Editor Step 4: Issue a Barebones HTTP POST request to update a Story asset](http://jsfiddle.net/JoshGough/QMugh/)
 
-## Create the Barebones Story Editor HTML Form
+## 5. Create the Barebones Story Editor HTML Form
 
 Having explored all the major client-server interactions, let's now 
 build the "simplest thing that could possibly work", to be agile, to edit the Story.
@@ -397,65 +406,194 @@ function createDtoFromForm(selector) {
   return dto;
 }
 ```
-* Here's a version of this final section in CoffeeScript
+# Whoah, that was a lot of code! Slow down and explain some of it?
 
-```coffee
-host = "http://eval.versionone.net"
-service = host + "/platformtest/rest-1.v1/Data/"
-assetPath = "Story/"
-select = "?sel=Name,Description,Estimate"
-headers =
-  Authorization: "Basic " + btoa("admin:admin")
-  Accept: "haljson"
+**Agreed.** Let's start here:
 
-$ ->
-  storyId = ""
-  $("#storyGet").click (e) ->
-    storyId = $("#StoryId").val()
-    return  if storyId is ""
+```javascript
+$(function () {
+  var storyId = '';
+  $("#storyGet").click(function (e) {
+    storyId = $('#StoryId').val();
+    if (storyId == '') {
+      return;
+    }
     url = service + assetPath + storyId + select
-    $.ajax(
-      url: url
-      type: "GET"
-      dataType: "json"
+    $.ajax({
+      url: url,
+      type: 'GET',
+      dataType: 'json',
       headers: headers
-    ).done((data) ->
-      bindDtoToForm data
-      $("#editor").show()
-    ).fail (jqXHR) ->
-      alert "Error during get. See console for details."
-      console.log "Error:"
-      console.log jqXHR.responseText
-
-  $("#save").click ->
-    storyDto = createDtoFromForm("#editorForm input, #editorForm textarea")
-    $.ajax(
-      url: service + assetPath + storyId
-      type: "POST"
-      data: JSON.stringify(storyDto)
-      dataType: "json"
-      contentType: "haljson"
-      headers: headers
-    ).done((data) ->
-      $("#message").text "Save successful! You can load it in VersionOne and see the results of your labor."
-      console.log data
-    ).fail (jqXHR) ->
-      alert "Error during save. See console for message."
-      console.log "Error on save:"
-      console.log jqXHR.responseText
-
-bindDtoToForm = (data) ->
-  for key of data
-    $("#" + key).val data[key]
-    
-createDtoFromForm = (selector) ->
-  dto = {}
-  $(selector).each ->
-    item = $(this)
-    id = item.attr("id")
-    dto[id] = item.val()
-  dto        
+    }).done(function (data) {
+      bindDtoToForm(data);
+      $("#editor").show();
+    }).fail(function (jqXHR) {
+      alert('Error during get. See console for details.');
+      console.log('Error:');
+      console.log(jqXHR.responseText);
+    });
+  });
+  // ... etc
 ```
+
+### jQuery document ready handler shortcut
+
+The first bit of code, the weird `$(function() { ...` uses jQuery's shortcut for the 'document ready handler'. This 
+instructs jQuery to execute the function passed to it when the Document Object Model (DOM) is ready. To read more 
+about this, visit the [jQuery web site](http://api.jquery.com/ready/).
+
+### jQuery selectors shortcuts
+
+After that, we use another jQuery shortcut for [selecting an element](http://api.jquery.com/category/selectors/) 
+out of the DOM: `$("#storyGet")`. This is a shortcut for calling `document.getElementById("#storyGet")`, 
+which selects the button from our HTML form. Having that form element selected, we call the `click` function, which 
+fill bind the passed function to the `click` event of the element (or elements) selected by the selector. 
+
+### Simple access to form data with jQuery's `val()` function
+
+From there, we try to pull out the value of the text box element named `#StoryId` using the jQuery [`val()` function]
+(http://api.jquery.com/val/), and return if it's empty.
+
+### Create the resource URL by string concatenation
+
+If it's not empty, we build up the URL for where to load the story from. 
+
+Let's remember the initial configuration variables we had in the beginning of the script:
+
+```javascript
+var host = "http://eval.versionone.net";
+var service = host + "/platformtest/rest-1.v1/Data/";
+var assetPath = "Story/";
+var select = "?sel=Name,Description,Estimate"
+var headers = {
+  Authorization: "Basic " + btoa("admin:admin"),
+  Accept: 'haljson'
+};
+```
+
+Now, supposing we type `1154` into the `StoryId` textbox, then the following line:
+
+`url = service + assetPath + storyId + select`
+
+will evaluate to:
+
+`http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/1154/?sel=Name,Description,Estimate'
+
+### Ajax cleans up remote data access
+
+The remainder of the function's code uses jQuery's handy [`ajax` function](http://api.jquery.com/jQuery.ajax/):
+
+```javascript
+$.ajax({
+  url: url,
+  type: 'GET',
+  dataType: 'json',
+  headers: headers
+}).done(function (data) {
+  bindDtoToForm(data);
+  $("#editor").show();
+}).fail(function (jqXHR) {
+  alert('Error during get. See console for details.');
+  console.log('Error:');
+  console.log(jqXHR.responseText);
+});
+```
+
+The parameters object hash parameters are:
+
+* `url` *the url we just built, providing the resource location that we want to load from the API*
+* `type` *the HTTP method to use for the request. We are simply fetching data, so we use HTTP GET*
+* `dataType` *this tells jQuery to expect the data coming back to be json, no matter what the content-type header says*
+* `headers` *we pass along the headers object to Authorize with the specificied credentials, and what data format we will Accept*
+
+### Understanding jQuery Deferred Objects for asynchronous operations
+
+The next part looks a little weird. `.done(...)` and then `.fail(...)`. jQuery 1.5 introduced the 
+[Deferred Object](http://api.jquery.com/category/deferred-object/).
+
+Here's a summary of what it's for from the documentation link above:
+
+```text
+The Deferred object, introduced in jQuery 1.5, is a chainable utility object created by calling the 
+jQuery.Deferred() method. It can register multiple callbacks into callback queues, invoke callback queues, 
+and relay the success or failure state of any synchronous or asynchronous function.
+
+The Deferred object is chainable, similar to the way a jQuery object is chainable, but it has its own methods. 
+After creating a Deferred object, you can use any of the methods below by either chaining directly from the 
+object creation or saving the object in a variable and invoking one or more methods on that variable.
+```
+
+Most of the functions on a Deferred Object accept a function parameter that will get called in response to 
+certain events. In our case, the `ajax()` call creates a Deferred object that wraps an underlying [XMLHttpRequest]
+(http://www.w3.org/TR/XMLHttpRequest/)used to communicate with the VersionOne Data API. As you probably know, this
+object makes calls asynchronously, so we cannot expect the request to complete before the next line of code runs!
+
+#### Handling successful HTTP requests with a `done()` callback
+
+Because of this, we supply the `done()` function with a 
+[callback function](http://en.wikipedia.org/wiki/Callback_(computer_programming)) that jQuery itself will invoke 
+when the request successfully returns data from the remote web server hosting the API.
+
+The callback itself will accept a parameter with the content returned by the server. In our case, we name it
+`data` and then we pass it off to the `bindDtoToForm()` function, which we'll explain in a moment. After that, 
+we simply call `$("#editor").show()`, which finds the `#editor` DIV element, and invokes jQuery's
+[`show()`](http://api.jquery.com/show/) function to cause the DIV to become visible in the UI.
+
+#### Handling failed HTTP requests with a `fail()` callback
+
+Now, if you thought that the `fail()` function accepts a function to call when the request fails, then you'd be 
+correct. In that case, jQuery returns to us its jqXHR object that made the call to the server. This is an instance 
+of the jqXHR object. This topic is a bit out of scope, and quite low-level, for this article, but you can [read 
+more about it here](http://api.jquery.com/jQuery.ajax/#jqXHR).
+
+### Populating the HTML form with `bindDtoToForm()`
+
+This is one of the easiest parts of the whole app! Yet, so many people fail to recognize how easy it is to 
+do this:
+
+```javascript
+function bindDtoToForm(data) {
+  for (var key in data) {
+    $("#" + key).val(data[key]);
+  }
+}
+```
+
+All that this does is:
+
+* Iterate over each key in the JSON DTO that we got from the server, then:
+* Use jQuery's selector shortcut we just examined to find the corresponding HTML form element, and:
+* Use the `val()` function we already examined to set the value in the form element.
+
+For reference, the JSON DTO will look something like this:
+
+```json
+{
+  "Name": "Tutorial Story",
+  "Description": "Sample tutorial story",
+  "Estimate": "5"
+}
+```
+
+So, if we were to write all the code we needed by hand to achive the same thing, it would look like this:
+
+```javascript
+function bindDtoToForm(data) {
+ $('#Name').val(data.Name); // or data['Name'], as these are equivalent
+ $('#Description').val(data.Description);
+ $('#Estimate').val(data.Estimate); 
+}
+```
+
+So, while in this case we only save 1 line of code, you can probably imagine how tedious it would be to write all
+that code by hand if we had 10 fields, or 100 fields. The first version, with the for loop, will handle 3 fields 
+or 300 fields with no additional code. ***Don't let me catch you putting 300 fields on a form, however!***
+
+**Done.**
+
+### Creating the DTO from the form to send to the API
+
+TODO
 
 # Conclusion
 
@@ -464,7 +602,7 @@ using the `createDtoFromForm` function? Well, it will be even easier than that w
 some **Backbone** to this and use **Backbone Forms** in the next episode!
 
 * Live JSFiddle: [VersionOne API: Barebones Editor Step 5: Putting it all together: The Barebones Editor!](http://jsfiddle.net/JoshGough/8fKLd/)
-* Live JSFiddle with CoffeeScript: [VersionOne API: Barebones Editor Step 5: Putting it all together: The Barebones Editor in CoffeeScript!](http://jsfiddle.net/JoshGough/sQ4Ya/)
+* For your curiosity, a live JSFiddle with CoffeeScript: [VersionOne API: Barebones Editor Step 5: Putting it all together: The Barebones Editor in CoffeeScript!](http://jsfiddle.net/JoshGough/sQ4Ya/)
 
 # Related Resources
 
