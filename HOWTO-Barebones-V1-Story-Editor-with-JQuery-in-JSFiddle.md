@@ -14,8 +14,7 @@ binding function to populate the form from a JSON DTO fetched from the API
 
 # What you'll need:
 
-* I've tested this in Google Chrome and Firefox, but not in other browsers, 
-so if you run into any snags, please let me know
+* I've tested this in Google Chrome, but not in other browsers, so if you run into any snags, please let me know.
 
 ## 1. Get Familiar with JSFiddle
 
