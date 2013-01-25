@@ -1,4 +1,4 @@
-# See the VersionOne Data API with JSON Support in Action
+# Explore New Improved JSON Support in the VersionOne Data API
 
 The VersionOne team is hard at work trying to make it easier for you to program against 
 our [Core API](http://community.versionone.com/sdk/documentation/coreapi.aspx). 
