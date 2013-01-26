@@ -93,7 +93,7 @@ Now, let's add some HTML to this thing, shall we?
 
 * Preferably in a new window or tab in Chrome, create a new fiddle at 
 [http://www.JSFiddle.net](http://www.jsFiddle.net)
-* Select 'jQuery' as a the framework on the left side.
+* Select `jQuery` as a the framework on the left side.
 * In the HTML panel on the right, type or paste this:
 
 ```html
