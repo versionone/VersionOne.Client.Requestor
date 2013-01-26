@@ -118,7 +118,7 @@ Now, let's add some HTML to this thing, shall we?
 </div>
 ```
 
-* In the JavaScript panel, add this:
+* In the JavaScript panel, first just copy and paste this first part in:
 
 ```javascript
 var host = "http://eval.versionone.net";
@@ -134,7 +134,11 @@ var settings = {
   headers: headers,
   dataType: 'json'
 };
+```
 
+* Now, type this part in since it's a lot different from the first step's code:
+
+```javascript
 $.ajax(settings)
   .done(function(data) {
     beautifulJson = JSON.stringify(data, null, 4);
@@ -198,13 +202,13 @@ Live JSFiddle: [VersionOne API: Barebones Editor Step 3: Render a JSON Asset wit
 
 Now that we're comfortable with JSFiddle, let's start building our Barebones Story Editor!
 
-* Try this simple query in the web browser's address bar:
+* Type the following URL into a new web browser tab's address bar:
 
 ```text
 http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/1154?acceptFormat=haljson&sel=Name,Description,Estimate
 ```
 
-* You should see some JSON similar to this:
+* You should see some JSON similar to this come back:
 
 ```json
 {
@@ -220,12 +224,13 @@ http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/1154?acceptFormat=h
 }
 ```
 
-Our Barebones Story Editor will feature *just* Name, Description, and Estimate, 
-so this query is enough for us to base our GET HTTP request on.
+Our Barebones Story Editor will feature *just* Name, Description, and Estimate, so this query is enough for us to 
+base our GET HTTP request on.
 
 ## 4. Issue a Barebones POST Story HTTP Request
 
-* Now, fire up another JSFiddle tab, and, after selecting `jQuery` as your framework, add this code to the JavaScript panel and run it:
+* Now, fire up another JSFiddle tab, and, after selecting `jQuery` as your framework, first paste 
+this code into the JavaScript pane:
 
 ```javascript
 var host = "http://eval.versionone.net";
@@ -235,7 +240,10 @@ var headers = {
   Authorization: "Basic " + btoa("admin:admin"),
   Accept: 'haljson'
 };  
+```
+* Then, type in this code:
 
+```javascript
 var storyDto = {
   Description: prompt('Enter a description', 'Changing description at time of ' + $.now()),
   Estimate: prompt('Enter an estimate of 1 to 5', '2')
@@ -260,9 +268,14 @@ $.ajax(settings)
   });
 ```
 
+* Go ahead and run the fiddle now
+
+### Explanation
+
 This time, we pass a few more settings to jQuery, such as the `POST` HTTP method, and, of course, 
-a stringified DTO object with two properties that will overwrite those properties on the asset. 
-Notice also that the response from the server contains just those two attributes.
+a "stringified" DTO object with two properties that will overwrite those properties on the remote Story asset. 
+If you examine the HTTP response using Chrome's Network tab, you'll notice also that the API's response 
+contains **just those two attributes**.
 
 Live JSFiddle: [VersionOne API: Barebones Editor Step 4: Issue a Barebones HTTP POST request to update a Story asset](http://jsfiddle.net/JoshGough/QMugh/)
 
@@ -271,7 +284,7 @@ Live JSFiddle: [VersionOne API: Barebones Editor Step 4: Issue a Barebones HTTP 
 Having explored all the major client-server interactions, let's now 
 build the "simplest thing that could possibly work", to be agile, to edit the Story.
 
-* Select `jQuery` as the framework from the left, then enter this into the HTML panel:
+* Select `jQuery` as the framework from the left, then paste or type this into the HTML panel:
 
 ```html
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -339,7 +352,7 @@ textarea {
 }
 ```
 
-* And, to wrap it up, put this into the JavaScript panel then hit run:
+* And, to wrap it up, paste this into the JavaScript pane:
 
 ```javascript
 var host = "http://eval.versionone.net";
@@ -350,7 +363,10 @@ var headers = {
   Authorization: "Basic " + btoa("admin:admin"),
   Accept: 'haljson'
 };
+```
+* Then, type in this new code:
 
+```javascript
 $(function () {
   var storyId = '';
   $("#storyGet").click(function (e) {
