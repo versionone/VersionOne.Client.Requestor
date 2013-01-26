@@ -28,8 +28,8 @@ We're going to use JSFiddle to build our form. So, do this:
 
 ```javascript
 var host = "http://eval.versionone.net"; // Remote web server root
-var service = host + "/platformtest/rest-1.v1/Data/" // Path to the REST service
-var assetQueryPath = "Scope/0" // Location of an Asset to fetch
+var service = host + "/platformtest/rest-1.v1/Data/"; // Path to the REST service
+var assetQueryPath = "Scope/0"; // Location of an Asset to fetch
 var headers = { 
   Authorization: "Basic " + btoa("admin:admin"), // Necessary to authenticate, since we won't have a login cookie from JSFiddle
   Accept: 'haljson' // The format that we want the response in. Without this, we get XML.
@@ -53,9 +53,13 @@ $.ajax(settings)
   });
 ```
 
+* Go ahead and run it now, and you should see a JSON result appear in the Result pane.
+
 Live JSFiddle: [VersionOne Data API: Barebones Editor Step 1: Use jQuery to Fetch a Project Asset as JSON](http://jsfiddle.net/JoshGough/u6Grx/)
 
-For illustration purposes, try the same code, but without asking for JSON. This time, you'll get the raw XML format:
+* For illustration purposes, now just paste in the following code. This time, you'll get the raw XML format 
+because we do not pass the `acceptFormat=haljson` parameter. XML is the default data format the VersionOne Data API 
+supports.
 
 ```javascript
 var host = "http://eval.versionone.net";
