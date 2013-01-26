@@ -1,23 +1,36 @@
 # Explore Improved JSON Support in the VersionOne Data API
 
-The VersionOne team is hard at work trying to make it easier for you to program against 
-our [Core API](http://community.versionone.com/sdk/documentation/coreapi.aspx). 
+The VersionOne dev team is hard at work trying to make it easier for you to program against 
+our [Core API](http://community.versionone.com/sdk/documentation/coreapi.aspx). The goal of this article is 
+to help you get started creating your own custom apps that interact with the VersionOne Data API, using standard 
+open source HTML and JavaScript tools.
 
-As part of that, we're adding stronger support for simplified [JSON](http://en.wikipedia.org/wiki/JSON) 
-requests and respones. We're also adding support for [YAML](http://en.wikipedia.org/wiki/YAML), 
+Based on customer feedback, the first step we're taking is to add stronger support for simplified [JSON-based](http://en.wikipedia.org/wiki/JSON) 
+HTTP requests and respones. We're also adding support for [YAML](http://en.wikipedia.org/wiki/YAML), 
 an even cleaner and simpler data format than JSON (JSON is actually a subset of YAML). 
-But, since JSON is the native format for JavaScript data, we'll examine that here.
+
+But, since JSON is the native format for JavaScript data, we'll focus on how it will make it easier to program
+against the API than the default XML data format.
 
 **In this how-to, you will:**
 
-* Explore the VersionOne Data API's JSON support by using a sample app running on our public test instance
-* Understand how to use HTTP GET with API parameters to search for Assets and shape and constrain the output
-* See how use HTTP POST with JSON-formatted to update Assets
-* Learn some handy tools in Google Chrome for inspecting HTTP requests and responses
+* Take a tour of a sample app built using the new JSON support, the VersionOne Requestor App
+* Understand how the Requestor app leverages the main features of the VersionOne Data API
+* Explore how the new, improved JSON support for the API powers the Requestor App
+* Create a simpler version of the Requestor App using JSFiddle, and:
+* Examine the HTTP requests and responses that our newly created app sends and receives to and from 
+the VersionOne Data API
 
 **What you'll need:**
 
 Just Google Chrome. Most of this will work in other browsers, but you'll have to use their own developer tools.
+
+## Test drive the VersionOne Requestor App
+
+The VersionOne Requestor App is a simple, one page web app that serves one purpose: it lets users save and edit 
+feature requests for a project within a VersionOne instance.
+
+TODO: finish this section based on M, D feedback from 1/25
 
 ## Introduction to the VersionOne Data API's JSON Support
 
