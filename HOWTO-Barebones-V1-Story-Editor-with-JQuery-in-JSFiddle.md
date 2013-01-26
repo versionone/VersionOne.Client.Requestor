@@ -20,7 +20,7 @@ binding function to populate the form from a JSON DTO fetched from the API
 
 We're going to use JSFiddle to build our form. So, do this:
 
-* Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
+* Open a brand new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
 * From the left side, under `Choose Framework`, `onLoad` should be preselected (leave it this way)
 * Then select the most recent version of `jQuery`
 * On the right, you'll see four panels: `HTML, JavaScript, CSS, and Result`
@@ -91,9 +91,10 @@ Live JSFiddle: [VersionOne API: Barebones Editor Step 2: Use jQuery to Fetch a P
 
 Now, let's add some HTML to this thing, shall we?
 
-* Open a new window or tab in Chrome and navigate to [http://www.JSFiddle.net](http://www.jsFiddle.net)
+* Preferably in a new window or tab in Chrome, create a new fiddle at 
+[http://www.JSFiddle.net](http://www.jsFiddle.net)
 * Select 'jQuery' as a the framework on the left side.
-* Next, in the HTML panel on the right, type or paste this:
+* In the HTML panel on the right, type or paste this:
 
 ```html
 <div id="error">
@@ -118,7 +119,7 @@ Now, let's add some HTML to this thing, shall we?
 </div>
 ```
 
-* In the JavaScript panel, first just copy and paste this first part in:
+* In the JavaScript pane, first just copy and paste the following:
 
 ```javascript
 var host = "http://eval.versionone.net";
@@ -136,7 +137,7 @@ var settings = {
 };
 ```
 
-* Now, type this part in since it's a lot different from the first step's code:
+* Type in the following JavaScript since it's a lot different from the first step's code:
 
 ```javascript
 $.ajax(settings)
@@ -193,20 +194,28 @@ body {
   padding: 6px;
 }
 ```
-* Run it! You should see a basic DIV with some CSS colors wrapping around our pretty JSON data result.
 
-Live JSFiddle: [VersionOne API: Barebones Editor Step 3: Render a JSON Asset with Basic HTML](http://jsfiddle.net/JoshGough/34VJc/
+* Run it! You should see a basic DIV with some CSS colors wrapping around our pretty JSON data result.
+* Live JSFiddle: [VersionOne API: Barebones Editor Step 3: Render a JSON Asset with Basic HTML](http://jsfiddle.net/JoshGough/34VJc/
 )
+
+### Explanation
+
+We're going to explain a lot more about this code after a few more steps, but here are some highlights for now:
+
+* `$` is a shortcut for the `jQuery` object. It's just a lot easier to type `$` than `jQuery` since it 
+gets used so often
+* The code `$.ajax(...).done(...).fail(...)` tells jQuery to try to execute an HTTP request using 
+ajax, and sets up a done function and a fail function
+* Code like `$('#link')` and `
 
 ## 3. Issue a Barebones GET Story HTTP Request
 
 Now that we're comfortable with JSFiddle, let's start building our Barebones Story Editor!
 
-* Type the following URL into a new web browser tab's address bar:
+* Click or type the following URL into a new web browser tab's address bar:
 
-```text
-http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/1154?acceptFormat=haljson&sel=Name,Description,Estimate
-```
+[http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/1154?acceptFormat=haljson&sel=Name,Description,Estimate]([http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/1154?acceptFormat=haljson&sel=Name,Description,Estimate)
 
 * You should see some JSON similar to this come back:
 
@@ -229,7 +238,7 @@ base our GET HTTP request on.
 
 ## 4. Issue a Barebones POST Story HTTP Request
 
-* Now, fire up another JSFiddle tab, and, after selecting `jQuery` as your framework, first paste 
+* Now, preferably in a brand new JSFiddle tab, after selecting `jQuery` as your framework, paste 
 this code into the JavaScript pane:
 
 ```javascript
@@ -241,7 +250,7 @@ var headers = {
   Accept: 'haljson'
 };  
 ```
-* Then, type in this code:
+* Type in this new code:
 
 ```javascript
 var storyDto = {
