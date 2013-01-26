@@ -506,7 +506,7 @@ Now, supposing we type `1154` into the `StoryId` textbox, then the following lin
 
 will evaluate to:
 
-`http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/1154/?sel=Name,Description,Estimate'
+`http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/1154/?sel=Name,Description,Estimate`
 
 ### Ajax cleans up remote data access
 
