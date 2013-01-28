@@ -151,11 +151,11 @@ var urlRoot = 'http://eval.versionone.net/platformtest/rest-1.v1/Data/Story/'; /
 var headers = { Authorization: 'Basic ' + btoa('admin:admin'), Accept: 'haljson' }; // Headers for auth and accept type format
 Backbone.emulateHTTP = true; // Tells Backbone to issue a POST instead of a PUT HTTP method for updates
 // Note that Models usually align with addressable HTTP resources, such as '/rest-1.v1/Data/Story/1154'
-var StoryModel = Backbone.Model.extend({ // .extend comes from Underscore.js, for created an 'inherited' class
-  urlRoot: urlRoot, // Sets the root url to the VP API URL base
+var StoryModel = Backbone.Model.extend({ // .extend comes from Underscore.js, to create an inherited 'class'
+  urlRoot: urlRoot, // Sets the root url to the V1 API URL base
   url: function () { // Override the built in url() for two cases:
     if (this.hasChanged() && !this.isNew()) return this.urlRoot + this.id; // In this case, just use the id -- used for save() via POST
-    return this.urlRoot + this.id + '?sel=' + _.keys(storyForm.schema).join(','); // Otherwise, limit the attributes return to just what our form schema contains
+    return this.urlRoot + this.id + '?sel=' + _.keys(storyForm.schema).join(','); // Otherwise, fetch only the attributes our schema contains
   }, // Note that _.keys is another Underscore goody that returns an array of key names from an object
   fetch: function(options) { // Overrides the base fetch so we can customize behavior to be V1 API friendly
     options || (options = {}); // When no options passed, default to an empty object
@@ -192,8 +192,8 @@ function storyLoad() { // Called when you click 'Load Story'
     alert('Please enter a story id first'); // Warn, and:
     return; // Get out of here...
   }
-  createForm(storyModel); // Pass the model into createForm, causing the if (model) branch to run, causing
-};                        // model.fetch() to execute, causing Backbone.sync to the model from the V1 API, and
+  createForm(storyModel); // Pass the model into createForm, causing the "if (model)" branch to run, causing
+};                        // model.fetch() to execute, causing Backbone.sync to fetch the model from the V1 API, and
                           // causing finish() to execute, causing Backbone.Form and friends to execute and presto!
 function storySave() { // Called when you click 'Save Story'
   if (storyForm.validate() != null) return; // Backbone Forms validates the form based on the schema we gave it, 
@@ -202,7 +202,7 @@ function storySave() { // Called when you click 'Save Story'
     $('#error').hide(); // done gets called on SUCCESS, so hide the errors element
     $('#message').text('Story saved!').fadeIn().delay(2500).fadeOut(); // More ooo, ahh animation for the success message
   }).fail(function(jqXHR) { // If the HTTP POST operation fails, this gets called to handle the error
-    $('#message').hide(); // Get tid of the success message this time.
+    $('#message').hide(); // Get rid of the success message this time.
     $('#error').text('Error during save! See console for details.').fadeIn().delay(5000).fadeOut(); // Boooo, hiss!
     console.log(jqXHR); // Dump the raw jQuery XML HTTP Request object to the console
   });
