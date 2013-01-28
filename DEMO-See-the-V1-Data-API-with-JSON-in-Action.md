@@ -1,9 +1,112 @@
 # Explore Improved JSON Support in the VersionOne Data API
 
+The goal of this tutorial series is to help you get started creating your own custom apps that interact with the 
+VersionOne Data API, using standard open source HTML and JavaScript tools.
+
+We want you, developers who use the VersionOne software, to be excited about programming with our APIs and 
+platform, and we realize that your job is not made easier by having to learn proprietary frameworks and APIs. 
+Because of that, we want you to be involved and vocal about this. 
+
+Our goals are tied to your goals. We want you to:
+
+## Enjoy using the VersionOne APIs
+
+We want you to *visibly* enjoy using the API. Yes, you *enjoy* it. Not you tolerate it, or your boss thinks you 
+need to do it to intergrate with some old school monolithic one-size-fits-all tracking/reporting/source control 
+"suite". ***We want you to enjoy writing code that integrates with VersionOne.***
+
+Hey, what about that *visibly* part? Well, we plan to do some [hackathons](http://en.wikipedia.org/wiki/Hackathon), 
+so we hope to see you there!
+
+## Master existing skills and gain new ones for the 
+
+You should start to feel like you're ***deepening the web development skills you already have***, or that you 
+are picking up new ones that will help you *elsewhere also*, not just with the VersionOne APIs.
+
+If at any time, you feel like we're producing APIs and tools that cause you to feel some vendor lock-in moves 
+coming on from the late 1990s, then yell at us, for our own good. This is **not the late 1990s**. We all work 
+in a web that is increasingly linked, with services and sites sharing data in this ["Linked Data"]
+(http://www.ted.com/talks/tim_berners_lee_on_the_next_web.html) world. 
+
+## Achieve your own goals more easily
+
+You have **your own products** to create. VersionOne cannot get in your way.
+
+We know you and your organizations want to move beyond the static web, beyond the dynamic web, and into the ["live web"]
+(http://www.huffingtonpost.com/2012/01/10/eric-schmidt-ces-2012_n_1198219.html?ref=technology)
+[http://theliveweb.org/2011/06/10/the-live-web/]
+
+It would be arrogant beyond belief for us to think that you don't have choices or that other companies aren't 
+empowering you as we speak to do just that.
+
+We prefer that you **choose willingly** to use VersionOne because of the enjoyment you feel about using it, the 
+knowledge and skills you gain while developing for it, and because it lets you and your organization build your 
+own products more quickly and easily.
+
+
+
 The VersionOne dev team is hard at work trying to make it easier for you to program against 
-our [Core API](http://community.versionone.com/sdk/documentation/coreapi.aspx). The goal of this article is 
-to help you get started creating your own custom apps that interact with the VersionOne Data API, using standard 
-open source HTML and JavaScript tools.
+our [Core API](http://community.versionone.com/sdk/documentation/coreapi.aspx).
+
+## Who this tutorial series is for
+
+
+## Which article should you start with?
+
+This is part of a progressive series. Each one builds upon the previous, conceptually. Even though the code 
+for each article stands alone, this can help you decide where to start:
+
+### Beginners with basic HTML and JavaScript knowledge
+
+If you have some experience making web pages with HTML and JavaScript, but are new to the concept of using APIs 
+([Application Programming Interfaces](http://en.wikipedia.org/wiki/Application_programming_interface), 
+or new to REST-based web APIs, ([REpresentational State Transfer]
+(http://en.wikipedia.org/wiki/Representational_state_transfer)), then the I recommend [Ryan Tomayko's very brief 
+introduction](http://tomayko.com/writings/rest-to-my-wife) to what REST is all about. It can 
+help you understand the concepts without needing to dive into the code yet. And, the other links in this paragraph 
+or in the **Related Resources** section below may also help.
+
+### Readers without experience with HTML or JavaScript
+
+If you don't yet have experience using HTML and JavaScript, but you'd like to complete this series either to learn 
+more about programming against the VersionOne API, or just to figure out more about web APIs and REST, try some of 
+these:
+
+* [WebPlatform.org Beginners Guide](http://docs.webplatform.org/wiki/beginners) -- open community with hands-on 
+tutorials and standards documentation, backed by the web's biggest players
+* [WebPlatform.org Introductory Video](http://www.youtube.com/watch?feature=player_embedded&v=Ug6XAw6hzaw#!) -- 
+intro video to the community. (Note the serious understatement that Tim Berners Lee is a 'Web Developer'. 
+He actually **created** the web in 1989. [Listen to him at TED.com](http://www.ted.com/talks/tim_berners_lee_on_the_next_web.html) 
+about the modern web.)
+* [HTML 5 Rocks](http://www.html5rocks.com/en/) -- great site with more advanced and powerful demonstrations of 
+HTML 5 features. Try [HTML5 Web Development To The Next Level](http://slides.html5rocks.com/#landing-slide), 
+or more [HTML5 Demos](http://html5demos.com/)
+
+
+### Seasoned web developers
+
+You probably can just glance over this article and skip to the next article which dives into creating a basic 
+agile user story editor that can fetch data from and save data to the VersionOne Data API using only standard 
+HTML and the jQuery library.
+
+### JavaScript Ninjas
+
+Is jQuery creator John Resig's] book [Secrets of the JavaScript Ninja](http://jsninja.com/) already pre-ordered? 
+Scarier, have you already read it, despite him thinking he isn't even finished?!?$
+
+Then, please open a new tab and head for [VersionOne Careers]
+(http://tbe.taleo.net/CH07/ats/careers/jobSearch.jsp?org=VERSIONONE&cws=1)!
+
+Anyway, you might want to go to part 3, which uses Backbone.js Models and 
+Backbone.sync to communicate with the VersionOne API. It also uses some more handy features from Underscore.js.
+
+Still too basic? Are you already criticizing my example choice of Backbone.js already? Good. 
+
+Maybe you can help our community refactor part 5 to be something you would feel proud of saying you 
+helped build for the open source community. We'd love the help.
+
+
+#
 
 Based on customer feedback, the first step we're taking is to add stronger support for simplified [JSON-based](http://en.wikipedia.org/wiki/JSON) 
 HTTP requests and respones. We're also adding support for [YAML](http://en.wikipedia.org/wiki/YAML), 
