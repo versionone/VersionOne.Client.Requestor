@@ -138,15 +138,42 @@ red error message. Try it.
 
 ## View Requests List in VersionOne
 
+If you login to the test VersionOne instance, at [http://eval.versionone.net/platformtest]
+(http://eval.versionone.net/platformtest) with username / password of `admin / admin`, then you can click the 
+`Requests` tab and see the list, with your entry in it:
+
 ![View Requests List in VersionOne](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-08-v1list.png)
 
 ## View Request Detail in VersionOne
+
+Click the item to popup the lightbox with details:
 
 ![View Request Detail in VersionOne](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-09-v1details.png)
 
 ## Edit Request in VersionOne
 
+And, you can then click the `Edit` button on the right to edit and save your changes:
+
 ![View Request Detail in VersionOne](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-10-v1edit.png)
+
+
+
+# TODO: Give conclusion and preview of the technical walkthrough
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
