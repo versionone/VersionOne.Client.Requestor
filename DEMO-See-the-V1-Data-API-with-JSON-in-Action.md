@@ -67,7 +67,7 @@ whole package lets you and your organization build your own products more quickl
 
 ## You can also remind us about this
 
-![Agile Manifesto](part01/agileManifesto.png)
+![Agile Manifesto](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part01/agileManifesto.png)
 
 You probably recognize that from [http://agilemanifesto.org/](http://agilemanifesto.org/).
 
