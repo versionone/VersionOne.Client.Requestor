@@ -75,7 +75,7 @@ It's likely that those words are what inspired you or your company to *take the 
 first place. And, if it does not feel that way to you sometimes, maybe you can remind the company you work for of 
 the phrase "Words mean things". VersionOne co-founder and CEO, Robert Holler, 
 sent this [brief video](http://www.youtube.com/watch?feature=player_embedded&v=Hzgzim5m7oU&noredirect=1) 
-out to our company last month to remind us allof that very idea.
+out to our company last month to remind us all of that very idea.
 
 Those words have *always meant something* to VersionOne -- one of the earliest companies to pursue the 
 philosophy and practices wholeheartedly. These words continue to resonate with us today, even in a time when "agile" 
