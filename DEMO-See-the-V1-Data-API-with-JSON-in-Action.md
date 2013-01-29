@@ -12,6 +12,9 @@ improved JSON support in the API that augments the older XML format. This [JSON 
 
 ## Our Goal: Developing With You, Not At You
 
+This is also an introduction to our new development blog, and to our own goals of engaging in more 
+collaboration with you, our users and being more responsive to your wants and needs for our products and APIs.
+
 We want you, developers in organizations all around the world who use the VersionOne software, 
 to be excited about programming with our APIs and platform. 
 
@@ -61,6 +64,23 @@ empowering you as we speak to do just that.
 We prefer that you **choose willingly** to use VersionOne because of the enjoyment you feel about using it and our
 APIs, the knowledge and skills you gain while developing with those APIs, and because, taken together, the 
 whole package lets you and your organization build your own products more quickly and easily.
+
+## You can also remind us about this
+
+![Agile Manifesto](part01/agileManifesto.png)
+
+You probably recognize that from [http://agilemanifesto.org/](http://agilemanifesto.org/).
+
+It's likely that those words are what inspired you or your company to *take the plung* and delve into agile in the 
+first place. And, if it does not feel that way to you sometimes, maybe you can remind the company you work for of 
+the phrase "Words mean things". VersionOne co-founder and CEO, Robert Holler, 
+sent this [brief video](http://www.youtube.com/watch?feature=player_embedded&v=Hzgzim5m7oU&noredirect=1) 
+out to our company last month to remind us allof that very idea.
+
+Those words have *always meant something* to VersionOne -- one of the earliest companies to pursue the 
+philosophy and practices wholeheartedly. These words continue to resonate with us today, even in a time when "agile" 
+has become a platitudinous marketing buzzword that you **should be** right to be skeptical of whenever you hear it, 
+including from us!
 
 ## Which article should I start with?
 
