@@ -52,7 +52,7 @@ This one:
 
 Oh, and this one:
 
-> Responding to change over following a plan
+> Through the work we have come to value: Responding to change over following a plan
 
 As I said in the introduction to this series, it would be ***arrogant beyond belief*** to think that we, 
 a tool vendor, could solve all your needs, "out of the box", with a tool we create -- given that you 
@@ -78,7 +78,7 @@ apps with simple HTML, JavaScript, and the VersionOne APIs!
 
 ## VersionOne Requestor Walkthrough: Let Customers Describe Wants and Needs in VersionOne as "Requests"
 
-You can follow along with this if you want by jumping over to [http://eval.versionone.net/platformtest/v1requestor/#list]
+You can follow along with this if you want by jumping over to [http://eval.versionone.net/platformtest/v1requestor/]
 (http://eval.versionone.net/platformtest/v1requestor). Note that some of the items may look a little different if 
 people have been playing around, but the basic workflow should work.
 
@@ -86,7 +86,45 @@ people have been playing around, but the basic workflow should work.
 If you search for something that doesn't exist, it is blowing up right now :) Will fix soon! 
 Stick with the script for now!
 
+### Home
 
+![Home](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-01-home.png)
+
+### Search
+
+![Search](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-02-search.png)
+
+### Select Project / New Request
+
+![Select Project / New Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-03-new.png)
+
+### Save New Request
+
+![Save New Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-04-enter.png)
+
+### List
+
+![Home](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-05-save.png)
+
+### Select Request
+
+![Select Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-06-list.png)
+
+### Save Request
+
+![Save Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-07-update.png)
+
+## View Requests List in VersionOne
+
+![View Requests List in VersionOne](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-08-v1list.png)
+
+## View Request Detail in VersionOne
+
+![View Request Detail in VersionOne](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-09-v1details.png)
+
+## Edit Request in VersionOne
+
+![View Request Detail in VersionOne](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-10-v1edit.png)
 
 
 
