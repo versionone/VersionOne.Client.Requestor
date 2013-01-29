@@ -19,7 +19,15 @@ topic from [http://www.WebPlatform.org](WebPlatform.org), or the [HTTP article](
 from Wikipedia.
 * Google Chrome because of its Developer Tools.
 
-## VersionOne Requestor Walkthrough: Let Customers Describe Wants and Needs in VersionOne as "Requests"
+## Super Simple Intro to HTTP
+
+If you read the links above, or already understand HTTP, you can skip this. We're just going to pull out some 
+paragraphs from the Wikipedia HTTP article:
+
+> HTTP functions as a request-response protocol in the client-server computing model. A web browser, for example, may be the client and an application running on a computer hosting a web site may be the server. The client submits an HTTP request message to the server. The server, which provides resources such as HTML files and other content, or performs other functions on behalf of the client, returns a response message to the client. The response contains completion status information about the request and may also contain requested content in its message body.
+
+
+## VersionOne Requestor **Technical** Walkthrough: Understanding the Nuts and Bolts of a REST API and JSON
 
 You can follow along with this if you want by jumping over to [http://eval.versionone.net/platformtest/v1requestor/]
 (http://eval.versionone.net/platformtest/v1requestor). Note that some of the items may look a little different if 
