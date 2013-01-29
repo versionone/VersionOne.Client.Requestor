@@ -88,29 +88,51 @@ Stick with the script for now!
 
 ### Home
 
-![Home](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-01-home.png)
+The home page has a simple search box where you, or your customer, can search for a Project by name. Type `system` 
+and hit `Enter` to pull up the example 'System (All Projects)` project.
 
-### Search
+![Home](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-01-home-a.png)
+
+### Search for a project
+
+After typing `system` and hitting enter, it will return the project into the list:
 
 ![Search](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-02-search.png)
 
-### Select Project / New Request
+### Select project to pull up a new Request form
+
+Click the item, and it will open up a new Request entry form:
 
 ![Select Project / New Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-03-new.png)
 
-### Save New Request
+### Enter new Request details
+
+Fill in some details, and select a `High` priority (if your request is awesome!)
 
 ![Save New Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-04-enter.png)
 
-### List
+### Save new Request
+
+Once, you've typed in the Request details, click the `Save` button on the bottom right. It should display a green 
+success message at the top. You can keep modifying the details if you'd like to add in more info, 
+or click `New` from the top to start a brand new Request.
 
 ![Home](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-05-save.png)
 
-### Select Request
+### Select Request from list
+
+Click the `List` button from the top left. This takes you back tot he list of Requests for the Project. Your new item 
+should be there at the top of the list now. You can click on that to edit it, or just keep following along with the 
+screen shots.
 
 ![Select Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-06-list.png)
 
-### Save Request
+### Modify and save Request
+
+After picking a Request, and modifying its details, click the `Save` button. It should display a green success message.
+
+***Note:*** if you empty out the `Request Title`, a required field, it will highlight the field and show a big bad 
+red error message. Try it.
 
 ![Save Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-07-update.png)
 
