@@ -10,6 +10,10 @@ By reading this series and performing the code exercises, you'll learn about new
 improved JSON support in the API that augments the older XML format. This [JSON support is still experimental]
 (https://github.com/versionone/VersionOne.SDK.Experimental), and we're seeking your input and feedback!
 
+## Article Links
+
+TODO, fill this out with links to the others 
+
 ## Our Goal: Developing With You, Not At You
 
 This is also an introduction to our new development blog, and to our own goals of engaging in more 
