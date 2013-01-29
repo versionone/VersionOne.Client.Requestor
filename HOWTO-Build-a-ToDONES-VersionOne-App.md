@@ -3,7 +3,7 @@
 If you've been writing web apps with any of the increasingly, often maddeningly, popular JavaScript MV* frameworks or 
 libraries, then you've come across the classic ToDos app clones. Here's a list of just a handful of them:
 
-* [Todo](http://documentcloud.github.com/backbone/examples/todos/index.html) -- Backbone.js
+* [Todos](http://documentcloud.github.com/backbone/examples/todos/index.html) -- Backbone.js
 * [Todos](http://todos.derbyjs.com/derby) -- Derby.js
 * [Todos](http://meteor.com/examples/todos) -- MeteorJS
 * [Todos](https://github.com/emberjs/todos) -- EmberJS
