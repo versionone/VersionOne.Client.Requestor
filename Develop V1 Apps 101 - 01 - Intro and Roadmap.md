@@ -47,7 +47,7 @@ are picking up new ones that will also apply *elsewhere*, not just with the Vers
 
 If at any time, you feel like we're producing APIs and tools that are borrowing vendor lock-in moves from the 
 late 1990s, then yell at us, for our own good. This is **not the late 1990s**. We all work in a web that is 
-increasingly linked, with services and sites sharing data in ["Linked Data"]
+increasingly linked, with services and sites sharing data in a ["Linked Data"]
 (http://www.ted.com/talks/tim_berners_lee_on_the_next_web.html) kinda way. 
 
 ### 3. Achieve your own goals with ease
