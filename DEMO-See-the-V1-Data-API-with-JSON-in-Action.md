@@ -1,7 +1,6 @@
 # Sample App Demo: VersionOne Requestor
 
-This article will walk you through a sample app built using the VersionOne APIs and the improved, and still 
-experimental JSON support for the API. 
+This article will walk you through a sample app built using the VersionOne REST Data API.
 
 ## A Hack of the Clones
 If you've been writing web apps with any of the increasingly, often maddeningly, popular JavaScript MV* 
