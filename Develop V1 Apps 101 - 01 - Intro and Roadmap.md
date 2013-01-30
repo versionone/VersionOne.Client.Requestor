@@ -31,11 +31,12 @@ Because of this, we want you to be ***involved and vocal about your wants and ne
 platform***. If it looks like we have not read and understood the 
 [FMGTABAA](http://www.lessonsoffailure.com/tag/ivory-tower/), then remind us that:
 
-## Our goals for you are: Enjoyment, Skill Building, Achievement
+## We want you to feel: Enjoyment, Understanding, and Achievement
 
-We want you to:
+You should feel great when using our APIs to customize VersionOne to your needs! Here's what we want 
+for you:
 
-### 1. Enjoy using the VersionOne APIs
+### Enjoyment
 
 We want you to *visibly* enjoy using the API. Yes, we want you to *enjoy* it. Not just tolerate it, or roll 
 your eyes and grit your teeth because your boss thinks you need to use the API to intergrate with some old school 
@@ -46,7 +47,7 @@ monolithic one-size-fits-all tracking/reporting/source control "suite".
 Hey, what about that *visibly* part? Well, we plan to do some [hackathons](http://en.wikipedia.org/wiki/Hackathon), 
 so we hope to see you there!
 
-### 2. Master existing skills and build new ones for your future
+### Understanding
 
 You should feel like you're ***deepening the web development skills you already have***, or that you 
 are picking up new ones that will also apply *elsewhere*, not just with the VersionOne APIs.
@@ -56,7 +57,7 @@ late 1990s, then yell at us, for our own good. This is **not the late 1990s**. W
 increasingly linked, with services and sites sharing data in a ["Linked Data"]
 (http://www.ted.com/talks/tim_berners_lee_on_the_next_web.html) kinda way. 
 
-### 3. Achieve your own goals with ease
+### Achievement
 
 You have **your own products** to create. VersionOne cannot get in your way. It must make your lives ***easier***.
 
