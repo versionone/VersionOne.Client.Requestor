@@ -10,11 +10,11 @@ By reading this series and performing the code exercises, you'll learn about new
 improved JSON support in the API that augments the older XML format. This [JSON support is still experimental]
 (https://github.com/versionone/VersionOne.SDK.Experimental), and we're seeking your input and feedback!
 
-## Article Links
+## Article links
 
 TODO, fill this out with links to the others 
 
-## Our Goal: Developing With You, Not At You
+## Developing with you, not at you
 
 This is also an introduction to our new development blog, and to our own goals of engaging in more 
 collaboration with you, our users and being more responsive to your wants and needs for our products and APIs.
@@ -31,7 +31,9 @@ Because of this, we want you to be ***involved and vocal about your wants and ne
 platform***. If it looks like we have not read and understood the 
 [FMGTABAA](http://www.lessonsoffailure.com/tag/ivory-tower/), then remind us that:
 
-**Our goals align with your goals. We want you to:**
+## Our goals for you are: Enjoyment, Skill Building, Achievement
+
+We want you to:
 
 ### 1. Enjoy using the VersionOne APIs
 
@@ -91,7 +93,7 @@ including from us!
 Since this is a progressive series, each article builds upon the previous, conceptually. Even though the code 
 for each article stands alone, this can help you decide where to start:
 
-### Readers without experience with HTML or JavaScript
+### Beginners: readers without experience with HTML or JavaScript
 
 If you don't yet have experience using HTML and JavaScript, but you'd like to complete this series either to learn 
 more about programming against the VersionOne API, or just to figure out more about Web APIs and REST, try some of 
@@ -105,7 +107,7 @@ tutorials and standards documentation, backed by the web's biggest players
 HTML 5 features. Try [HTML5 Web Development To The Next Level](http://slides.html5rocks.com/#landing-slide), 
 or more [HTML5 Demos](http://html5demos.com/)
 
-### Beginners with basic HTML and JavaScript knowledge
+### Novices: readers with basic HTML and JavaScript knowledge
 
 If you have some experience making web pages with HTML and JavaScript, but are new to the concept of using APIs 
 ([Application Programming Interfaces](http://en.wikipedia.org/wiki/Application_programming_interface), 
@@ -120,13 +122,13 @@ introduction to REST-based web services by Roger L. Costello
 
 And, the other links in this paragraph or in the **Related Resources** section below may also help.
 
-### Seasoned web developers
+### Intermediate: experienced web developers comfortable with jQuery or other JavaScript libraries
 
 You probably can just glance over this article and skip to the next article. It dives into creating a basic 
 agile user story editor that can fetch data from and save data to the VersionOne Data API using only standard 
 HTML and the open source [jQuery library](http://jquery.com/).
 
-### JavaScript Ninjas
+### Advanced: JavaScript ninjas
 
 Have you already pre-ordered jQuery creator John Resig's book [Secrets of the JavaScript Ninja](http://jsninja.com/)?
 
