@@ -17,6 +17,10 @@ And, the last shall be first:
 
 * [Tasks](http://mail.google.com/mail/help/tasks/) -- GMail Tasks FTW
 
+Ok, not really the last. If you want to go mad, then visit this site:
+
+* [TodosMVC](http://addyosmani.github.com/todomvc/) -- Todos written in thousands of JavaScript MV* frameworks
+
 The idea behind these apps is for you to keep track of personal todos or tasks and check them off as you complete 
 them. Simple enough. Nice for things like "pay bills" or "buy movie tickets".
 
