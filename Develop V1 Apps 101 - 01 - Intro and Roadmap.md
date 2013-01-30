@@ -77,7 +77,7 @@ whole package lets you and your organization build your own products more quickl
 
 You probably recognize that from [http://agilemanifesto.org/](http://agilemanifesto.org/).
 
-It's likely that those words are what inspired you or your company to *take the plung* and delve into agile in the 
+It's likely that those words are what inspired you or your company to *take the plunge* and delve into agile in the 
 first place. And, if it does not feel that way to you sometimes, maybe you can remind the company you work for of 
 the phrase "Words mean things". VersionOne co-founder and CEO, Robert Holler, 
 sent this [brief video](http://www.youtube.com/watch?feature=player_embedded&v=Hzgzim5m7oU&noredirect=1) 
