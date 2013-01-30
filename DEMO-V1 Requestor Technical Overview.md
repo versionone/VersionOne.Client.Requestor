@@ -127,11 +127,21 @@ and hit `Enter` to pull up the example 'System (All Projects)` project.
 
 ![Home](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-01-home-a.png)
 
+### Open Chrome Developer Tools
+
+After the page loads, hit `F12` to open Chrome's Developer Tools. It should look like this:
+
+![Chrome Developer Tools](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-01-home-ch.png)
+
 ## Search for a project
 
 After typing `system` and hitting enter, it will return the project into the list:
 
 ![Search](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-02-search.png)
+
+### Examine the HTTP request URL and headers
+
+![Search HTTP Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-02-search-ch.png)
 
 ## Select project to pull up a new Request form
 
