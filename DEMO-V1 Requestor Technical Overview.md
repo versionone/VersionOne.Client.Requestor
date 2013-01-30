@@ -6,6 +6,26 @@ to make it easier for your customers to provide "Feature Requests" that get save
 This app serves as a perfect diving board for us to now understand how it all works under the hood. This will help
 you understand the basics of HTTP and RESTful APIs and how to use the VersionOne RESTful APIs.
 
+## Table of Contents
+
+- [Peeling the onion](#peeling-the-onion)
+- [What you'll need](#what-youll-need)
+- [Super simple intro to HTTP](#super-simple-intro-to-http)
+ - [HTTP lets your browser get resources from, and post resources to remote web servers](#http-lets-your-browser-get-resources-from-and-post-resources-to-remote-web-servers)
+ - [HTTP verbs tell remote web servers how to act](#http-verbs-tell-remote-web-servers-how-to-act)
+- [A state of REST](#a-state-of-rest)
+- [Known issues](#known-issues)
+- [Home](#home)
+- [Search for a project](#search-for-a-project)
+- [Select project to pull up a new Request form](#select-project-to-pull-up-a-new-request-form)
+- [Enter new Request details](#enter-new-request-details)
+- [Save new Request](#save-new-request)
+- [Select Request from list](#select-request-from-list)
+- [Modify and save Request](#modify-and-save-request)
+- [View Requests List in VersionOne](#view-requests-list-in-versionone)
+- [View Request Detail in VersionOne](#view-request-detail-in-versionone)
+- [Edit Request in VersionOne](#edit-request-in-versionone)
+
 ## Peeling the onion
 
 We're going to take the same steps we did in the last article, but we will also show what's happening under the hood now
@@ -48,7 +68,7 @@ Wikipedia says this about HTTP:
 
 > HTTP functions as a request-response protocol in the client-server computing model. A web browser, for example, may be the client and an application running on a computer hosting a web site may be the server. The client submits an HTTP request message to the server. The server, which provides resources such as HTML files and other content, or performs other functions on behalf of the client, returns a response message to the client. The response contains completion status information about the request and may also contain requested content in its message body.
 
-### HTTP Verbs 
+### HTTP verbs tell remote web servers how to act
 
 I just mentioned that **get** and **post** are the most widely used HTTP verbs. This is true. Every time your search 
 engine gives you a list of links, and you click on a link, your browser sends a **get** verb to the server that runs 
@@ -92,42 +112,40 @@ it to describe the architecture of the World Wide Web. You can read more about [
 TODO: complete...
 
 
-##
-
 You can follow along with this if you want by jumping over to [http://eval.versionone.net/platformtest/v1requestor/]
 (http://eval.versionone.net/platformtest/v1requestor). Note that some of the items may look a little different if 
 people have been playing around, but the basic workflow should work.
 
-### Known issues
+## Known issues
 If you search for something that doesn't exist, it is blowing up right now :) Will fix soon! 
 Stick with the script for now!
 
-### Home
+## Home
 
 The home page has a simple search box where you, or your customer, can search for a Project by name. Type `system` 
 and hit `Enter` to pull up the example 'System (All Projects)` project.
 
 ![Home](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-01-home-a.png)
 
-### Search for a project
+## Search for a project
 
 After typing `system` and hitting enter, it will return the project into the list:
 
 ![Search](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-02-search.png)
 
-### Select project to pull up a new Request form
+## Select project to pull up a new Request form
 
 Click the item, and it will open up a new Request entry form:
 
 ![Select Project / New Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-03-new.png)
 
-### Enter new Request details
+## Enter new Request details
 
 Fill in some details, and select a `High` priority (if your request is awesome!)
 
 ![Save New Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-04-enter.png)
 
-### Save new Request
+## Save new Request
 
 Once, you've typed in the Request details, click the `Save` button on the bottom right. It should display a green 
 success message at the top. You can keep modifying the details if you'd like to add in more info, 
@@ -135,7 +153,7 @@ or click `New` from the top to start a brand new Request.
 
 ![Home](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-05-save.png)
 
-### Select Request from list
+## Select Request from list
 
 Click the `List` button from the top left. This takes you back tot he list of Requests for the Project. Your new item 
 should be there at the top of the list now. You can click on that to edit it, or just keep following along with the 
@@ -143,7 +161,7 @@ screen shots.
 
 ![Select Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-06-list.png)
 
-### Modify and save Request
+## Modify and save Request
 
 After picking a Request, and modifying its details, click the `Save` button. It should display a green success message.
 
