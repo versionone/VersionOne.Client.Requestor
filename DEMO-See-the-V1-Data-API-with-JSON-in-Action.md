@@ -1,4 +1,4 @@
-# Sample App Demo: V1 Requestor
+# Sample App Demo: VersionOne Requestor
 
 This article will walk you through a sample app built using the VersionOne APIs and the improved, and still 
 experimental JSON support. 
