@@ -2,7 +2,27 @@
 
 Take a tour of a sample app built using the VersionOne REST Data API.
 
-## A Hack of the Clones
+# Contents
+
+- [A Hack of the Clones](#a-hack-of-the-clones)
+- [Not in My Backlog!](#not-in-my-backlog)
+- [Individuals and Interactions, or: How and When Customer Requests Really Happen](#individuals-and-interactions-or-how-and-when-customer-requests-really-happen)
+- [What if These Real World Scenarios Ring True?](#what-if-these-real-world-scenarios-ring-true)
+- [VersionOne Requestor Walkthrough: Let Customers Describe Wants and Needs in VersionOne as "Requests"](#versionone-requestor-walkthrough-let-customers-describe-wants-and-needs-in-versionone-as-requests)
+- [Known issues](#known-issues)
+- [Home](#home)
+- [Search for a project](#search-for-a-project)
+- [Select project to pull up a new Request form](#select-project-to-pull-up-a-new-request-form)
+- [Enter new Request details](#enter-new-request-details)
+- [Save new Request](#save-new-request)
+- [Select Request from list](#select-request-from-list)
+- [Modify and save Request](#modify-and-save-request)
+- [View Requests List in VersionOne](#view-requests-list-in-versionone)
+- [View Request Detail in VersionOne](#view-request-detail-in-versionone)
+- [Edit Request in VersionOne](#edit-request-in-versionone)
+
+
+# A Hack of the Clones
 If you've been writing web apps with any of the increasingly, often maddeningly, popular JavaScript MV* 
 frameworks or libraries, then you've come across the classic, obligatory "Todos" app clones. Here's a list of 
 just a handful of them:
@@ -24,7 +44,7 @@ Ok, just kidding about that last one. If you want to go mad, then visit this sit
 The idea behind these apps is for you to keep track of personal todos or tasks and check them off as you complete 
 them. Simple enough. Nice for things like "pay bills" or "buy movie tickets".
 
-## Not in My Backlog!
+# Not in My Backlog!
 
 But, as a software developer you know such an app will not suffice for your customers and your workflow. You get 
 way too many change requests, feature requests, nice to haves, must haves, etc. Isn't that why you found VersionOne 
@@ -40,7 +60,7 @@ like marketing and is thus outside the scope of this demonstration, but you can 
 the [Agile Product Planning Tool](http://www.versionone.com/Product/Agile-Planning-Tools/) 
 page on the main VersionOne web site.***
 
-## Individuals and Interactions, or: How and When Customer Requests *Really Happen*
+# Individuals and Interactions, or: How and When Customer Requests *Really Happen*
 
 But, what if you don't want to force your customers or your users to be **registered in VersionOne** simply to get 
 those requests into your backlog? Or, what if they believe it's *your job*, not theirs, to utilize the VersionOne 
@@ -61,7 +81,7 @@ As I said in the introduction to this series, it would be ***arrogant beyond bel
 a tool vendor, could solve all your needs, "out of the box", with a tool we create -- given that you 
 embrace those core agile values!
 
-## What if These Real World Scenarios Ring True?
+# What if These Real World Scenarios Ring True?
 
 * You have a customer-facing or user-facing web site with a form for change requests or enhancements?
 * You have lots of new people bringing up ideas in meetings and you cannot waste time creating new accounts for 
@@ -79,42 +99,42 @@ is a simple app, and we will now walk through it functionally, and then we'll se
 Looking under the covers will help you understand how you can customize it or how you can build your own custom 
 apps with simple HTML, JavaScript, and the VersionOne APIs!
 
-## VersionOne Requestor Walkthrough: Let Customers Describe Wants and Needs in VersionOne as "Requests"
+# VersionOne Requestor Walkthrough: Let Customers Describe Wants and Needs in VersionOne as "Requests"
 
 You can follow along with this if you want by jumping over to [http://eval.versionone.net/platformtest/v1requestor/]
 (http://eval.versionone.net/platformtest/v1requestor). Note that some of the items may look a little different if 
 people have been playing around, but the basic workflow should work.
 
-### Known issues
+# Known issues
 If you search for something that doesn't exist, it is blowing up right now :) Will fix soon! 
 Stick with the script for now!
 
-### Home
+# Home
 
 The home page has a simple search box where you, or your customer, can search for a Project by name. Type `system` 
 and hit `Enter` to pull up the example 'System (All Projects)` project.
 
 ![Home](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-01-home-a.png)
 
-### Search for a project
+# Search for a project
 
 After typing `system` and hitting enter, it will return the project into the list:
 
 ![Search](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-02-search.png)
 
-### Select project to pull up a new Request form
+# Select project to pull up a new Request form
 
 Click the item, and it will open up a new Request entry form:
 
 ![Select Project / New Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-03-new.png)
 
-### Enter new Request details
+# Enter new Request details
 
 Fill in some details, and select a `High` priority (if your request is awesome!)
 
 ![Save New Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-04-enter.png)
 
-### Save new Request
+# Save new Request
 
 Once, you've typed in the Request details, click the `Save` button on the bottom right. It should display a green 
 success message at the top. You can keep modifying the details if you'd like to add in more info, 
@@ -122,7 +142,7 @@ or click `New` from the top to start a brand new Request.
 
 ![Home](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-05-save.png)
 
-### Select Request from list
+# Select Request from list
 
 Click the `List` button from the top left. This takes you back tot he list of Requests for the Project. Your new item 
 should be there at the top of the list now. You can click on that to edit it, or just keep following along with the 
@@ -130,7 +150,7 @@ screen shots.
 
 ![Select Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-06-list.png)
 
-### Modify and save Request
+# Modify and save Request
 
 After picking a Request, and modifying its details, click the `Save` button. It should display a green success message.
 
@@ -139,7 +159,7 @@ red error message. Try it.
 
 ![Save Request](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-07-update.png)
 
-## View Requests List in VersionOne
+# View Requests List in VersionOne
 
 If you login to the test VersionOne instance, at [http://eval.versionone.net/platformtest]
 (http://eval.versionone.net/platformtest) with username / password of `admin / admin`, then you can click the 
@@ -147,13 +167,13 @@ If you login to the test VersionOne instance, at [http://eval.versionone.net/pla
 
 ![View Requests List in VersionOne](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-08-v1list.png)
 
-## View Request Detail in VersionOne
+# View Request Detail in VersionOne
 
 Click the item to popup the lightbox with details:
 
 ![View Request Detail in VersionOne](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/part02/requestor-09-v1details.png)
 
-## Edit Request in VersionOne
+# Edit Request in VersionOne
 
 And, you can then click the `Edit` button on the right to edit and save your changes:
 
