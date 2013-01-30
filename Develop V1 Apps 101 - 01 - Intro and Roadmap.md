@@ -12,6 +12,21 @@ improved JSON support in the API that augments the older XML format. This [JSON 
 
 ## Article links
 
+TODO: seems like a good breakdown:
+
+1. Sample App Demo: Feature Requestor
+2. HTTP: Introduction
+3. A State of REST: From Web Pages to Web Application Programming Interfaces (APIs)
+4. Under the Hood of the Feature Requestor App: REST APIs in Action
+5. Exercise: Query the VersionOne API for User Stories in 10 Lines of JavaScript with jQuery
+6. Exercise: Update a User Story vit the VersionOne API in 15 Lines of JavaScript with jQuery
+7. Detour: Wake up to REST with a Cup of Coffee: Reworking the Query and Update Examples in CoffeeScript
+6. Exercise: Build a Barebones User Story Editor in 75 Lines of JavaScript with jQuery and the VersionOne REST API
+7. Exercise: Build a Backbone-Fortified User Story Editor with Backbone.js and Backbone Forms and the VersionOne REST API
+8. Demo: Let's Get MetaPhysical: Understanding the VersionOne REST Meta API
+9. Exercise: Build the MetaMorformizer: Creating our UI Dynamically with Help from the VersionOne REST Meta API and Localization API
+
+
 TODO, fill this out with links to the others 
 
 ## Developing with you, not at you
@@ -36,7 +51,7 @@ platform***. If it looks like we have not read and understood the
 You should feel great when using our APIs to customize VersionOne to your needs! Here's what we want 
 for you:
 
-### Enjoyment
+### Enjoymenta
 
 We want you to *visibly* enjoy using the API. Yes, we want you to *enjoy* it. Not just tolerate it, or roll 
 your eyes and grit your teeth because your boss thinks you need to use the API to intergrate with some old school 
