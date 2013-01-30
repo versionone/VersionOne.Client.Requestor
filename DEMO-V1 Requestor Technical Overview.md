@@ -19,15 +19,80 @@ topic from [http://www.WebPlatform.org](WebPlatform.org), or the [HTTP article](
 from Wikipedia.
 * Google Chrome because of its Developer Tools.
 
-## Super Simple Intro to HTTP
+## Super simple intro to HTTP
 
-If you read the links above, or already understand HTTP, you can skip this. We're just going to pull out some 
-paragraphs from the Wikipedia HTTP article:
+If you read the links above, or already understand HTTP, you can skip ahead to the `A state of REST` section.
+
+### HTTP lets your browser *get* resources from, and *post* resources to remote web servers
+
+It's likely that everyday, you see or type `http://www.google.com` in your web browser's address bar. 
+HTTP stands for Hypertext Transfer Protocol. This protocol provides a small set of commands, called *verbs*, used by 
+your web browser to **get** resources (documents, images, scripts, etc) from remote web servers. It also lets your 
+browser **post** resources (data from search forms, your Facebook status updates, your credit card number) to remote 
+web servers. 
+
+That's the basic summary! While there are, of course, technical details involved, two of the commands, in fact the two 
+most used by far, are actually named **get** and  **post**. 
+
+When you type `http://www.google.com` and hit enter in the browser address bar, your browser sends the `get` verb to the 
+server, and the server returns a resource (web page) that gives you back a search form.
+
+When you then type in `good REST api tutorials` and hit enter, your browser sends the `post` verb back to Google's web 
+server, along with the phrase `good REST api tutorials` as a resource. Google reads the resource data, and it uses it 
+to find results for you that match.
+
+In just a few moments, we'll show you how to ***spy*** on your web browser while it does this, so you can see this in 
+action.
+
+Wikipedia says this about HTTP:
 
 > HTTP functions as a request-response protocol in the client-server computing model. A web browser, for example, may be the client and an application running on a computer hosting a web site may be the server. The client submits an HTTP request message to the server. The server, which provides resources such as HTML files and other content, or performs other functions on behalf of the client, returns a response message to the client. The response contains completion status information about the request and may also contain requested content in its message body.
 
+### HTTP Verbs 
 
-## VersionOne Requestor **Technical** Walkthrough: Understanding the Nuts and Bolts of a REST API and JSON
+I just mentioned that **get** and **post** are the most widely used HTTP verbs. This is true. Every time your search 
+engine gives you a list of links, and you click on a link, your browser sends a **get** verb to the server that runs 
+the link you just clicked on. And, every time you push `Send` in GMail, share a tweet, or set a new Facebook status, 
+your browser sends the message / tweet / status using **post**.
+
+But, there are other verbs in HTTP. We won't really need to worry about those others in this tutorial, 
+and you won't really need to worry about them when using the VersionOne APIs, but for your reference here is an 
+excerpt from Wikipedia:
+
+> HTTP defines methods (sometimes referred to as verbs) to indicate the desired action to be performed on the identified resource. What this resource represents, whether pre-existing data or data that is generated dynamically, depends on the implementation of the server. Often, the resource corresponds to a file or the output of an executable residing on the server.
+
+And, the verbs it lists:
+
+> GET -- Requests a representation of the specified resource. Requests using GET should only retrieve data and should have no other effect. (This is also true of some other HTTP methods.) The W3C has published guidance principles on this distinction, saying, "Web application design should be informed by the above principles, but also by the relevant limitations."
+
+> HEAD -- Asks for the response identical to the one that would correspond to a GET request, but without the response body. This is useful for retrieving meta-information written in response headers, without having to transport the entire content.
+
+> POST -- Requests that the server accept the entity enclosed in the request as a new subordinate of the resource identified by the URI. The data POSTed might be, as examples, an annotation for existing resources; a message for a bulletin board, newsgroup, mailing list, or comment thread; a block of data that is the result of submitting a web form to a data-handling process; or an item to add to a database.
+
+> PUT -- Requests that the enclosed entity be stored under the supplied URI. If the URI refers to an already existing resource, it is modified; if the URI does not point to an existing resource, then the server can create the resource with that URI.
+
+> DELETE -- Deletes the specified resource.
+
+> TRACE -- Echoes back the received request so that a client can see what (if any) changes or additions have been made by intermediate servers.
+
+> OPTIONS -- Returns the HTTP methods that the server supports for specified URL. This can be used to check the functionality of a web server by requesting '*' instead of a specific resource.
+
+> CONNECT -- Converts the request connection to a transparent TCP/IP tunnel, usually to facilitate SSL-encrypted communication (HTTPS) through an unencrypted HTTP proxy.
+
+> PATCH -- Is used to apply partial modifications to a resource.
+
+With this basic knowledge, we can now introduce the basic ideas behind REpresentational State Transfer (REST)
+
+## A state of REST
+
+REST stands for REpresentational State Transfer. It's a term coined by Roy Fielding in his Ph.D. dissertation. He used 
+it to describe the architecture of the World Wide Web. You can read more about [REST on Wikipedia]
+(http://en.wikipedia.org/wiki/Representational_state_transfer). 
+
+TODO: complete...
+
+
+##
 
 You can follow along with this if you want by jumping over to [http://eval.versionone.net/platformtest/v1requestor/]
 (http://eval.versionone.net/platformtest/v1requestor). Note that some of the items may look a little different if 
