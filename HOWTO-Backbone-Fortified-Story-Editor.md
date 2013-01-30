@@ -58,6 +58,8 @@ validation ***magical powers***.
 Don't do this now, unless you like juggling a thousand tabs in your browser, but if you are new to these libraries 
 and want to go further in depth, I encourage you to check out these links:
 
+* [TodoMVC](http://addyosmani.github.com/todomvc/) - Ambitious comparison matrix using the obligatory Todos app 
+implemented in hundreds of different JavaScript MV* libraries.
 * [Throne of JS conference videos and interviews](http://www.infoq.com/throne_of_js_2012/) - Friendlyish competition 
 between 7 frameworks: Backbone.js, Ember.js, Meteor.js, AngularJS, Spine.js, CanJS, and Knockout.js
 * [Client UI Smackdown](http://www.infoq.com/presentations/JavaScript-Frameworks-Review) - Craig Walls reviews 
