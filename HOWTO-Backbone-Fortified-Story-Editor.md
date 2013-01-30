@@ -11,14 +11,28 @@ Let's revamp the last sample so that all it takes to add a new field is a **simp
 at the top of a small script. In the process, we'll incorporate some great and popular JavaScript libraries to 
 reduce the amount of [boilerplate code](http://en.wikipedia.org/wiki/Boilerplate_code) we need to write and maintain!
 
-# In this how-to, you will:
+# Contents
+
+- [In this how-to, you will](#in-this-how-to-you-will)
+- [What you'll need](#what-youll-need)
+- [Introduction and Live Finished JSFiddle Example](#introduction-and-live-finished-jsfiddle-example)
+- [Learn you a JS library for great good](#learn-you-a-js-library-for-great-good)
+- [Create an HTML Skeleton](#1-create-an-html-skeleton)
+- [Add some vertebrae to the JavaScript with Backbone.js and friends](#2-add-some-vertebrae-to-the-javascript-with-backbonejs-and-friends)
+- [Exercise: Transform the Story Editor into a Request Editor](#3-exercise-transform-the-story-editor-into-a-request-editor)
+  - [Let's Get Meta(physical)](#lets-get-metaphysical)
+	- [See current requests](#see-current-requests)
+- [Conclusion](#conclusion)
+- [Related Resources](#related-resources)
+
+# In this how-to, you will
 
 * Refactor the Barebones Story Editor to become ***fortified*** with the popular Backbone.js open source library
 * Learn how to extend Backbone.Model and override its functions to work with existing HTTP APIs
 * Learn the Backbone Forms library for creating HTML forms automagically from simple JS-based schemas
 * Use some handy features of Underscore.js, Backbone's counterpart library for functional utilities
 
-# What you'll need:
+# What you'll need
 
 * Like before, I've tested these in Google Chrome, but not other browsers yet. Please let me know if you find 
 issues in other browsers.
@@ -65,11 +79,11 @@ between 7 frameworks: Backbone.js, Ember.js, Meteor.js, AngularJS, Spine.js, Can
 * [Client UI Smackdown](http://www.infoq.com/presentations/JavaScript-Frameworks-Review) - Craig Walls reviews 
 several JavaScript client-side UI frameworks: Backbone.js, Spine.js, Knockout.js, Knockback.js, Sammy.js. 
 
-# Back on task, agile soldier!
+**Back on task, agile soldier!**
 
 I already gave you the demo, but don't be a cheater. Keep going and build it step-by-step now:
 
-# 1. Create an HTML Skeleton
+# Create an HTML Skeleton
 
 Get started by doing this:
 
@@ -132,7 +146,7 @@ This replaces the much more verbose HTML from before:
 </div>
 ```
 
-# 2. Add some vertebrae to the JavaScript with Backbone.js and friends
+# Add some vertebrae to the JavaScript with Backbone.js and friends
 
 The refactored JavaScript code is so small, 75 lines, that you can just type or paste it in all at once. 
 Each line has comments to explain its purpose. I encourage you to type, not paste the code, but don't feel like 
@@ -268,7 +282,7 @@ textarea {
 
 You're done! You can run the sample now and try out the next step, if you'd like.
 
-# 3. Exercise: Transform the Story Editor into a Request Editor
+# Exercise: Transform the Story Editor into a Request Editor
 
 You may remember from the first article that the [V1 Requestor App](http://eval.versionone.net/platformtest/v1requestor/index.html) 
 allows you to search for projects, load existing Requests, and edit them, or add brand new ones.
