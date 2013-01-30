@@ -11,14 +11,14 @@ Let's revamp the last sample so that all it takes to add a new field is a **simp
 at the top of a small script. In the process, we'll incorporate some great and popular JavaScript libraries to 
 reduce the amount of [boilerplate code](http://en.wikipedia.org/wiki/Boilerplate_code) we need to write and maintain!
 
-**In this how-to, you will:***
+# In this how-to, you will:
 
 * Refactor the Barebones Story Editor to become ***fortified*** with the popular Backbone.js open source library
 * Learn how to extend Backbone.Model and override its functions to work with existing HTTP APIs
 * Learn the Backbone Forms library for creating HTML forms automagically from simple JS-based schemas
 * Use some handy features of Underscore.js, Backbone's counterpart library for functional utilities
 
-**What you'll need:**
+# What you'll need:
 
 * Like before, I've tested these in Google Chrome, but not other browsers yet. Please let me know if you find 
 issues in other browsers.
@@ -53,7 +53,7 @@ has been using several of these, notably Backbone.js. So, in this article, we're
 its sidekick Underscore.js, and a library named Backbone Forms that extends Backbone with form-creation and 
 validation ***magical powers***.
 
-## Learn you a JS library for great good
+# Learn you a JS library for great good
 
 Don't do this now, unless you like juggling a thousand tabs in your browser, but if you are new to these libraries 
 and want to go further in depth, I encourage you to check out these links:
@@ -65,11 +65,11 @@ between 7 frameworks: Backbone.js, Ember.js, Meteor.js, AngularJS, Spine.js, Can
 * [Client UI Smackdown](http://www.infoq.com/presentations/JavaScript-Frameworks-Review) - Craig Walls reviews 
 several JavaScript client-side UI frameworks: Backbone.js, Spine.js, Knockout.js, Knockback.js, Sammy.js. 
 
-## Back on task, agile soldier!
+# Back on task, agile soldier!
 
 I already gave you the demo, but don't be a cheater. Keep going and build it step-by-step now:
 
-## 1. Create an HTML Skeleton
+# 1. Create an HTML Skeleton
 
 Get started by doing this:
 
@@ -132,7 +132,7 @@ This replaces the much more verbose HTML from before:
 </div>
 ```
 
-## 2. Add some vertebrae to the JavaScript with Backbone.js and friends
+# 2. Add some vertebrae to the JavaScript with Backbone.js and friends
 
 The refactored JavaScript code is so small, 75 lines, that you can just type or paste it in all at once. 
 Each line has comments to explain its purpose. I encourage you to type, not paste the code, but don't feel like 
