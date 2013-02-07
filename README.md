@@ -10,7 +10,7 @@ User Story, or even other types of assets, like Epics.
 It's implemented in 100% HTML, CSS, and JavaScript/CoffeeScript and uses several popular open source libraries like 
 jQueryMobile, Backbone.js, and Backbone Forms.
 
-**It's designed to be easily customizable for you, so please let us know what you need and we can help you do it. We 
+**It's designed to be easily customizable for you, so please let us know what you need if you need help. We 
 also welcome your own contributions to this project. So, fork away!**
 
 # Contact us if you want use with a private, on premise instance
