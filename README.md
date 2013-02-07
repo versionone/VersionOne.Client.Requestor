@@ -1,4 +1,4 @@
-VersionOne.App.FeatureRequestor
+VersionOne.FeatureRequestor App
 ========================
 
 TODO: add links to blog series
@@ -10,7 +10,7 @@ User Story, or even other types of assets, like Epics.
 It's implemented in 100% customizable HTML, CSS, and JavaScript/CoffeeScript and uses several popular open source libraries like 
 jQueryMobile, Backbone.js, and Backbone Forms.
 
-# Contact us if you have a private, on premise instance
+# Contact us if you want use with a private, on premise instance
 
 If you have your own instance installed on premise, we are still working on documentation for that. So, contact us 
 if you'd like help. Working through it with you will help us too.
