@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionOne.Requestor.NET", "VersionOne.Requestor.NET\VersionOne.Requestor.NET.csproj", "{72693883-C8FF-493B-9788-483974A83F83}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionOne.FeatureRequestor.Config", "VersionOne.FeatureRequestor.Config.csproj", "{72693883-C8FF-493B-9788-483974A83F83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

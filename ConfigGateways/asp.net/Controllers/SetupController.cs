@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Web.Mvc;
 using System.Text;
 
-namespace VersionOne.Requestor.NET.Controllers
+namespace VersionOne.FeatureRequestor.Config.Controllers
 {
     public class SetupController : Controller
     {
