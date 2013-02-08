@@ -1,258 +1,180 @@
-![DocumentUp](http://documentup.com/images/logo.png)
+## Use with Hosted V1
 
-**This site has been generated with DocumentUp** (eat your own dog food, people)
+### IIS Deploy
 
-Automatically generated documentation sites for your markdown files! There are various ways of getting your documentation going:
+To let IIS serve the files for you:
 
-* [Hosted](#hosted)
-* [On-Demand API](#on-demand-api)
-* [gh-pages](#gh-pages)
+1. Clone this repository or download the files as a zip and place the contents of the `VersionOne.FeatureRequestor` 
+folder into a directory, such as `C:\inetpub\wwwroot\v1requestor`.
+2. In IIS, from the `Connetions` panel, open `Sites` and select or create a site.
+3. Right click on the site and select `Add Application` or `Add Virtual Directory`.
+4. Enter `v1requestor` for `Alias`, and for `Physical Path` put the directory you used in step 1.
+5. Click `Ok`.
+6. Browse to the new site. If you placed it directly into the default site, the address should be 
+[`http://localhost/v1requestor`](http://localhost/v1requestor).
+7. See the `How to configure for your VersionOne instance and projects` below.
 
-## Hosted
+### File Share Deploy
 
-DocumentUp hosts your documentation sites. Just visit `http://documentup.com/username/repository` to generate a site from your `README.md`.
+While it's probably better to install on a web server, you can actually run the Feature Requestor from a file share, but 
+you have to enable a special flag in Google Chrome to do so. But, it appears this feature of Chrome was "rushed", so if 
+you really want to do it, [read about the `--allow-file-access-from-files` Chrome option]
+(http://stackoverflow.com/questions/4270999/google-chrome-allow-file-access-from-files-disabled-for-chrome-beta-8).
 
-Recommended if you have a public Github repository.
+## Configure for V1 Projects
 
-### Post-Receive Hook
+There are two configuration files:
 
-If you want your readme to be recompiled, please add a [Post-Receive Hook](http://help.github.com/post-receive-hooks/) to your Github repository pointing to: `http://documentup.com/recompile`
+1. config.js (or config.coffee) -- specifies the URL for VersionOne and a few other options
+2. fields.js (or fields.coffee) -- specifies the projects and fields you want to display on the request form for each 
+project
 
-### Manual Recompile
+## config.js
 
-Visit `http://documentup.com/username/repository/recompile` to manually tell the server to recompile your readme.
+Most importantly, change the `host`, `service`, and `versionOneAuth` variables to point to your own VersionOne 
+instance. By default, they point to the VersionOne test intsance.
 
-Useful when changes are made to the stylesheets on the server but the compilation hasn't been triggered for a while.
+### host
 
-### Configuration
+*Url, default: http://eval.versionone.net*
 
-Add a `.documentup.json` dotfile file to the root of your repository. Refer to the [options](#options) section below for its contents. Feel free to consult this repository's [`.documentup.json`](https://github.com/jeromegn/DocumentUp/blob/master/.documentup.json)
+The web server address where your VersionOne instance is locaated, most likely something like `http://www7.v1host.com` 
+or `http://www11.v1host.com`.
 
-## On-Demand API
+### service
 
-POST or JSONP called on `http://documentup.com/compiled`
+*Url, default: http://eval.versionone.net/platformtest/rest-1.v1/Data/*
 
-Generates a standalone documentation HTML file.
+The complete url for the Versionone REST API endpoint for your instance, ending with a `/`. If you log in to your 
+instance at `http://www11.v1host.com/TeamAwesome`, then your REST API endpoint url is 
+`http://www11.v1host.com/TeamAwesome/rest-1.v1/Data/`.
 
-Recommended for private Github repositories or local projects.
+### versionOneAuth
 
-### Parameters
+*String, default: admin:admin*
 
-**content** (String) *required*
-Markdown content you want converted
+Authentication credentials for a user that can submit a feature request into the projects you specify in `fields.js`. 
+You should take care to give this user only the permissions you want, perhaps only to add requests for those projects. 
 
-All the configuration parameters detailed [options](#options) are also valid.
+This must be in the form of `username:password`. This value gets [Base64-encoded]
+(http://en.wikipedia.org/wiki/Base64) and sent as an HTTP `Authorization` header.
 
-### POST example
+*Note:* we have some code for an alternative way of authenticating, but we're not finished with it. If you're interested 
+in that, let us know.
 
-Pipe the response HTML into a file and open it. Example using `curl`:
+### projectListClickTarget
 
-```bash
-curl -X POST --data-urlencode content@README.md \
-http://documentup.com/compiled > index.html && open index.html
-```
+*String, default: new*
 
-**Note:** If the file you're trying to pass contain ampersands, you need to manually change them to %26. Otherwise the URL will break.
+This controls what happens when a user clicks a project name after searching
 
-### JSONP example with jQuery
+Valid values are:
+
+* `new` -- open a new blank request form
+* `list` -- open the list of existing requests to filter and select
+
+### others
+
+Modify the others to your heart's content.
+
+## fields.js
+
+The fields.js file is where specifies the fields that will be visiible for all projects or for specific projects when 
+adding or editing a request.
+
+### Settings
+
+TODO: add info
+
+
+### How to specify default fields
+
+To specify which fields to show up for all projects by default, define the a setting named `default`, like this:
 
 ```javascript
-$.ajax({
-  url: "http://documentup.com/compiled",
-  dataType: "jsonp",
-  data: {
-    content: "# test",
-    name: "Test JSONP!"
+"default": {
+  RequestedBy: {
+    title: 'Requested By',
+    autofocus: true
   },
-  success: function(resp){
-    // `status` is always provided
-    if (resp.status == 200) {
-      // Write to your document
-      document.open();
-      document.write(resp.html);
-      document.close();
-    }
+  Name: {
+    title: 'Request Title'
+  },
+  Description: {
+    title: 'Request Description (Project & Why needed)',
+    type: 'TextArea',
+    optional: true
+  },
+  Priority: {
+    title: 'Priority',
+    type: 'Select',
+    assetName: 'RequestPriority'
   }
-});
+}
 ```
 
-## gh-pages
+### How to specify fields for specific projects
 
-For those wanting to stay within the comfort of their gh-pages branch, it's still possible by using an `index.html` file similar to this:
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <script src="documentup.min.js"></script>
-    <script>
-      DocumentUp.document("username/repository");
-    </script>
-  </head>
-  <body></body>
-</html>
-```
-
-Make sure to change the `"username/repository"` to the repository's name and user's username.
-
-Use the `documentup.min.js` file in this repository, not the one what used to be on cdnjs.com, it's deprecated.
-
-### Configuration
-
-`DocumentUp.document` accepts either a String or an Object representing your desired configuration. If an object is used, remember to add a `repo` option containing the path `"username/repository"` to your github repository.
-
-All options detailed in the [options](#options) section are available.
-
-In addition to those, one special option is available to "gh-pages version" of DocumentUp:
-
-**afterRender** (Function)  
-A function to be executed after the document has been replaced with the compiled HTML.
-
-### Example
+For a sepcific project, you define fields with a key named after the project's Scope oid, like below. Note that this 
+even lets you even use custom fields that are defined in your VersionOne instance. The `type` parameter refers to the 
+field types available in [Backbone Forms](https://github.com/powmedia/backbone-forms).
 
 ```javascript
-DocumentUp.document({
-  repo:  "jeromegn/documentup",
-  name: "DocumentUp",
-  twitter: [
-    "jeromegn",
-    "DocumentUp"
-  ],
-  afterRender: function(){
-    alert("rendered");
+'Scope:173519': {
+  RequestedBy: {
+    title: 'Requested By',
+    autofocus: true
+  },
+  Name: {
+    title: 'Request Title'
+  },
+  Custom_RequestedETA: {
+    title: 'Requested by (ETA)',
+    type: 'Date'
+  },
+  Description: {
+    title: 'Request Description (Project & Why needed)',
+    type: 'TextArea',
+    optional: true
+  },
+  Custom_ProductService: {
+    title: 'Product/Service',
+    type: 'Select',
+    assetName: 'Custom_Product'
+  },
+  Custom_Team2: {
+    title: 'Team',
+    type: 'Select',
+    assetName: 'Custom_Team'
+  },
+  Custom_HWRequestedlistandcostperunit: {
+    title: 'Capacity or HW Requested',
+    type: 'TextArea'
+  },
+  Custom_RequestImpact: {
+    title: 'Request Impact',
+    type: 'Select',
+    assetName: 'Custom_Severity'
   }
-});
+}
 ```
 
-### What this script does
+# Configure with Service Gateway
 
-It does what's written in the JSONP section, without the jQuery dependency. It uses a endpoint like: `http://documentup.com/username/repository?callback=` to fetch the cached copy of the repository and then replaces the page's html with the generated documentation.
+TODO: below is outdated
 
-## Formatting guide
+Did you see those credentials embedded in JavaScript above? Yes, that could suck. 
+We're looking at better ways to enable this to work from the web browser, but we also have a way to proxy the request 
+through a "service gateway", but we don't have instructions for that yet. You can see a C# version and a Node.js 
+version in the source code of the project, however. Contact us if you would like to use these features.
 
-Just like you normally would. DocumentUp also supports "Github Flavored Markdown" and we recommend you use it for syntax highlighting.
+# Advanced: CoffeeScript
 
-It doesn't support tables as it is supported on Github, but you can use inline HTML.
+The main source for the app is actually CoffeeScript. It's been compiled to JavaScript, and those files are here in the 
+repository, but if you'd prefer to customize the code in CoffeeScript rather than muck with JavaScript, then do this:
 
-h1's (# in markdown) will appear as first level navigation in the sidebar while h2's (##) will appear under them as sub-navigation.
-
-Example:
-
-```markdown
-# Project name / Title (won't appear in the sidebar)
-
-Some intro text if you want.
-
-## Top level-navigation
-
-### Sub-navigation
-
-#### This wouldn't show up in the sidebar
-```
-
-## Options
-
-### name
-
-*String, default: repository name*
-
-Name of your project. It'll appear in the header of the sidebar. Defaults to the `repository` substring of the `repo` option.
-
-### color
-
-*String, default: "#336699"*
-
-CSS-like color representing the color for the links both in the sidebar and the content.
-
-### theme
-
-*String, default: null*
-
-Name of the theme to use. Refer to the [themes](#themes) sections.
-
-### issues
-
-*Boolean, default: true*
-
-Adds a link to the sidebar for the issues tab of the repository if `true`. Also accepts a string if your issues are managed elsewhere.
-
-### travis
-
-*Boolean, default: false*
-
-Indicate if the project is being tested by [Travis-CI](http://travis-ci.org/). If `true`, it'll add the small travis badge in the sidebar.
-
-### twitter
-
-*String / Array of strings, default: null*
-
-Add follow buttons for one or more Twitter accounts to your sidebar. Useful to gather followers.
-
-### google_analytics
-
-*String default: null*
-
-This is your Google Analytics "UA" unique ID. Adds GA tracking to your generated documentation.  
-e.g.: "UA-5201171-14"
-
-## Themes
-
-### Default
-
-The one you're looking at now.
-
-### V1
-
-For the nostalgic. Use `v1` in your `theme` config option.
-
-![V1](http://documentup.com/images/v1.png)
-
-## Roadmap
-
-* Private repositories
-* Multi-page aggregation
-
-## Thank you
-
-* Thanks for, the few, well documented project sites out there for the inspiration.
-* Thanks to [CDNJS](http://cdnjs.com) who **originally** offered hosting for this project.
-* Thanks to [Jean-Marc Denis](http://jeanmarcdenis.me/) for the freely downloadable bow tie I used in the logo.
-
-## Changelog
-
-#### Hosted version (Feb 2, 2012)
-
-Versioning is going to be difficult now since this is now a service. Deployment will be continuous.
-
-#### 0.1.1 (Jan 26, 2012)
-
-* Files now parsed in UTF-8
-* Namespaced repositories in localStorage (thanks to [tbranyen](https://github.com/tbranyen))
-* A few README fixes
-
-#### 0.1.0 (Jan 25, 2012)
-
-* Initial release
-
-## License
-
-Copyright (c) 2012 Jerome Gravel-Niquet
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+1. Install [Node.js](http://nodejs.org/) if you don't already have it.
+2. Open a command prompt and change directory to where the `VersionOne.FeatureRequestor` folder is in your local repository clone.
+3. Type `npm install coffee-script` (Or, [see alternatives for installing CoffeeScript](http://coffeescript.org/#installation)).
+4. Type `./make.sh` to execute the CoffeeScript compiler. This is a simple script that regenerates a few `.js` files 
+from the `.coffee` files in the project.
