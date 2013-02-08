@@ -1,3 +1,28 @@
+## Introduction
+
+VersionOne Feature Requestor is a simple app that lets users submit new feature requests into VersionOne through the 
+VersionOne REST Data API. It also lets them edit these feature requests. Team members can turn feature requests in 
+VersoinOne into User Stories or other asset types like Defects and Epics.
+
+**TODO:** Add blog links
+
+![Feature Requestor](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/blog/part02/requestor-07-update.png)
+
+### Implementation
+
+It's implemented in 100% HTML, CSS, and JavaScript/CoffeeScript and uses several popular open source libraries like 
+jQueryMobile, Backbone.js, and Backbone Forms.
+
+### Customization
+
+**It's designed to be easily customizable for you, so please let us know what you need if you need help. We 
+also welcome your own contributions to this project. So, fork away!**
+
+## Installation
+
+Contact us if you are interested in this. It's bran new, and currently in use by one customer. We'd like to work with 
+you to make sure we help you get what you need.
+
 ## Use with Hosted V1
 
 ### IIS Deploy
@@ -20,6 +45,11 @@ While it's probably better to install on a web server, you can actually run the 
 you have to enable a special flag in Google Chrome to do so. But, it appears this feature of Chrome was "rushed", so if 
 you really want to do it, [read about the `--allow-file-access-from-files` Chrome option]
 (http://stackoverflow.com/questions/4270999/google-chrome-allow-file-access-from-files-disabled-for-chrome-beta-8).
+
+## Use with On-Premise V1
+
+If you have your own instance installed on premise, we are still working on documentation for that. So, contact us 
+for help.
 
 ## Configure for V1 Projects
 
@@ -82,17 +112,12 @@ Modify the others to your heart's content.
 The fields.js file is where specifies the fields that will be visiible for all projects or for specific projects when 
 adding or editing a request.
 
-### Settings
-
-TODO: add info
-
-
-### How to specify default fields
+## Specify default fields
 
 To specify which fields to show up for all projects by default, define the a setting named `default`, like this:
 
 ```javascript
-"default": {
+'default': {
   RequestedBy: {
     title: 'Requested By',
     autofocus: true
@@ -112,8 +137,79 @@ To specify which fields to show up for all projects by default, define the a set
   }
 }
 ```
+## Field options
 
-### How to specify fields for specific projects
+Each entry within the `default` project is keyed by the physical name of the corresponding VersionOne attribute or 
+relationship. The entry itself is an object can contain the following options. Note that all of these work fine with 
+the built-in VersionOne asset attributes as well as custom fields.
+
+### title
+
+*String, default: <key>*
+
+The label to appear above the input field.
+
+### type
+
+*Backbone Forms field type, default: text*
+
+Specifies the input element type for the field, based on [Backbone Forms](https://github.com/powmedia/backbone-forms) 
+field types. You can compare this with the meta data for the field to get it right -- see [VersionOne Meta API]
+(http://community.versionone.com/sdk/Documentation/MetaAPI.aspx).
+
+### autofocus
+
+*Boolean, default: false*
+
+Set this to true if you want a field to autofocus on load. It sets the HTML 5 `autofocus` attribute in the input element. 
+Obviously, it will only work with one field.
+
+### optional
+
+*Boolean, default: false*
+
+By default, all fields will be required, unless you set this to `false`!
+
+## Relation options
+
+The tool supports basic use with relations by showing them in a select element. This works with both built-in and 
+custom list types.
+
+### Example relation
+
+From above:
+
+```javascript
+Priority: {
+  title: 'Priority',
+  type: 'Select',
+  assetName: 'RequestPriority'
+}
+```
+
+A Request asset has a `Request.Priority` attribute, which is of type RequestPriority. You can see that in the 
+meta data for a Request at: [http://eval.versionone.net/platformtest/meta.v1/Request?xsl=api.xsl](
+http://eval.versionone.net/platformtest/meta.v1/Request?xsl=api.xsl)
+
+And, you can find the list of possible values at 
+[http://eval.versionone.net/platformtest/rest-1.v1/Data/RequestPriority]
+(http://eval.versionone.net/platformtest/rest-1.v1/Data/RequestPriority)
+
+In the `Specify fields for specific projects` section, you'll see this:
+
+```javascript
+Custom_ProductService: {
+  title: 'Product/Service',
+  type: 'Select',
+  assetName: 'Custom_Product'
+}
+```
+
+In that case, a customer chose to name the attribute `Custom_ProductService`, which can take values from the list of 
+the custom list-type named `Custom_Product`. **There is no requirement that the `Custom_` prefix appear in a custom field,
+however!**
+
+## Specify fields for individual projects
 
 For a sepcific project, you define fields with a key named after the project's Scope oid, like below. Note that this 
 even lets you even use custom fields that are defined in your VersionOne instance. The `type` parameter refers to the 
@@ -159,7 +255,7 @@ field types available in [Backbone Forms](https://github.com/powmedia/backbone-f
 }
 ```
 
-# Configure with Service Gateway
+## Configure a credentials provider
 
 TODO: below is outdated
 
@@ -168,7 +264,7 @@ We're looking at better ways to enable this to work from the web browser, but we
 through a "service gateway", but we don't have instructions for that yet. You can see a C# version and a Node.js 
 version in the source code of the project, however. Contact us if you would like to use these features.
 
-# Advanced: CoffeeScript
+## Advanced: CoffeeScript
 
 The main source for the app is actually CoffeeScript. It's been compiled to JavaScript, and those files are here in the 
 repository, but if you'd prefer to customize the code in CoffeeScript rather than muck with JavaScript, then do this:
