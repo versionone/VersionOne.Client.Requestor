@@ -172,6 +172,11 @@ Obviously, it will only work with one field.
 
 By default, all fields will be required, unless you set this to `false`!
 
+### Backbone Forms docs
+
+Check out the [Backbone Forms](https://github.com/powmedia/backbone-forms) documentation for more information on 
+how you can utilize and customize the form fields.
+
 ## Relation options
 
 The tool supports basic use with relations by showing them in a select element. This works with both built-in and 
