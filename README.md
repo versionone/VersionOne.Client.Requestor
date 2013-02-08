@@ -112,17 +112,12 @@ Modify the others to your heart's content.
 The fields.js file is where specifies the fields that will be visiible for all projects or for specific projects when 
 adding or editing a request.
 
-### Settings
-
-TODO: add info
-
-
-### How to specify default fields
+## Specify default fields
 
 To specify which fields to show up for all projects by default, define the a setting named `default`, like this:
 
 ```javascript
-"default": {
+'default': {
   RequestedBy: {
     title: 'Requested By',
     autofocus: true
@@ -142,8 +137,79 @@ To specify which fields to show up for all projects by default, define the a set
   }
 }
 ```
+## Field options
 
-### How to specify fields for specific projects
+Each entry within the `default` project is keyed by the physical name of the corresponding VersionOne attribute or 
+relationship. The entry itself is an object can contain the following options. Note that all of these work fine with 
+the built-in VersionOne asset attributes as well as custom fields.
+
+### title
+
+*String, default: <key>*
+
+The label to appear above the input field.
+
+### type
+
+*Backbone Forms field type, default: text*
+
+Specifies the input element type for the field, based on [Backbone Forms](https://github.com/powmedia/backbone-forms) 
+field types. You can compare this with the meta data for the field to get it right -- see [VersionOne Meta API]
+(http://community.versionone.com/sdk/Documentation/MetaAPI.aspx).
+
+### autofocus
+
+*Boolean, default: false*
+
+Set this to true if you want a field to autofocus on load. It sets the HTML 5 `autofocus` attribute in the input element. 
+Obviously, it will only work with one field.
+
+### optional
+
+*Boolean, default: false*
+
+By default, all fields will be required, unless you set this to `false`!
+
+## Relation options
+
+The tool supports basic use with relations by showing them in a select element. This works with both built-in and 
+custom list types.
+
+### Example
+
+From above:
+
+```javascript
+Priority: {
+  title: 'Priority',
+  type: 'Select',
+  assetName: 'RequestPriority'
+}
+```
+
+A Request asset has a `Request.Priority` attribute, which is of type RequestPriority. You can see that in the 
+meta data for a Request at: [http://eval.versionone.net/platformtest/meta.v1/Request?xsl=api.xsl](
+http://eval.versionone.net/platformtest/meta.v1/Request?xsl=api.xsl)
+
+And, you can find the list of possible values at 
+[http://eval.versionone.net/platformtest/rest-1.v1/Data/RequestPriority]
+(http://eval.versionone.net/platformtest/rest-1.v1/Data/RequestPriority)
+
+In the `Specify fields for specific projects` section, you'll see this:
+
+```javascript
+Custom_ProductService: {
+  title: 'Product/Service',
+  type: 'Select',
+  assetName: 'Custom_Product'
+}
+```
+
+In that case, a customer chose to name the attribute `Custom_ProductService`, which can take values from the list of 
+the custom list-type named `Custom_Product`. **There is no requirement that the `Custom_` prefix appear in a custom field,
+however!**
+
+## Specify fields for specific projects
 
 For a sepcific project, you define fields with a key named after the project's Scope oid, like below. Note that this 
 even lets you even use custom fields that are defined in your VersionOne instance. The `type` parameter refers to the 
