@@ -1,37 +1,6 @@
-VersionOne.FeatureRequestor App
-========================
+## Use with Hosted V1
 
-TODO: add links to blog series
-
-VersionOne Feature Requestor is a simple app that lets users submit new feature requests into VersionOne through the 
-VersionOne REST Data API. It also lets them edit these feature requests. A feature request in can eventually become a 
-User Story, or even other types of assets, like Epics.
-
-It's implemented in 100% HTML, CSS, and JavaScript/CoffeeScript and uses several popular open source libraries like 
-jQueryMobile, Backbone.js, and Backbone Forms.
-
-**It's designed to be easily customizable for you, so please let us know what you need if you need help. We 
-also welcome your own contributions to this project. So, fork away!**
-
-# Contact us if you want use with a private, on premise instance
-
-If you have your own instance installed on premise, we are still working on documentation for that. So, contact us 
-if you'd like help. Working through it with you will help us too.
-
-# Options for how to use with a hosted VersionOne instance
-
-If you want to run this against a VersionOne hosted instace, please contact us because it depends on a 
-few 'experimental' DLLs for enhanced JSON support in the API that we have to install for you. **Note**: this 
-support will become part of the Core product soon.
-
-## 1. How to use over a file share with Google Chrome
-
-While it's probably better to install on a web server, you can actually run the Feature Requestor from a file share, but 
-you have to enable a special flag in Google Chrome to do so. But, it appears this feature of Chrome was "rushed", so if 
-you really want to do it, [read about the `--allow-file-access-from-files` Chrome option]
-(http://stackoverflow.com/questions/4270999/google-chrome-allow-file-access-from-files-disabled-for-chrome-beta-8).
-
-## 2. How to deploy to IIS
+### IIS Deploy
 
 To let IIS serve the files for you:
 
@@ -45,7 +14,14 @@ folder into a directory, such as `C:\inetpub\wwwroot\v1requestor`.
 [`http://localhost/v1requestor`](http://localhost/v1requestor).
 7. See the `How to configure for your VersionOne instance and projects` below.
 
-# How to configure for your VersionOne instance and projects
+### File Share Deploy
+
+While it's probably better to install on a web server, you can actually run the Feature Requestor from a file share, but 
+you have to enable a special flag in Google Chrome to do so. But, it appears this feature of Chrome was "rushed", so if 
+you really want to do it, [read about the `--allow-file-access-from-files` Chrome option]
+(http://stackoverflow.com/questions/4270999/google-chrome-allow-file-access-from-files-disabled-for-chrome-beta-8).
+
+## Configure for V1 Projects
 
 There are two configuration files:
 
@@ -53,20 +29,42 @@ There are two configuration files:
 2. fields.js (or fields.coffee) -- specifies the projects and fields you want to display on the request form for each 
 project
 
-## Options for config.js
+## config.js
 
-TODO: clean up
+Most importantly, change the `host`, `service`, and `versionOneAuth` variables to point to your own VersionOne 
+instance. By default, they point to the VersionOne test intsance.
 
-Change the `host`, `service`, and `versionOneAuth` variables to point to your own VersionOne instance. By default, they 
-point to the VersionOne test insance:
+### host
 
-```javascript
-host = 'http://eval.versionone.net';
-service = 'http://eval.versionone.net/platformtest/rest-1.v1/Data/';
-versionOneAuth = 'admin:admin';
-```
+*Url, default: http://eval.versionone.net*
 
-### `projectListClickTarget`
+The web server address where your VersionOne instance is locaated, most likely something like `http://www7.v1host.com` 
+or `http://www11.v1host.com`.
+
+### service
+
+*Url, default: http://eval.versionone.net/platformtest/rest-1.v1/Data/*
+
+The complete url for the Versionone REST API endpoint for your instance, ending with a `/`. If you log in to your 
+instance at `http://www11.v1host.com/TeamAwesome`, then your REST API endpoint url is 
+`http://www11.v1host.com/TeamAwesome/rest-1.v1/Data/`.
+
+### versionOneAuth
+
+*String, default: admin:admin*
+
+Authentication credentials for a user that can submit a feature request into the projects you specify in `fields.js`. 
+You should take care to give this user only the permissions you want, perhaps only to add requests for those projects. 
+
+This must be in the form of `username:password`. This value gets [Base64-encoded]
+(http://en.wikipedia.org/wiki/Base64) and sent as an HTTP `Authorization` header.
+
+*Note:* we have some code for an alternative way of authenticating, but we're not finished with it. If you're interested 
+in that, let us know.
+
+### projectListClickTarget
+
+*String, default: new*
 
 This controls what happens when a user clicks a project name after searching
 
@@ -75,8 +73,11 @@ Valid values are:
 * `new` -- open a new blank request form
 * `list` -- open the list of existing requests to filter and select
 
-## Options for fields.js
+### others
 
+Modify the others to your heart's content.
+
+## fields.js
 
 The fields.js file is where specifies the fields that will be visiible for all projects or for specific projects when 
 adding or editing a request.
@@ -158,7 +159,16 @@ field types available in [Backbone Forms](https://github.com/powmedia/backbone-f
 }
 ```
 
-# Optional: how to recompile the CoffeeScript to regenerate the JavaScript files
+# Configure with Service Gateway
+
+TODO: below is outdated
+
+Did you see those credentials embedded in JavaScript above? Yes, that could suck. 
+We're looking at better ways to enable this to work from the web browser, but we also have a way to proxy the request 
+through a "service gateway", but we don't have instructions for that yet. You can see a C# version and a Node.js 
+version in the source code of the project, however. Contact us if you would like to use these features.
+
+# Advanced: CoffeeScript
 
 The main source for the app is actually CoffeeScript. It's been compiled to JavaScript, and those files are here in the 
 repository, but if you'd prefer to customize the code in CoffeeScript rather than muck with JavaScript, then do this:
@@ -168,13 +178,3 @@ repository, but if you'd prefer to customize the code in CoffeeScript rather tha
 3. Type `npm install coffee-script` (Or, [see alternatives for installing CoffeeScript](http://coffeescript.org/#installation)).
 4. Type `./make.sh` to execute the CoffeeScript compiler. This is a simple script that regenerates a few `.js` files 
 from the `.coffee` files in the project.
-
-# How to use with a service gateway
-
-TODO: below is outdated
-
-Did you see those credentials embedded in JavaScript above? Yes, that could suck. 
-We're looking at better ways to enable this to work from the web browser, but we also have a way to proxy the request 
-through a "service gateway", but we don't have instructions for that yet. You can see a C# version and a Node.js 
-version in the source code of the project, however. Contact us if you would like to use these features.
-
