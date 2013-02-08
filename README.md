@@ -18,7 +18,7 @@ jQueryMobile, Backbone.js, and Backbone Forms.
 **It's designed to be easily customizable for you, so please let us know what you need if you need help. We 
 also welcome your own contributions to this project. So, fork away!**
 
-## Getting Started
+## Installation
 
 Contact us if you are interested in this. It's bran new, and currently in use by one customer. We'd like to work with 
 you to make sure we help you get what you need.
