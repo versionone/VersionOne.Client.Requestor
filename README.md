@@ -77,10 +77,86 @@ Valid values are:
 
 ## Options for fields.js
 
-TODO: clean up
 
-This is where you change the fields that will be visiible for all projects or for specific projects when adding or 
-editing a request.
+The fields.js file is where specifies the fields that will be visiible for all projects or for specific projects when 
+adding or editing a request.
+
+### Settings
+
+TODO: add info
+
+
+### How to specify default fields
+
+To specify which fields to show up for all projects by default, define the a setting named `default`, like this:
+
+```javascript
+"default": {
+  RequestedBy: {
+    title: 'Requested By',
+    autofocus: true
+  },
+  Name: {
+    title: 'Request Title'
+  },
+  Description: {
+    title: 'Request Description (Project & Why needed)',
+    type: 'TextArea',
+    optional: true
+  },
+  Priority: {
+    title: 'Priority',
+    type: 'Select',
+    assetName: 'RequestPriority'
+  }
+}
+```
+
+### How to specify fields for specific projects
+
+For a sepcific project, you define fields with a key named after the project's Scope oid, like below. Note that this 
+even lets you even use custom fields that are defined in your VersionOne instance. The `type` parameter refers to the 
+field types available in [Backbone Forms](https://github.com/powmedia/backbone-forms).
+
+```javascript
+'Scope:173519': {
+  RequestedBy: {
+    title: 'Requested By',
+    autofocus: true
+  },
+  Name: {
+    title: 'Request Title'
+  },
+  Custom_RequestedETA: {
+    title: 'Requested by (ETA)',
+    type: 'Date'
+  },
+  Description: {
+    title: 'Request Description (Project & Why needed)',
+    type: 'TextArea',
+    optional: true
+  },
+  Custom_ProductService: {
+    title: 'Product/Service',
+    type: 'Select',
+    assetName: 'Custom_Product'
+  },
+  Custom_Team2: {
+    title: 'Team',
+    type: 'Select',
+    assetName: 'Custom_Team'
+  },
+  Custom_HWRequestedlistandcostperunit: {
+    title: 'Capacity or HW Requested',
+    type: 'TextArea'
+  },
+  Custom_RequestImpact: {
+    title: 'Request Impact',
+    type: 'Select',
+    assetName: 'Custom_Severity'
+  }
+}
+```
 
 # Optional: how to recompile the CoffeeScript to regenerate the JavaScript files
 
