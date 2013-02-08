@@ -1,4 +1,4 @@
-# Introduction
+## Introduction
 
 VersionOne Feature Requestor is a simple app that lets users submit new feature requests into VersionOne through the 
 VersionOne REST Data API. It also lets them edit these feature requests. A feature request in can eventually become a 
@@ -10,12 +10,12 @@ jQueryMobile, Backbone.js, and Backbone Forms.
 **It's designed to be easily customizable for you, so please let us know what you need if you need help. We 
 also welcome your own contributions to this project. So, fork away!**
 
-# Getting Started
+## Getting Started
 
 Contact us if you are interested in this. It's bran new, and currently in use by one customer. We'd like to work with 
 you to make sure we help you get what you need.
 
-# Use with Hosted V1
+## Use with Hosted V1
 
 ### IIS Deploy
 
@@ -181,7 +181,7 @@ field types available in [Backbone Forms](https://github.com/powmedia/backbone-f
 }
 ```
 
-# Configure with Service Gateway
+## Configure with Service Gateway
 
 TODO: below is outdated
 
@@ -190,7 +190,7 @@ We're looking at better ways to enable this to work from the web browser, but we
 through a "service gateway", but we don't have instructions for that yet. You can see a C# version and a Node.js 
 version in the source code of the project, however. Contact us if you would like to use these features.
 
-# Advanced: CoffeeScript
+## Advanced: CoffeeScript
 
 The main source for the app is actually CoffeeScript. It's been compiled to JavaScript, and those files are here in the 
 repository, but if you'd prefer to customize the code in CoffeeScript rather than muck with JavaScript, then do this:
