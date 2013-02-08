@@ -4,6 +4,10 @@ VersionOne Feature Requestor is a simple app that lets users submit new feature 
 VersionOne REST Data API. It also lets them edit these feature requests. A feature request in can eventually become a 
 User Story, or even other types of assets, like Epics.
 
+![Feature Requestor](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/blog/part02/requestor-07-update.png)
+
+### Implementation
+
 It's implemented in 100% HTML, CSS, and JavaScript/CoffeeScript and uses several popular open source libraries like 
 jQueryMobile, Backbone.js, and Backbone Forms.
 
