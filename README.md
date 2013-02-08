@@ -1,8 +1,10 @@
 ## Introduction
 
 VersionOne Feature Requestor is a simple app that lets users submit new feature requests into VersionOne through the 
-VersionOne REST Data API. It also lets them edit these feature requests. A feature request in can eventually become a 
-User Story, or even other types of assets, like Epics.
+VersionOne REST Data API. It also lets them edit these feature requests. Team members can turn feature requests in 
+VersoinOne into User Stories or other asset types like Defects and Epics.
+
+**TODO:** Add blog links
 
 ![Feature Requestor](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/blog/part02/requestor-07-update.png)
 
