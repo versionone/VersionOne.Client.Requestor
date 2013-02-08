@@ -175,7 +175,7 @@ By default, all fields will be required, unless you set this to `false`!
 The tool supports basic use with relations by showing them in a select element. This works with both built-in and 
 custom list types.
 
-### Example
+### Example relation
 
 From above:
 
