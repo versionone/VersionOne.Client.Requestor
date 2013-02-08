@@ -1,4 +1,21 @@
-## Use with Hosted V1
+# Introduction
+
+VersionOne Feature Requestor is a simple app that lets users submit new feature requests into VersionOne through the 
+VersionOne REST Data API. It also lets them edit these feature requests. A feature request in can eventually become a 
+User Story, or even other types of assets, like Epics.
+
+It's implemented in 100% HTML, CSS, and JavaScript/CoffeeScript and uses several popular open source libraries like 
+jQueryMobile, Backbone.js, and Backbone Forms.
+
+**It's designed to be easily customizable for you, so please let us know what you need if you need help. We 
+also welcome your own contributions to this project. So, fork away!**
+
+# Getting Started
+
+Contact us if you are interested in this. It's bran new, and currently in use by one customer. We'd like to work with 
+you to make sure we help you get what you need.
+
+# Use with Hosted V1
 
 ### IIS Deploy
 
@@ -20,6 +37,11 @@ While it's probably better to install on a web server, you can actually run the 
 you have to enable a special flag in Google Chrome to do so. But, it appears this feature of Chrome was "rushed", so if 
 you really want to do it, [read about the `--allow-file-access-from-files` Chrome option]
 (http://stackoverflow.com/questions/4270999/google-chrome-allow-file-access-from-files-disabled-for-chrome-beta-8).
+
+## Use with On-Premise V1
+
+If you have your own instance installed on premise, we are still working on documentation for that. So, contact us 
+for help.
 
 ## Configure for V1 Projects
 
