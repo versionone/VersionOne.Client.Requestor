@@ -1,3 +1,5 @@
+![Powered by VersionOne](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/VersionOne.FeatureRequestor/images/poweredbyv1.png)
+
 ## Introduction
 
 VersionOne Feature Requestor is a simple app that lets users submit new feature requests into VersionOne through the 
