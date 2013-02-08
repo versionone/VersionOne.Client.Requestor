@@ -209,7 +209,7 @@ In that case, a customer chose to name the attribute `Custom_ProductService`, wh
 the custom list-type named `Custom_Product`. **There is no requirement that the `Custom_` prefix appear in a custom field,
 however!**
 
-## Specify fields for specific projects
+## Specify fields for individual projects
 
 For a sepcific project, you define fields with a key named after the project's Scope oid, like below. Note that this 
 even lets you even use custom fields that are defined in your VersionOne instance. The `type` parameter refers to the 
@@ -255,7 +255,7 @@ field types available in [Backbone Forms](https://github.com/powmedia/backbone-f
 }
 ```
 
-## Configure with Service Gateway
+## Configure a credentials provider
 
 TODO: below is outdated
 
