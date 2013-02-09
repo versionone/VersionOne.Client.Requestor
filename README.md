@@ -22,7 +22,7 @@ also welcome your own contributions to this project. So, fork away!**
 
 ## Installation
 
-Contact us if you are interested in this. It's bran new, and currently in use by one customer. We'd like to work with 
+Contact us if you are interested in this. It's brand new, and currently in use by one customer. We'd like to work with 
 you to make sure we help you get what you need.
 
 ## Use with Hosted V1
