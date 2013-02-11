@@ -33,7 +33,7 @@ To let IIS serve the files for you:
 
 1. Clone this repository or download the files as a zip and place the contents of the `VersionOne.FeatureRequestor` 
 folder into a directory, such as `C:\inetpub\wwwroot\v1requestor`.
-2. In IIS, from the `Connetions` panel, open `Sites` and select or create a site.
+2. In IIS, from the `Connections` panel, open `Sites` and select or create a site.
 3. Right click on the site and select `Add Application` or `Add Virtual Directory`.
 4. Enter `v1requestor` for `Alias`, and for `Physical Path` put the directory you used in step 1.
 5. Click `Ok`.
