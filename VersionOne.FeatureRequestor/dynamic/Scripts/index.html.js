@@ -6,7 +6,7 @@ var html = "<html>\
     <link rel='stylesheet' href='https://raw.github.com/versionone/VersionOne.Requestor.NET/master/VersionOne.FeatureRequestor/dynamic/Content/jquery.mobile.v1.css' type='text/css' />   \
     <link rel='stylesheet' href='https://raw.github.com/versionone/VersionOne.Requestor.NET/master/VersionOne.FeatureRequestor/dynamic/Content/v1assetEditor.css' />\
     <link rel='stylesheet' href='https://raw.github.com/versionone/VersionOne.Requestor.NET/master/VersionOne.FeatureRequestor/dynamic/Content/toastr.css' />\
-    <link href='https://raw.github.com/versionone/VersionOne.Requestor.NET/master/VersionOne.FeatureRequestor/dynamic/scripts/templates/bootstrap.css' rel='stylesheet' />\
+    <link href='https://raw.github.com/versionone/VersionOne.Requestor.NET/master/VersionOne.FeatureRequestor/dynamic/Scripts/templates/bootstrap.css' rel='stylesheet' />\
 </head>\
 <body>\
 <div id='bodyDiv' style='visibility:hidden'>\
