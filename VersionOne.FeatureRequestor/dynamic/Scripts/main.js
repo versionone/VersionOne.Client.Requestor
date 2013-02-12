@@ -38,6 +38,7 @@ require([
 	    require)
     {
        $(document).ready(function() {
+            console.log('ready');
             require(['v1assetEditor'], function (v1AssetEditor) {
                 console.log('Doc is ready!');
                 window.v1AssetEditor = new v1assetEditor(v1config);
@@ -46,6 +47,8 @@ require([
                 });
             });
        });
-       document.write(indexHtml);       
+       var content = $(indexHtml);
+       var parent = document.documentElement.childNodes[0];
+       parent.appendChild(content);
 	}
 );
