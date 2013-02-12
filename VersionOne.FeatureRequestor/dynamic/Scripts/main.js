@@ -20,6 +20,7 @@ requirejs.config({
 });
 
 require([
+        'text!index.html',
         'config',
         'v1assetEditor',
         'jquery',
@@ -31,11 +32,14 @@ require([
         'jsrender'
     ],
     function(
+        indexHtml,
         v1config,
         v1assetEditor,
         $)
     {
+        document.write(indexHtml);        
     	$(document).ready(function () {
+            console.log('Doc is ready!');
     	    window.v1AssetEditor = new v1assetEditor(v1config);
             window.v1AssetEditor.on("assetFormCreated", function(assetForm) {
                 window.v1RequestForm = assetForm;
