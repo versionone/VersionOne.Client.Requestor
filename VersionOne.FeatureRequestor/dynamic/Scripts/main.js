@@ -47,8 +47,7 @@ require([
                 });
             });
        });
-       var content = $(indexHtml);
-       var parent = document.documentElement.childNodes[0];
-       parent.appendChild(content);
+       var content = $(indexHtml);       
+       $('body').append(content);
 	}
 );
