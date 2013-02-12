@@ -37,6 +37,7 @@ require([
         v1assetEditor,
         $)
     {
+	console.log(indexHtml);
         document.write(indexHtml);        
     	$(document).ready(function () {
             console.log('Doc is ready!');
