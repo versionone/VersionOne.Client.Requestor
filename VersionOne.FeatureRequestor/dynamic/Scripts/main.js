@@ -38,6 +38,7 @@ require([
         $)
     {
 	console.log(indexHtml);
+	/*
         document.write(indexHtml);        
     	$(document).ready(function () {
             console.log('Doc is ready!');
@@ -46,5 +47,6 @@ require([
                 window.v1RequestForm = assetForm;
             });
     	});
+	*/
     }
 );
