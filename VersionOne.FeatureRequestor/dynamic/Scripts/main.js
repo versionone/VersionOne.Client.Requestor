@@ -39,8 +39,8 @@ require([
     {
 	   console.log(indexHtml);
 	   document.write(indexHtml);
-	   require(['v1assetEditor'], function (v1AssetEditor) {
-           $(document).ready(function () {
+       $(document).ready(function() {
+            require(['v1assetEditor'], function (v1AssetEditor) {
                 console.log('Doc is ready!');
                 window.v1AssetEditor = new v1assetEditor(v1config);
                 window.v1AssetEditor.on("assetFormCreated", function (assetForm) {
