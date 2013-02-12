@@ -39,7 +39,7 @@ require([
     {
 	   console.log(indexHtml);
 	   document.write(indexHtml);
-	   require(['v1assetEditor', function (v1AssetEditor) {
+	   require(['v1assetEditor'], function (v1AssetEditor) {
            $(document).ready(function () {
                 console.log('Doc is ready!');
                 window.v1AssetEditor = new v1assetEditor(v1config);
