@@ -1,4 +1,4 @@
-define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender"], (Backbone, _, toastr, $) ->
+define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile", "jsrender"], (Backbone, _, toastr, $, v1json) ->
   log = (message) ->
     console.log message
 
@@ -36,19 +36,20 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
     constructor: (options) ->          
       continueSettingOptions = =>
         options.whereParamsForProjectScope =
-          acceptFormat: contentType
+          accept: contentType
           sel: ""
-        options.queryOpts = acceptFormat: contentType
+        options.queryOpts = accept: contentType
         options.contentType = contentType      
         for key of options
           @[key] = options[key]      
         @initialize()
       
-      contentType = "haljson"
+      contentType = "application/json"
       debugEnabled = options.showDebug
       
       if options.serviceGateway
         $.ajax(options.serviceGateway).done((data) ->
+          data = v1json.jsonClean(data)
           options.headers = data
           continueSettingOptions()
         ).fail (ex) ->
@@ -124,6 +125,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         request = @createRequest(url: url)
         projects = $("#projects")
         ajaxRequest = $.ajax(request).done((data) =>
+          data = v1json.jsonClean(data)
           ajaxRequest = null
           projects = $("#projects").empty()
           for val in data
@@ -181,6 +183,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       assets = $("#assets")
       assets.empty()
       $.ajax(request).done((data) =>
+        data = v1json.jsonClean(data)
         info "Found " + data.length + " requests"
         for item, i in data
           @listAppend item
@@ -318,6 +321,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
           type: "GET"
         )
         ajaxRequest = $.ajax(request).done((data) =>
+          data = v1json.jsonClean(data)
           if data.length > 0
             for option in data
               field.options.push
@@ -353,7 +357,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
 
       asset = @createFetchModel url
 
-      asset.exec().done(=>
+      asset.exec().done( (data) =>
         modelData = {}
         model = new @assetFormModel().schema
         links = asset.get('_links')
@@ -413,6 +417,9 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
         url: url
         exec: ->
           return @fetch(options)
+        parse: (data) ->
+          return v1json.jsonClean(data)
+
 
       fetchModel = Backbone.Model.extend(props)
 
@@ -433,15 +440,16 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
           positionClass: "toast-bottom-right"
         return
       dto = @createDto()
-      debug "Dto:"
-      debug dto
+      payload = v1json.json2xml(dto)
+      console.log payload
       request = @createRequest(
         url: url
         type: "POST"
-        data: JSON.stringify(dto)
-        contentType: @contentType
+        data: payload
+        # contentType: @contentType
       )
       $.ajax(request).done((data) =>
+        data = v1json.jsonClean(data)
         @trigger eventType, @, data
         callback data if callback
       ).fail @_ajaxFail
