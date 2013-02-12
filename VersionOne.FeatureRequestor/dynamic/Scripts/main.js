@@ -22,8 +22,8 @@ requirejs.config({
 require([
         'text!index.html',
         'config',
-        'v1assetEditor',
         'jquery',
+	'require',
         'backbone',
         'backbone-forms',
         'editors/list',
@@ -34,19 +34,19 @@ require([
     function(
         indexHtml,
         v1config,
-        v1assetEditor,
-        $)
+        $,
+	require)
     {
 	console.log(indexHtml);
-	/*
-        document.write(indexHtml);        
-    	$(document).ready(function () {
-            console.log('Doc is ready!');
-    	    window.v1AssetEditor = new v1assetEditor(v1config);
-            window.v1AssetEditor.on("assetFormCreated", function(assetForm) {
-                window.v1RequestForm = assetForm;
-            });
-    	});
-	*/
+	document.write(indexHtml);
+	require(['v1assetEditor', function (v1AssetEditor) {
+	    $(document).ready(function () {
+	        console.log('Doc is ready!');
+	        window.v1AssetEditor = new v1assetEditor(v1config);
+	        window.v1AssetEditor.on("assetFormCreated", function (assetForm) {
+	            window.v1RequestForm = assetForm;
+	        });
+	    });
+	});
     }
 );
