@@ -36,7 +36,7 @@
         });
       });
     };
-    $("#projectsPage").live("pageinit", $.mobile.loading('show'), $('#bodyDiv').css('visibility', 'visible').hide().fadeIn('slow'), $.mobile.loading('hide'));
+    $("#projectsPage").live("pageinit", $('#bodyDiv').css('visibility', 'visible').hide().fadeIn('slow'));
     VersionOneAssetEditor = (function() {
 
       function VersionOneAssetEditor(options) {
