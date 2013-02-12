@@ -39,6 +39,11 @@ require([
     {
        $(document).ready(function() {
             console.log('ready');
+       });
+       var content = $(indexHtml);
+
+       $('body').append(content);
+       function completeLoad() {
             require(['v1assetEditor'], function (v1AssetEditor) {
                 console.log('Doc is ready!');
                 window.v1AssetEditor = new v1assetEditor(v1config);
@@ -46,8 +51,7 @@ require([
                     window.v1RequestForm = assetForm;
                 });
             });
-       });
-       var content = $(indexHtml);       
-       $('body').append(content);
+        }
+        window.setTimeout(completeLoad, 3000);
 	}
 );
