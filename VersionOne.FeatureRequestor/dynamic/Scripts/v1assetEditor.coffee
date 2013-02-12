@@ -25,7 +25,7 @@ define ["backbone", "underscore", "toastr", "jquery", "jquery.mobile", "jsrender
       $(this).keyup (e) ->
         $(this).trigger "enterPress" if e.keyCode is 13
 
-  $("#projectsPage").live "pageinit",
+  $("#projectsPage").live "pageinit", ->
     $.mobile.loading('show')
     $('#bodyDiv').css('visibility','visible').hide().fadeIn('slow');
     $.mobile.loading('hide')
