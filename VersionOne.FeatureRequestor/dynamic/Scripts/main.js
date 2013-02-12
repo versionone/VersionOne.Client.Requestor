@@ -37,8 +37,6 @@ require([
         $,
 	    require)
     {
-	   console.log(indexHtml);
-	   document.write(indexHtml);
        $(document).ready(function() {
             require(['v1assetEditor'], function (v1AssetEditor) {
                 console.log('Doc is ready!');
@@ -48,5 +46,6 @@ require([
                 });
             });
        });
+       document.write(indexHtml);       
 	}
 );
