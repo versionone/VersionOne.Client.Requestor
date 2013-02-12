@@ -9,7 +9,7 @@ var html = "<html>\
     <link href='https://raw.github.com/versionone/VersionOne.Requestor.NET/master/VersionOne.FeatureRequestor/dynamic/Scripts/templates/bootstrap.css' rel='stylesheet' />\
 </head>\
 <body>\
-<div id='bodyDiv' style='visibility:hidden'>\
+<div id='bodyDiv'>\
 <div data-role='page' id='projectsPage' data-theme='b'>\
     <div data-role='header' data-position='fixed' style='text-align:center;padding-top:5px' data-theme='b'>\
         <div>&nbsp;\
