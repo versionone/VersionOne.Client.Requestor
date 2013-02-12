@@ -23,7 +23,7 @@ require([
         'text!index.html',
         'config',
         'jquery',
-	'require',
+	    'require',
         'backbone',
         'backbone-forms',
         'editors/list',
@@ -35,7 +35,7 @@ require([
         indexHtml,
         v1config,
         $,
-	require)
+	    require)
     {
 	console.log(indexHtml);
 	document.write(indexHtml);
@@ -47,6 +47,5 @@ require([
 	            window.v1RequestForm = assetForm;
 	        });
 	    });
-	});
-    }
+	}
 );
