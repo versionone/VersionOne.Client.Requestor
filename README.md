@@ -262,15 +262,6 @@ field types available in [Backbone Forms](https://github.com/powmedia/backbone-f
 }
 ```
 
-## Configure a credentials provider
-
-TODO: below is outdated
-
-Did you see those credentials embedded in JavaScript above? Yes, that could suck. 
-We're looking at better ways to enable this to work from the web browser, but we also have a way to proxy the request 
-through a "service gateway", but we don't have instructions for that yet. You can see a C# version and a Node.js 
-version in the source code of the project, however. Contact us if you would like to use these features.
-
 ## Advanced: CoffeeScript
 
 The main source for the app is actually CoffeeScript. It's been compiled to JavaScript, and those files are here in the 
