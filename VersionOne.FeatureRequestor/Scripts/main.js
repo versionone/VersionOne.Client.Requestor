@@ -31,7 +31,7 @@ require([
         v1assetEditor,
         $)
     {
-    	$(document).ready(function () {
+    	$(document).ready(function () { 
     	    window.v1AssetEditor = new v1assetEditor(v1config);
             window.v1AssetEditor.on("assetFormCreated", function(assetForm) {
                 window.vRequestForm = assetForm;
