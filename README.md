@@ -43,7 +43,12 @@ While it's probably better to install on a web server, you can actually run the 
 
 ## Use with On-Premise V1
 
-If you have your own instance installed on premise, we are still working on documentation for that. So, contact us for help.
+If you have your own instance installed on premise, we are still working on documentation for that. At a minimum, we
+know that if you have the Active Directory authentication option configured, you'll need to ensure that `ASP Impersonation` 
+is enabled in IIS, and that `Anonymous Authentication` is disabled.
+
+But, we've only helped one customer with this kind of install so far, so if you try and come across any issues, just
+contact us for help.
 
 ## Configure for V1 Projects
 
