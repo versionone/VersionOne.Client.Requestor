@@ -10,6 +10,12 @@ For more about the features of the VersionOne Requestor, see the blog post on [I
 
 For broader collaboration including external customers, and deeper collaboration including comments and voting, check out [VersionOne Ideas](http://www.versionone.com/Product/agile-idea-management-tool/).
 
+## Browser Requirements
+
+This tool has been tested with Google Chrome, and partially with Mozilla Firefox. It is known that it does 
+not work with IE 9, but has not been tests on later versions. If you try it on other browsers and it works,
+please let us know so we can update this.
+
 ### Implementation
 
 It's implemented in 100% HTML, CSS, and JavaScript/CoffeeScript and uses several popular open source libraries like jQueryMobile, Backbone.js, and Backbone Forms.
