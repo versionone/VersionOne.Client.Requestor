@@ -13,7 +13,7 @@ For broader collaboration including external customers, and deeper collaboration
 ### Browser Requirements
 
 This tool has been tested with Google Chrome, and partially with Mozilla Firefox. It is known that it does 
-not work with IE 9, but has not been tests on later versions. If you try it on other browsers and it works,
+not work with IE 9, but has not been tested on later versions. If you try it on other browsers and it works,
 please let us know so we can update this.
 
 ### Implementation
