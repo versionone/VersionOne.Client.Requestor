@@ -28,9 +28,20 @@ It's implemented in 100% HTML, CSS, and JavaScript/CoffeeScript and uses several
 
 Contact us if you are interested in this. It's brand new, and currently in use by one customer. We'd like to work with you to make sure we help you get what you need.
 
-## Use with Hosted V1
+## How to use with your own On-Premise VersionOne
 
-### IIS Deploy
+If you have your own instance of VersionOne installed on premise, and have full access to the IIS server, then 
+you have two options for installing the Requestor:
+
+* One, you can host it on any web server, whether IIS or not, **but then you must configure CORS support in IIS where VersionOne is installed.**
+* Or, you can place the files in a `Requestor` folder under the `<VersionOne Installation Location>\Content` 
+folder. If you do this, then you do not need to enable CORS.
+
+### Configuration needed by both options
+
+At a minimum, we know that if you have the `Active Directory` authentication option configured, you'll need to ensure that ASP Impersonation is enabled in IIS, and that `Anonymous Authentication` is disabled.
+
+### Configure a new IIS Application or Virtual Directory to serve the Requestor
 
 To let IIS serve the files for you:
 
@@ -39,24 +50,33 @@ To let IIS serve the files for you:
 3. Right click on the site and select `Add Application` or `Add Virtual Directory`.
 4. Enter `v1requestor` for `Alias`, and for `Physical Path` put the directory you used in step 1.
 5. Click `Ok`.
-6. Browse to the new site. If you placed it directly into the default site, the address should be 
-[`http://localhost/v1requestor`](http://localhost/v1requestor).
-7. See the `How to configure for your VersionOne instance and projects` below.
+6. Enable [CORS](http://enable-cors.org/) in your VersionOne instance within IIS by selecting its
+app or virtual directory node, then select HTTP Response Headers and add these::
 
-### File Share Deploy
+    > Access-Control-Allow-Methods = GET, PUT, POST, DELETE, OPTIONS
+    
+    > Access-Control-Allow-Origin = *
+    
+    > Access-Control-Allow-Headers = Authorization, Content-Type
+
+7. Browse to the new site. If you placed it directly into the default site, the address should be 
+[`http://localhost/v1requestor`](http://localhost/v1requestor).
+8. See the `Configure for VersionOne Projects` section below.
+
+### Deploy to `Content` folder of your VersionOne instance
+
+
+
+## Deploying without a web server (with caveats)
 
 While it's probably better to install on a web server, you can actually run the Feature Requestor from a file share, but you have to enable a special flag in Google Chrome to do so. But, it appears this feature of Chrome was "rushed", so if you really want to do it, [read about the `--allow-file-access-from-files` Chrome option](http://stackoverflow.com/questions/4270999/google-chrome-allow-file-access-from-files-disabled-for-chrome-beta-8).
 
-## Use with On-Premise V1
+## Use with Hosted, On-Demand VersionOne
 
-If you have your own instance installed on premise, we are still working on documentation for that. At a minimum, we
-know that if you have the Active Directory authentication option configured, you'll need to ensure that `ASP Impersonation` 
-is enabled in IIS, and that `Anonymous Authentication` is disabled.
+If you use the VersionOne On-Demand, hosted service, we are still working on documentation for that. Contact us 
+directly through VersionOne Support if you want to use it with an On-Demand VersionOne instance.
 
-But, we've only helped one customer with this kind of install so far, so if you try and come across any issues, just
-contact us for help.
-
-## Configure for V1 Projects
+## Configure for VersionOne Projects
 
 There are two configuration files:
 
