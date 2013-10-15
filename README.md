@@ -41,7 +41,7 @@ folder. If you do this, then you do not need to enable CORS.
 
 At a minimum, we know that if you have the `Active Directory` authentication option configured, you'll need to ensure that ASP Impersonation is enabled in IIS, and that `Anonymous Authentication` is disabled.
 
-### Configure a new IIS Application or Virtual Directory to serve the Requestor
+### Option 1: Configure a new IIS Application or Virtual Directory to serve the Requestor
 
 To let IIS serve the files for you:
 
@@ -63,8 +63,7 @@ app or virtual directory node, then select HTTP Response Headers and add these::
 [`http://localhost/v1requestor`](http://localhost/v1requestor).
 8. See the `Configure for VersionOne Projects` section below.
 
-### Deploy to `Content` folder of your VersionOne instance
-
+### Option 2: Deploy to `Content` folder of your VersionOne instance
 
 
 ## Deploying without a web server (with caveats)
