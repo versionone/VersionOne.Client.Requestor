@@ -15,7 +15,7 @@ For broader collaboration including external customers, and deeper collaboration
 This tool has been tested with Google Chrome, and partially with Mozilla Firefox. It is known that it does 
 not work with IE 9, but has not been tested on later versions. If you try it on other browsers and it works,
 please let us know so we can update this.
-
+c
 ### Implementation
 
 It's implemented in 100% HTML, CSS, and JavaScript/CoffeeScript and uses several popular open source libraries like jQueryMobile, Backbone.js, and Backbone Forms.
@@ -34,7 +34,7 @@ If you have your own instance of VersionOne installed on premise, and have full 
 you have two options for installing the Requestor:
 
 * One, you can host it on any web server, whether IIS or not, **but then you must configure CORS support in IIS where VersionOne is installed.**
-* Or, you can place the files in a `Requestor` folder under the `<VersionOne Installation Location>\Content` 
+* Or, you can place the files in a `Requestor` folder under the `<VersionOne Installation Location>\Custom` 
 folder. If you do this, then you do not need to enable CORS.
 
 ### Configuration needed by both options
@@ -63,8 +63,9 @@ app or virtual directory node, then select HTTP Response Headers and add these::
 [`http://localhost/v1requestor`](http://localhost/v1requestor).
 8. See the `Configure for VersionOne Projects` section below.
 
-### Option 2: Deploy to `Content` folder of your VersionOne instance
+### Option 2: Deploy to `Custom` folder of your VersionOne instance
 
+TODO
 
 ## Deploying without a web server (with caveats)
 
