@@ -308,30 +308,32 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
       selectLists = []
       for key, value of model
         selectLists.push value if value.options.length < 1 if value.type is "Select"
-
+      that = @	
       for field in selectLists
-        assetName = field.editorAttrs["data-assetName"]
-        fields = field.formFields
-        fields = ["Name"] if not fields? or fields.length is 0
-        url = @service + assetName + "?" + $.param(@queryOpts) + "&" + $.param(
-          sel: fields.join(",")
-          sort: "Order"
-        )
-        request = @createRequest(
-          url: url
-          type: "GET"
-        )
-        ajaxRequest = $.ajax(request).done((data) =>
-          data = v1json.jsonClean(data)
-          if data.length > 0
-            for option in data
-              field.options.push
-                val: option._links.self.id
-                label: option.Name
-          else
-            @debug "No results for query: " + url
-        ).fail(@_ajaxFail)
-        ajaxRequests.push ajaxRequest
+        ( (field) ->
+          assetName = field.editorAttrs["data-assetName"]
+          fields = field.formFields
+          fields = ["Name"] if not fields? or fields.length is 0
+          url = that.service + assetName + "?" + $.param(that.queryOpts) + "&" + $.param(
+            sel: fields.join(",")
+            sort: "Order"
+          )
+          request = that.createRequest(
+            url: url
+            type: "GET"
+          )
+          ajaxRequest = $.ajax(request).done((data) =>
+            data = v1json.jsonClean(data)
+            if data.length > 0
+              for option in data
+                field.options.push
+                  val: option._links.self.id
+                  label: option.Name
+            else
+              that.debug "No results for query: " + url
+          ).fail(that._ajaxFail)
+          ajaxRequests.push ajaxRequest
+        )(field)
 
       return promise if @resolveIfEmpty(promise, ajaxRequests)
       
