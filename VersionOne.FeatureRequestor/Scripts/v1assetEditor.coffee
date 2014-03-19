@@ -310,7 +310,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
         selectLists.push value if value.options.length < 1 if value.type is "Select"
       that = @	
       for field in selectLists
-        ( (field) ->
+        do (field) ->  
           assetName = field.editorAttrs["data-assetName"]
           fields = field.formFields
           fields = ["Name"] if not fields? or fields.length is 0
@@ -333,7 +333,6 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
               that.debug "No results for query: " + url
           ).fail(that._ajaxFail)
           ajaxRequests.push ajaxRequest
-        )(field)
 
       return promise if @resolveIfEmpty(promise, ajaxRequests)
       
