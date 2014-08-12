@@ -611,7 +611,8 @@
         request = this.createRequest({
           url: url,
           type: "POST",
-          data: payload
+          data: payload,
+          contentType: "application/xml"
         });
         return $.ajax(request).done(function(data) {
           data = v1json.jsonClean(data);

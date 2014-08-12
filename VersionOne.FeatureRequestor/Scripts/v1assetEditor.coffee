@@ -448,7 +448,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
         url: url
         type: "POST"
         data: payload
-        # contentType: @contentType
+        contentType: "application/xml"
       )
       $.ajax(request).done((data) =>
         data = v1json.jsonClean(data)
