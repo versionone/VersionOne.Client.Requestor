@@ -174,7 +174,7 @@
               val = data[_i];
               _this.projectItemAppend(val);
             }
-            projects.listview("refresh");
+            projects.listview().listview("refresh");
             return $.mobile.loading('hide');
           }).fail(_this._ajaxFail);
         });
@@ -253,7 +253,7 @@
             item = data[i];
             _this.listAppend(item);
           }
-          return assets.listview("refresh");
+          return assets.listview().listview("refresh");
         }).fail(this._ajaxFail);
         return this.changePage("#list");
       };
@@ -342,7 +342,7 @@
         templ = this.listItemFormat(item);
         assets = $("#assets");
         assets.prepend(templ);
-        return assets.listview("refresh");
+        return assets.listview().listview("refresh");
       };
 
       VersionOneAssetEditor.prototype._normalizeIdWithoutMoment = function(item) {
@@ -377,7 +377,7 @@
           listItem = $(this);
           return listItem.closest("li").replaceWith(templ);
         });
-        return assets.listview("refresh");
+        return assets.listview().listview("refresh");
       };
 
       VersionOneAssetEditor.prototype.newAsset = function(modelData, href) {
@@ -666,7 +666,7 @@
             }
           });
         });
-        return 'sel = $("[name=\'Priority\']")\nsel.selectmenu()\nsel.val "RequestPriority:167"\nsel.selectmenu "refresh"';
+        return 'sel = $("[name=\'Priority\']")      \nsel.val "RequestPriority:167"\nsel.selectmenu().selectmenu "refresh"';
       };
 
       VersionOneAssetEditor.prototype.enumFields = function(callback) {

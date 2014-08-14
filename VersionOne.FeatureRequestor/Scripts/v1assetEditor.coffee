@@ -130,7 +130,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
           projects = $("#projects").empty()
           for val in data
             @projectItemAppend val
-          projects.listview "refresh"
+          projects.listview().listview "refresh"
           $.mobile.loading('hide')
         ).fail(@_ajaxFail)
 
@@ -188,7 +188,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
         info "Found " + data.length + " requests"
         for item, i in data
           @listAppend item
-        assets.listview "refresh"
+        assets.listview().listview "refresh"
       ).fail @_ajaxFail
       @changePage "#list"
 
@@ -251,7 +251,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
       templ = @listItemFormat(item)
       assets = $("#assets")
       assets.prepend templ
-      assets.listview "refresh"
+      assets.listview().listview "refresh"
 
     _normalizeIdWithoutMoment: (item) ->
       id = item._links.self.id
@@ -277,7 +277,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
         listItem = $(this)      
         #var newItem = @listItemFormat(item);
         listItem.closest("li").replaceWith templ
-      assets.listview "refresh"
+      assets.listview().listview "refresh"
 
     newAsset: (modelData, href) ->
       @configSelectLists().done =>
@@ -487,10 +487,9 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
             $(this).val ""
             $(this).textinput()    
       '''
-      sel = $("[name='Priority']")
-      sel.selectmenu()
+      sel = $("[name='Priority']")      
       sel.val "RequestPriority:167"
-      sel.selectmenu "refresh"
+      sel.selectmenu().selectmenu "refresh"
       '''
 
     enumFields: (callback) ->
