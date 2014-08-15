@@ -50,7 +50,7 @@ To let IIS serve the files for you:
 3. Right click on the site and select `Add Application` or `Add Virtual Directory`.
 4. Enter `v1requestor` for `Alias`, and for `Physical Path` put the directory you used in step 1.
 5. Click `Ok`.
-6. Enable [CORS](http://enable-cors.org/) in your VersionOne instance within IIS by selecting its
+6. **Option A:** Enable [CORS](http://enable-cors.org/) in your VersionOne instance within IIS by selecting its
 app or virtual directory node, then select HTTP Response Headers and add these::
 
     > Access-Control-Allow-Methods = GET, PUT, POST, DELETE, OPTIONS
@@ -59,9 +59,13 @@ app or virtual directory node, then select HTTP Response Headers and add these::
     
     > Access-Control-Allow-Headers = Authorization, Content-Type
 
+	**Option B:**
+If you cannot or want to enable CORS in your VersionOne instance server you can use our CorsProxy which will seat between requestor and your VersionOne instance, without needing to change IIS. 
+For more information about how to install CorsProxy go to [https://github.com/versionone/VersionOne.CorsProxy](https://github.com/versionone/VersionOne.CorsProxy) (it is just one click!).	
+
 7. Browse to the new site. If you placed it directly into the default site, the address should be 
 [`http://localhost/v1requestor`](http://localhost/v1requestor).
-8. See the `Configure for VersionOne Projects` section below.
+8. See the `Configure for VersionOne Projects` section below. 
 
 ### Option 2: Deploy to `Custom` folder of your VersionOne instance
 
@@ -86,6 +90,12 @@ There are two configuration files:
 ## config.js
 
 Most importantly, change the `host`, `service`, and `versionOneAuth` variables to point to your own VersionOne instance. By default, they point to the VersionOne test instance.
+**Note:** If you are using corsproxy remember to put its url before the one from VersionOne like in the next example:
+
+```javascript
+host = 'http://yourCorsProxy/https://www.v1host.com';
+service = host + '/v1instance/rest-1.v1/Data/';
+```
 
 ### host
 
