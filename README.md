@@ -20,6 +20,14 @@ c
 
 It's implemented in 100% HTML, CSS, and JavaScript/CoffeeScript and uses several popular open source libraries like jQueryMobile, Backbone.js, and Backbone Forms.
 
+##Deploy
+If you want to quickly deploy without needing to host the proxy yourself you just need to click the next button:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/veplechuc/VersionOne.CorsProxy)
+
+You only need to create a free heroku account if you don't already have one.
+
+
 ### Customization
 
 **It's designed to be easily customizable for you, so please let us know what you need if you need help. We also welcome your own contributions to this project. So, fork away!**
