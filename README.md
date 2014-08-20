@@ -1,4 +1,4 @@
-![Powered by VersionOne](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/VersionOne.FeatureRequestor/images/poweredbyv1.png)
+![Powered by VersionOne](https://raw.githubusercontent.com/versionone/VersionOne.Client.Requestor/master/VersionOne.FeatureRequestor/images/poweredbyv1.png)
 
 ## Introduction
 
@@ -6,7 +6,7 @@ When seeking input on the backlog, would it encourage collaboration with more st
 
 For more about the features of the VersionOne Requestor, see the blog post on [Introduction and Why You'd Need It](http://blogs.versionone.com/agile-development/2013/02/07/feature-requestor-what-and-why/)
 
-![Feature Requestor](https://raw.github.com/versionone/VersionOne.Requestor.NET/master/blog/part02/requestor-07-update.png)
+![Feature Requestor](https://raw.githubusercontent.com/versionone/VersionOne.Client.Requestor/master/blog/part02/requestor-07-update.png)
 
 For broader collaboration including external customers, and deeper collaboration including comments and voting, check out [VersionOne Ideas](http://www.versionone.com/Product/agile-idea-management-tool/).
 
@@ -22,63 +22,32 @@ It's implemented in 100% HTML, CSS, and JavaScript/CoffeeScript and uses several
 
 ### Customization
 
-**It's designed to be easily customizable for you, so please let us know what you need if you need help. We also welcome your own contributions to this project. So, fork away!**
+It's designed to be easily customizable for different custom fields and server locations. See below for details.
 
-## Installation
+### Contributing
 
-Contact us if you are interested in this. It's brand new, and currently in use by one customer. We'd like to work with you to make sure we help you get what you need.
+We also welcome contributions! Please send pull requests! If you figure out specific instructions for using the Node.JS based installation option under different OS or cloud-hosted configurations, please create a how-to document and submit a pull requests.
 
 ## How to use with your own On-Premise VersionOne
 
-If you have your own instance of VersionOne installed on premise, and have full access to the IIS server, then 
-you have two options for installing the Requestor:
+If you have your own instance of VersionOne installed on premise, and have full access to the IIS server, then the easiest thing to do is this:
 
-* One, you can host it on any web server, whether IIS or not, **but then you must configure CORS support in IIS where VersionOne is installed.**
-* Or, you can place the files in a `Requestor` folder under the `<VersionOne Installation Location>\Custom` 
-folder. If you do this, then you do not need to enable CORS.
+* Modify the `config.js` file as described in the `Configure for VersionOne Projects` section below.
+* Next, under `<VersionOne Installation Location>\Custom`, create a new folder named `Requestor` and copy all the files into it.
+* **Note:** If you have the `Active Directory` authentication option configured for VersionOne, you'll need to ensure that **ASP Impersonation** is enabled in IIS, and that `Anonymous Authentication` is disabled.
 
-### Configuration needed by both options
+You should now be able to navigate to the site at [http://localhost/VersionOne/Custom/Requestor](http://localhost/VersionOne/Custom/Requestor).
 
-At a minimum, we know that if you have the `Active Directory` authentication option configured, you'll need to ensure that ASP Impersonation is enabled in IIS, and that `Anonymous Authentication` is disabled.
+## How to run as a stand-alone Node.js process for On-Premise installations or Hosted instances
 
-### Option 1: Configure a new IIS Application or Virtual Directory to serve the Requestor
+If you have a Hosted VersionOne instance, then you have two option types for running the Requestor. 
 
-To let IIS serve the files for you:
+First, modify the `config.js`, and possibly the `fields.js` file as described by the `Configure for VersionOne Projects` section below. **Note**: you need to embed a username and password for the VersionOne user who will 
 
-1. Clone this repository or download the files as a zip and place the contents of the `VersionOne.FeatureRequestor` folder into a directory, such as `C:\inetpub\wwwroot\v1requestor`.
-2. In IIS, from the `Connections` panel, open `Sites` and select or create a site.
-3. Right click on the site and select `Add Application` or `Add Virtual Directory`.
-4. Enter `v1requestor` for `Alias`, and for `Physical Path` put the directory you used in step 1.
-5. Click `Ok`.
-6. **Option A:** Enable [CORS](http://enable-cors.org/) in your VersionOne instance within IIS by selecting its
-app or virtual directory node, then select HTTP Response Headers and add these::
+1. Run the provided Node.js web server on a server in your own internal network
+2. Deploy the code to a cloud-hosted provider. We have documented [How To Deploy Requestor to Heroku for Free via a single click](HowTo-DeployInHeroku.md).
 
-    > Access-Control-Allow-Methods = GET, PUT, POST, DELETE, OPTIONS
-    
-    > Access-Control-Allow-Origin = *
-    
-    > Access-Control-Allow-Headers = Authorization, Content-Type
-
-	**Option B:**
-If you cannot or want to enable CORS in your VersionOne instance server you can use our CorsProxy which will seat between requestor and your VersionOne instance, without needing to change IIS. 
-For more information about how to install CorsProxy go to [https://github.com/versionone/VersionOne.CorsProxy](https://github.com/versionone/VersionOne.CorsProxy) (it is just one click!).	
-
-7. Browse to the new site. If you placed it directly into the default site, the address should be 
-[`http://localhost/v1requestor`](http://localhost/v1requestor).
-8. See the `Configure for VersionOne Projects` section below. 
-
-### Option 2: Deploy to `Custom` folder of your VersionOne instance
-
-TODO
-
-## Deploying without a web server (with caveats)
-
-While it's probably better to install on a web server, you can actually run the Feature Requestor from a file share, but you have to enable a special flag in Google Chrome to do so. But, it appears this feature of Chrome was "rushed", so if you really want to do it, [read about the `--allow-file-access-from-files` Chrome option](http://stackoverflow.com/questions/4270999/google-chrome-allow-file-access-from-files-disabled-for-chrome-beta-8).
-
-## Use with Hosted, On-Demand VersionOne
-
-If you use the VersionOne On-Demand, hosted service, we are still working on documentation for that. Contact us 
-directly through VersionOne Support if you want to use it with an On-Demand VersionOne instance.
+**If you figure out another option for how to deploy it, please send us a pull request with a file named like: *HowTo-DeployIn<provider>.md***
 
 ## Configure for VersionOne Projects
 
@@ -90,22 +59,27 @@ There are two configuration files:
 ## config.js
 
 Most importantly, change the `host`, `service`, and `versionOneAuth` variables to point to your own VersionOne instance. By default, they point to the VersionOne test instance.
-**Note:** If you are using corsproxy remember to put its url before the one from VersionOne like in the next example:
+
+**Note:** Unless you deployed the code into the `Custom` folder of your On-Premise VersionOne instance, then you must remember to put the URL of the server in a special format.
 
 ```javascript
-host = 'http://yourCorsProxy/https://www.v1host.com';
+host = 'http://where-you-deployed-requestor.com/pt/https://www.v1host.com';
 service = host + '/v1instance/rest-1.v1/Data/';
 ```
 
+The first part of the host, `http://where-you-deployed-requestor.com/pt/`, is the address to the Node.js based web server, including the special `/pt/` route, which handles [CORS proxying](http://enable-cors.org/) since the VersionOne system does not support CORS inherently. The second part, for example `https://www.v1host.com`, is the actual server base address where your VersionOne instance is installed.
+
+The `service` variable simply tacks on the instance and REST api endpoint pathing to the `host` variable.
+
 ### host
 
-*Url, default: http://eval.versionone.net*
+*Url, default: https://www14.v1host.com*
 
 The web server address where your VersionOne instance is locaated, most likely something like `http://www7.v1host.com` or `http://www11.v1host.com`.
 
 ### service
 
-*Url, default: http://eval.versionone.net/platformtest/rest-1.v1/Data/*
+*Url, default: https://www14.v1host.com/v1sdktesting/rest-1.v1/Data/*
 
 The complete url for the Versionone REST API endpoint for your instance, ending with a `/`. If you log in to your instance at `http://www11.v1host.com/TeamAwesome`, then your REST API endpoint url is `http://www11.v1host.com/TeamAwesome/rest-1.v1/Data/`.
 
@@ -211,9 +185,9 @@ Priority: {
 }
 ```
 
-A Request asset has a `Request.Priority` attribute, which is of type RequestPriority. You can see that in the meta data for a Request at: [http://eval.versionone.net/platformtest/meta.v1/Request?xsl=api.xsl](http://eval.versionone.net/platformtest/meta.v1/Request?xsl=api.xsl)
+A Request asset has a `Request.Priority` attribute, which is of type RequestPriority. You can see that in the meta data for a Request at: [https://www14.v1host.com/v1sdktesting/meta.v1/Request?xsl=api.xsl](https://www14.v1host.com/v1sdktesting/meta.v1/Request?xsl=api.xsl)
 
-And, you can find the list of possible values at [http://eval.versionone.net/platformtest/rest-1.v1/Data/RequestPriority](http://eval.versionone.net/platformtest/rest-1.v1/Data/RequestPriority)
+And, you can find the list of possible values at [https://www14.v1host.com/v1sdktesting/rest-1.v1/Data/RequestPriority](https://www14.v1host.com/v1sdktesting/rest-1.v1/Data/RequestPriority)
 
 In the `Specify fields for specific projects` section, you'll see this:
 
