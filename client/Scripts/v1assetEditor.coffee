@@ -41,7 +41,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
         options.queryOpts = accept: contentType
         options.contentType = contentType      
         for key of options
-          @[key] = options[key]      
+          @[key] = options[key] 
         @initialize()
       
       contentType = "application/json"
@@ -62,7 +62,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
     debug: (message) ->
       log message if @showDebug
 
-    initialize: ->
+    initialize: ->      
       @requestorName = ""
       @refreshFieldSet "default"
       
@@ -130,7 +130,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
           projects = $("#projects").empty()
           for val in data
             @projectItemAppend val
-          projects.listview "refresh"
+          projects.listview().listview "refresh"
           $.mobile.loading('hide')
         ).fail(@_ajaxFail)
 
@@ -152,6 +152,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
           @newAsset()
 
     configureListPage: ->
+      console.log("ssdfsd");
       assets = $("#assets")
       assets.empty()
       assets.listview()
@@ -187,7 +188,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
         info "Found " + data.length + " requests"
         for item, i in data
           @listAppend item
-        assets.listview "refresh"
+        assets.listview().listview "refresh"
       ).fail @_ajaxFail
       @changePage "#list"
 
@@ -250,7 +251,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
       templ = @listItemFormat(item)
       assets = $("#assets")
       assets.prepend templ
-      assets.listview "refresh"
+      assets.listview().listview "refresh"
 
     _normalizeIdWithoutMoment: (item) ->
       id = item._links.self.id
@@ -276,7 +277,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
         listItem = $(this)      
         #var newItem = @listItemFormat(item);
         listItem.closest("li").replaceWith templ
-      assets.listview "refresh"
+      assets.listview().listview "refresh"
 
     newAsset: (modelData, href) ->
       @configSelectLists().done =>
@@ -307,30 +308,31 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
       selectLists = []
       for key, value of model
         selectLists.push value if value.options.length < 1 if value.type is "Select"
-
+      that = @	
       for field in selectLists
-        assetName = field.editorAttrs["data-assetName"]
-        fields = field.formFields
-        fields = ["Name"] if not fields? or fields.length is 0
-        url = @service + assetName + "?" + $.param(@queryOpts) + "&" + $.param(
-          sel: fields.join(",")
-          sort: "Order"
-        )
-        request = @createRequest(
-          url: url
-          type: "GET"
-        )
-        ajaxRequest = $.ajax(request).done((data) =>
-          data = v1json.jsonClean(data)
-          if data.length > 0
-            for option in data
-              field.options.push
-                val: option._links.self.id
-                label: option.Name
-          else
-            @debug "No results for query: " + url
-        ).fail(@_ajaxFail)
-        ajaxRequests.push ajaxRequest
+        do (field) ->  
+          assetName = field.editorAttrs["data-assetName"]
+          fields = field.formFields
+          fields = ["Name"] if not fields? or fields.length is 0
+          url = that.service + assetName + "?" + $.param(that.queryOpts) + "&" + $.param(
+            sel: fields.join(",")
+            sort: "Order"
+          )
+          request = that.createRequest(
+            url: url
+            type: "GET"
+          )
+          ajaxRequest = $.ajax(request).done((data) =>
+            data = v1json.jsonClean(data)
+            if data.length > 0
+              for option in data
+                field.options.push
+                  val: option._links.self.id
+                  label: option.Name
+            else
+              that.debug "No results for query: " + url
+          ).fail(that._ajaxFail)
+          ajaxRequests.push ajaxRequest
 
       return promise if @resolveIfEmpty(promise, ajaxRequests)
       
@@ -446,7 +448,7 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
         url: url
         type: "POST"
         data: payload
-        # contentType: @contentType
+        contentType: "application/xml"
       )
       $.ajax(request).done((data) =>
         data = v1json.jsonClean(data)
@@ -485,10 +487,9 @@ define ["backbone", "underscore", "toastr", "jquery", "v1json", "jquery.mobile",
             $(this).val ""
             $(this).textinput()    
       '''
-      sel = $("[name='Priority']")
-      sel.selectmenu()
+      sel = $("[name='Priority']")      
       sel.val "RequestPriority:167"
-      sel.selectmenu "refresh"
+      sel.selectmenu().selectmenu "refresh"
       '''
 
     enumFields: (callback) ->
