@@ -6,7 +6,7 @@ When seeking input on the backlog, would it encourage collaboration with more st
 
 For more about the features of the VersionOne Requestor, see the blog post on [Introduction and Why You'd Need It](http://blogs.versionone.com/agile-development/2013/02/07/feature-requestor-what-and-why/)
 
-![Feature Requestor](https://raw.githubusercontent.com/versionone/VersionOne.Client.Requestor/master/blog/part02/requestor-07-update.png)
+![Feature Requestor](https://raw.githubusercontent.com/versionone/VersionOne.Client.Requestor/master/client/images/requestor-07-update.png)
 
 For broader collaboration including external customers, and deeper collaboration including comments and voting, check out [VersionOne Ideas](http://www.versionone.com/Product/agile-idea-management-tool/).
 
