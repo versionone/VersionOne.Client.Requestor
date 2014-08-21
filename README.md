@@ -23,7 +23,7 @@ For broader collaboration including external customers, and deeper collaboration
 This tool has been tested with Google Chrome, and partially with Mozilla Firefox. It is known that it does 
 not work with IE 9, but has not been tested on later versions. If you try it on other browsers and it works,
 please let us know so we can update this.
-c
+
 ### Implementation
 
 It's implemented in 100% HTML, CSS, and JavaScript/CoffeeScript and uses several popular open source libraries like jQueryMobile, Backbone.js, and Backbone Forms.
@@ -66,30 +66,32 @@ There are two configuration files:
 
 ## config.js
 
-Most importantly, change the `host`, `service`, and `versionOneAuth` variables to point to your own VersionOne instance. By default, they point to the VersionOne test instance.
+Most importantly, change the `host`, `service`, and `versionOneAuth` variables to point to your own VersionOne instance. By default, the settings expect that you are running the sever.js process from Node.js and are proxying through it to the public VersionOne test instance. That's what the `/pt/https://www.v1host.com` default means.
 
-**Note:** Unless you deployed the code into the `Custom` folder of your On-Premise VersionOne instance, then you must remember to put the URL of the server in a special format.
+**Note:** If you deployed the code into the `Custom` folder of your On-Premise VersionOne instance, then you should just set `host = ''`, because it is running on the same server as the `service` itself.
 
 ```javascript
-host = 'http://where-you-deployed-requestor.com/pt/https://www.v1host.com';
+host = '/pt/https://www.v1host.com';
 service = host + '/v1instance/rest-1.v1/Data/';
 ```
 
-The first part of the host, `http://where-you-deployed-requestor.com/pt/`, is the address to the Node.js based web server, including the special `/pt/` route, which handles [CORS proxying](http://enable-cors.org/) since the VersionOne system does not support CORS inherently. The second part, for example `https://www.v1host.com`, is the actual server base address where your VersionOne instance is installed.
+The odd looking path, `/pt/`, is simply the "pass through" route that the Node.js based server.js file uses to handle [CORS proxying](http://enable-cors.org/) since the VersionOne system does not support CORS inherently. The second part, for example `https://www.v1host.com`, is the actual server base address where your VersionOne instance is installed.
 
 The `service` variable simply tacks on the instance and REST api endpoint pathing to the `host` variable.
 
 ### host
 
-*Url, default: https://www14.v1host.com*
+*Url, default: /pt/https://www14.v1host.com*
 
-The web server address where your VersionOne instance is locaated, most likely something like `http://www7.v1host.com` or `http://www11.v1host.com`.
+As explained above, only set this if you are running the Node.js server.js process and need to proxy through to a hosted VersionOne instance. It's important that you keep the `/pt/` in front of the actual server host address because the server.js process responds to requests coming to this route by proxying them through to the actual target host.
 
 ### service
 
-*Url, default: https://www14.v1host.com/v1sdktesting/rest-1.v1/Data/*
+*Url, default: /pt/https://www14.v1host.com/v1sdktesting/rest-1.v1/Data/*
 
-The complete url for the Versionone REST API endpoint for your instance, ending with a `/`. If you log in to your instance at `http://www11.v1host.com/TeamAwesome`, then your REST API endpoint url is `http://www11.v1host.com/TeamAwesome/rest-1.v1/Data/`.
+The complete proxied url for the VersionOne REST API endpoint for your hosted instance, ending with a `/`; or, the relative path if you have deployed the Requestor into your On-Premise instances's Custom folder as describedf abobe. 
+
+If you log in to your instance at `http://www11.v1host.com/TeamAwesome`, then your REST API endpoint url is `http://www11.v1host.com/TeamAwesome/rest-1.v1/Data/`.
 
 ### versionOneAuth
 
