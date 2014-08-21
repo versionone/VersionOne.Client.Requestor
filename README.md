@@ -161,7 +161,7 @@ The label to appear above the input field.
 
 *Backbone Forms field type, default: text*
 
-Specifies the input element type for the field, based on [Backbone Forms](https://github.com/powmedia/backbone-forms) field types. You can compare this with the meta data for the field to get it right -- see [VersionOne Meta API](http://community.versionone.com/sdk/Documentation/MetaAPI.aspx).
+Specifies the input element type for the field, based on [Backbone Forms](https://github.com/powmedia/backbone-forms) field types. You can compare this with the meta data for the field to get it right -- see [VersionOne Meta API](http://community.versionone.com/Developers/Developer-Library/Documentation/API/Endpoints/meta.v1).
 
 ### autofocus
 
