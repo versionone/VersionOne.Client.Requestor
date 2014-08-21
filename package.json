@@ -1,7 +1,7 @@
 {
   "name": "VersionOne.Client.Requestor",
   "version": "0.0.1",
-  "description": "Requestor lets users submit and edit Requests in VersionOne via its REST API, without requiring each user to have a VersionOne license.",
+  "description": "A web application for collecting VersionOne Requests from stakeholders without VersionOne logins",
   "main": "server.js",
   "repository": "https://github.com/versionone/VersionOne.Client.Requestor",
   "dependencies": {
