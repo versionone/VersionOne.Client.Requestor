@@ -1,4 +1,4 @@
-![Powered by VersionOne](https://raw.githubusercontent.com/versionone/VersionOne.Client.Requestor/master/VersionOne.FeatureRequestor/images/poweredbyv1.png)
+![Powered by VersionOne](https://raw.githubusercontent.com/versionone/VersionOne.Client.Requestor/master/client/images/poweredbyv1.png)
 
 ## Introduction
 
@@ -250,7 +250,7 @@ For a sepcific project, you define fields with a key named after the project's S
 The main source for the app is actually CoffeeScript. It's been compiled to JavaScript, and those files are here in the repository, but if you'd prefer to customize the code in CoffeeScript rather than muck with JavaScript, then do this:
 
 1. Install [Node.js](http://nodejs.org/) if you don't already have it.
-2. Open a command prompt and change directory to where the `VersionOne.FeatureRequestor` folder is in your local repository clone.
+2. Open a command prompt and change directory to where the `VersionOne.Client.Requestor` folder is in your local repository clone.
 3. Type `npm install coffee-script` (Or, [see alternatives for installing CoffeeScript](http://coffeescript.org/#installation)).
 4. Type `./make.sh` to execute the CoffeeScript compiler. This is a simple script that regenerates a few `.js` files from the `.coffee` files in the project.
 
