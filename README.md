@@ -2,7 +2,7 @@
 
 ## VersionOne Requestor Client
 
-Requestor lets users submit and edit Requests in VersionOne via its REST API, without requiring each user to have a VersionOne license.
+Requestor lets stakeholders submit and edit Requests in VersionOne via its REST API, without requiring each stakeholder to have a VersionOne login.
 
 You can configure it to use custom fields that you've added to your own VersionOne instance.
 
