@@ -1,8 +1,8 @@
 define ['./fields'], (fields) ->
   showDebugMessages = true
   
-  host = 'http://eval.versionone.net';
-  service = 'http://eval.versionone.net/platformtest/rest-1.v1/Data/';
+  host = 'https://www14.v1host.com/v1sdktesting';
+  service = 'https://www14.v1host.com/v1sdktesting/rest-1.v1/Data/';
   versionOneAuth = 'admin:admin';
   
   #host = 'http://localhost';
