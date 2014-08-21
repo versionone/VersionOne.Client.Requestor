@@ -1,1 +1,1 @@
-web: node VersionOne.CorsProxy.js
+web: node server.js
