@@ -5,7 +5,7 @@
 
     showDebugMessages = true;
     host = 'http://localhost:5000/pt/https://www14.v1host.com';
-    service = host + '/v1sdktesting/Data/';
+    service = host + '/v1sdktesting/rest-1.v1/Data/';
     versionOneAuth = 'admin:admin';
     serviceGateway = false;
     assetName = "Request";
