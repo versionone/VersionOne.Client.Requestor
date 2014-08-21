@@ -55,7 +55,7 @@ First, modify the `config.js`, and possibly the `fields.js` file as described by
 1. Run the provided Node.js web server on a server in your own internal network
 2. Deploy the code to a cloud-hosted provider. We have documented [How To Deploy Requestor to Heroku for Free via a single click](HowTo-DeployInHeroku.md).
 
-**If you figure out another option for how to deploy it, please send us a pull request with a file named like: *HowTo-DeployIn<provider>.md***
+**If you figure out another option for how to deploy it, please send us a pull request with a file named like: *HowTo-DeployIn&lt;provider&gt;.md***
 
 ## Configure for VersionOne Projects
 
