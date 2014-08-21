@@ -1,13 +1,9 @@
 define ['./fields'], (fields) ->
   showDebugMessages = true
   
-  host = 'https://www14.v1host.com/v1sdktesting';
-  service = 'https://www14.v1host.com/v1sdktesting/rest-1.v1/Data/';
-  versionOneAuth = 'admin:admin';
-  
-  #host = 'http://localhost';
-  #service = 'http://localhost/VersionOne.Web/rest-1.v1/Data/';
-  #versionOneAuth = 'admin:admin';
+  host = '/pt/https://www14.v1host.com';
+  service = host + '/v1sdktesting/rest-1.v1/Data/';
+  versionOneAuth = 'admin:admin'; 
 
   serviceGateway = false
   
