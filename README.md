@@ -81,17 +81,17 @@ The `service` variable simply tacks on the instance and REST api endpoint pathin
 
 ### host
 
-*Url, default: /pt/https://www14.v1host.com*
+*Url, default: `/pt/https://www14.v1host.com`*
 
 As explained above, only set this if you are running the Node.js server.js process and need to proxy through to a hosted VersionOne instance. It's important that you keep the `/pt/` in front of the actual server host address because the server.js process responds to requests coming to this route by proxying them through to the actual target host.
 
 ### service
 
-*Url, default: /pt/https://www14.v1host.com/v1sdktesting/rest-1.v1/Data/*
+*Url, default: `/pt/https://www14.v1host.com/v1sdktesting/rest-1.v1/Data/`*
 
-The complete proxied url for the VersionOne REST API endpoint for your hosted instance, ending with a `/`; or, the relative path if you have deployed the Requestor into your On-Premise instances's Custom folder as describedf abobe. 
+The complete proxied url for the VersionOne REST API endpoint for your hosted instance, ending with a `/`; or, the relative path if you have deployed the Requestor into your On-Premise instances's Custom folder as described abobe. 
 
-If you log in to your instance at `http://www11.v1host.com/TeamAwesome`, then your REST API endpoint url is `http://www11.v1host.com/TeamAwesome/rest-1.v1/Data/`.
+If you log in to your instance at `https://www11.v1host.com/TeamAwesome`, then your REST API endpoint url is `https://www11.v1host.com/TeamAwesome/rest-1.v1/Data/`.
 
 ### versionOneAuth
 
