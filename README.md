@@ -1,6 +1,14 @@
 ![Powered by VersionOne](https://raw.githubusercontent.com/versionone/VersionOne.Client.Requestor/master/client/images/poweredbyv1.png)
 
-## Introduction
+## VersionOne Requestor Client
+
+The Requestor is a simple way for internal stakeholders to submit and edit requests for new features or to report defects, without having access to the full VersionOne application or knowledge of your VersionOne project structure. 
+
+You can configure it to use custom fields that you've added to your own VersionOne instance.
+
+The source code is free and open source, and we encourage you to improve it and submit pull requests!
+
+## Background
 
 When seeking input on the backlog, would it encourage collaboration with more stakeholders across the organization if they could submit requests to a simple, stand-alone web application, without having to login and navigate an agile project management tool? The VersionOne Requestor is a single-page web application that can be customized with custom fields and your organization's style. The Requestor is a simple way for internal stakeholders to submit and edit requests for new features or to report defects, without having access to the full VersionOne application or knowledge of your VersionOne project structure. So what? Stakeholders are infrequent users of agile project management software; hence, they often forget the right combination of menu options and project structure to submit requests in the right place. By removing these obstacles to collaboration, more stakeholders can provide feedback without frustration.
 
@@ -253,4 +261,3 @@ The main source for the app is actually CoffeeScript. It's been compiled to Java
 2. Open a command prompt and change directory to where the `VersionOne.Client.Requestor` folder is in your local repository clone.
 3. Type `npm install coffee-script` (Or, [see alternatives for installing CoffeeScript](http://coffeescript.org/#installation)).
 4. Type `./make.sh` to execute the CoffeeScript compiler. This is a simple script that regenerates a few `.js` files from the `.coffee` files in the project.
-
