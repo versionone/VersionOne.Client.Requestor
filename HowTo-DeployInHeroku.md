@@ -19,7 +19,7 @@ You can deploy this code in Heroku under a free account. But, first you want to 
 ##Deploy
 If you want to quickly deploy without needing to host the proxy yourself you just need to click the next button:
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/versionone/VersionOne.Client.Requestor)
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/versionone/VersionOne.Client.Requestor/tree/S-45195_single_server)
 
 You only need to create a free heroku account if you don't already have one.
 
