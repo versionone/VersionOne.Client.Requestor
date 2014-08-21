@@ -253,3 +253,4 @@ The main source for the app is actually CoffeeScript. It's been compiled to Java
 2. Open a command prompt and change directory to where the `VersionOne.FeatureRequestor` folder is in your local repository clone.
 3. Type `npm install coffee-script` (Or, [see alternatives for installing CoffeeScript](http://coffeescript.org/#installation)).
 4. Type `./make.sh` to execute the CoffeeScript compiler. This is a simple script that regenerates a few `.js` files from the `.coffee` files in the project.
+

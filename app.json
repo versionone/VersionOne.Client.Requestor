@@ -1,7 +1,7 @@
 {
-  "name": "versionone-corsproxy",
+  "name": "VersionOne-Client-Requestor",
   "description": "A proxy so we can make cross-domain calls to servers without CORS enabled.",
-  "repository": "https://github.com/kunzimariano/VersionOne.CorsProxy",
+  "repository": "https://github.com/veplechuc/VersionOne.Client.Requestor",
   "logo": "https://raw.github.com/versionone/VersionOne.Requestor.NET/master/VersionOne.FeatureRequestor/images/poweredbyv1.png",
   "keywords": ["node", "cors", "proxy", "VersionOne"]
 }
