@@ -26,7 +26,7 @@ It's designed to be easily customizable for different custom fields and server l
 
 ### Contributing
 
-We also welcome contributions! Please send pull requests! If you figure out specific instructions for using the Node.JS based installation option under different OS or cloud-hosted configurations, please create a how-to document and submit a pull requests.
+We also welcome contributions! Please send pull requests! If you figure out specific instructions for using the Node.JS based installation option under different OS or cloud-hosted configurations, please create a how-to document and submit a pull request. **See the [HowTo-DeployInHeroku.md](HowTo-DeployInHeroku.md) doc for an example.**
 
 ## How to use with your own On-Premise VersionOne
 
