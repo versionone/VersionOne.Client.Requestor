@@ -1,7 +1,7 @@
 {
   "name": "VersionOne.Client.Requestor",
   "version": "0.0.1",
-  "description": "Requestor is a simple way for internal stakeholders to submit and edit requests for new features or to report defects, without having access to the full VersionOne application or knowledge of your VersionOne project structure.",
+  "description": "Requestor lets users submit and edit Requests in VersionOne via its REST API, without requiring each user to have a VersionOne license.",
   "main": "server.js",
   "repository": "https://github.com/versionone/VersionOne.Client.Requestor",
   "dependencies": {
