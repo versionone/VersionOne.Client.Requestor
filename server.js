@@ -1,8 +1,13 @@
 var bodyParser = require('body-parser');
-var request = require('request');
+var httpntlm = require('httpntlm');
 var express = require('express');
 var app = express();
 var cors = require('cors');
+
+var username = 'v1admin';
+var password = 'v1admin#$';
+var workstation = '';
+var domain = '';
 
 app.use(bodyParser.text({ type : 'application/xml' }));
 app.use(cors());
@@ -40,13 +45,17 @@ app.get('/pt/*', function (req, res, next) {
         var options = {
             url: url,
             method: 'GET',
+            username: username,
+            password: password,
+            domain: domain,
+            workstation: workstation,
             headers: getHeaders(req.headers)
         };
         
-        request(options, function (error, response, body) {
+        httpntlm.get(options, function (error, response) {
             if (error) throw error.message;
             addHeaders(res, getHeaders(response.headers));
-            res.end(body);
+            res.end(response.body);
         });
     } catch (exception) {
         responseError(res, exception);
@@ -58,14 +67,18 @@ app.post('/pt/*', function (req, res, next) {
         var options = {
             url: getUrl(req.url),
             method: 'POST',
+            username: username,
+            password: password,
+            domain: domain,
+            workstation: workstation,            
             body: req.body,
             headers: getHeaders(req.headers)
         };
         
-        request(options, function (error, response, body) {
+        httpntlm.post(options, function (error, response) {
             if (error) throw error.message;
             addHeaders(res, getHeaders(response.headers));
-            res.status(200).send(body);
+            res.status(200).send(response.body);
         });
     } catch (exception) {
         responseError(res, exception);

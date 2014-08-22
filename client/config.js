@@ -3,9 +3,9 @@
   define(['./fields'], function(fields) {
     var assetName, configureFields, host, options, projectListClickTarget, service, serviceGateway, showDebugMessages, versionOneAuth;
     showDebugMessages = true;
-    host = '/pt/https://www14.v1host.com';
-    service = host + '/v1sdktesting/rest-1.v1/Data/';
-    versionOneAuth = 'admin:admin';
+    host = '/pt/http://54.205.161.58';
+    service = host + '/VersionOne/rest-1.v1/Data/';
+    versionOneAuth = 'nothing:special';
     serviceGateway = false;
     assetName = "Request";
     projectListClickTarget = 'new';
