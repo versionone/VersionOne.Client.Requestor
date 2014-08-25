@@ -73,7 +73,7 @@ After those are installed, do this:
   },
 ```
 * Type `npm install winser` to install the [WinSer](https://www.npmjs.org/package/winser) node package.
-* Finally, type `npm run-script install-windows-service` to install the Requestor as a Windows server. 
+* Finally, type `npm run-script install-windows-service` to install the Requestor as a Windows service. 
 * Open a web browser and you should now be able to access the Requestor at [http://localhost:5000/index.html](http://localhost:5000/index.html)!
 
 
