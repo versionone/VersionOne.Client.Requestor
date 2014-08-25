@@ -57,7 +57,7 @@ If you have a Hosted VersionOne instance, then you have two option types for run
 
 First, make sure you have [Node.js](http://nodejs.org/) and [Git for Windows](http://msysgit.github.io/) installed on the server on which you plan to install Requestor.
 
-When those are install, do this:
+After those are installed, do this:
 
 * Open a Git Bash prompt.
 * Navigate to a folder where you would like to install the Requestor, for example `C:\WebApps`, by typing `cd /c/WebApps`
