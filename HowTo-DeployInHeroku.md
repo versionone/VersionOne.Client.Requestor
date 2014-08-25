@@ -17,5 +17,7 @@ If you do it this way, you should take care to create a user in your VersionOne 
 * Open up this document you are reading right now and modify the code for the **Deploy** button that you see below by swapping the `https://github.com/versionone` part with the path to your newly forked copy.
 * Save the file.
 * Press the *Deploy* button! This will walk you through the steps to create the free account and the app!
+* Once finished the app will be available at `<appname_chosen>.herokuapp.com`
+
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/versionone/VersionOne.Client.Requestor/)
