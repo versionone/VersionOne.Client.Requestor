@@ -40,9 +40,12 @@ We also welcome contributions! Please send pull requests! If you figure out spec
 
 If you have your own instance of VersionOne installed on premise, and have full access to the IIS server, then the easiest thing to do is this:
 
-* Modify the `config.js` file as described in the `Configure for VersionOne Projects` section below.
-* Next, under `<VersionOne Installation Location>\Custom`, create a new folder named `Requestor` and copy all the files into it.
-* **Note:** If you have the `Active Directory` authentication option configured for VersionOne, you'll need to ensure that **ASP Impersonation** is enabled in IIS, and that `Anonymous Authentication` is disabled.
+* Copy all the files from the `client` directory in this repo to a new folder named `Requestor` in your `<VersionOne Installation Location>\Custom`folder.
+* Next, modify the `config.js` file as described in the `Configure for VersionOne Projects` section below, setting  `host = ''` along with the other changes.
+* **Notes:** 
+  1. The standard installation directory for a local instance of VersionOne is `C:\inetpub\wwwroot\VersionOne`, also you may need to create the `Custom` folder if it does not exist.
+  2. If you have the `Active Directory` authentication option configured for VersionOne, you'll need to ensure that **ASP Impersonation** is enabled in IIS, and that `Anonymous Authentication` is disabled.
+
 
 You should now be able to navigate to the site at [http://localhost/VersionOne/Custom/Requestor](http://localhost/VersionOne/Custom/Requestor).
 
@@ -68,7 +71,7 @@ There are two configuration files:
 
 Most importantly, change the `host`, `service`, and `versionOneAuth` variables to point to your own VersionOne instance. By default, the settings expect that you are running the sever.js process from Node.js and are proxying through it to the public VersionOne test instance. That's what the `/pt/https://www.v1host.com` default means.
 
-**Note:** If you deployed the code into the `Custom` folder of your On-Premise VersionOne instance, then you should just set `host = ''`, because it is running on the same server as the `service` itself.
+**Note:** If you deployed the code into the `Custom` folder of your On-Premise VersionOne instance as mention [above](https://github.com/versionone/VersionOne.Client.Requestor/blob/master/READMETOO.md#how-to-use-with-your-own-on-premise-versionone), then you should just set `host = ''`, because it is running on the same server as the `service` itself.
 
 ```javascript
 host = '/pt/https://www.v1host.com';
