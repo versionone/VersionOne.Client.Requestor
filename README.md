@@ -51,12 +51,35 @@ You should now be able to navigate to the site at [http://localhost/VersionOne/C
 
 ## How to run as a stand-alone Node.js process for On-Premise installations or Hosted instances
 
-If you have a Hosted VersionOne instance, then you have two option types for running the Requestor. 
+If you have a Hosted VersionOne instance, then you have two option types for running the Requestor: locally in your own network, or on a public cloud provider. 
 
-First, modify the `config.js`, and possibly the `fields.js` file as described by the `Configure for VersionOne Projects` section below. **Note**: you need to embed a username and password for the VersionOne user who will 
+### How to run as a Windows service in your own local network
 
-1. Run the provided Node.js web server on a server in your own internal network
-2. Deploy the code to a cloud-hosted provider. We have documented [How To Deploy Requestor to Heroku for Free via a single click](HowTo-DeployInHeroku.md).
+First, make sure you have [Node.js](http://nodejs.org/) and [Git for Windows](http://msysgit.github.io/) installed on the server on which you plan to install Requestor.
+
+When those are install, do this:
+
+* Open a Git Bash prompt.
+* Navigate to a folder where you would like to install the Requestor, for example `C:\WebApps`, by typing `cd /c/WebApps`
+* Type `git clone https://github.com/versionone/VersionOne.Client.Requestor.git`.
+* Type `cd VersionOne.Client.Requestor` to change into the newly cloned repository directory.
+* Follow the steps in [Configure for VersionOne Projects](#configure-for-versionone-projects) for editing the `config.js` and `fields.js` files to meet your needs.
+* Modify the `package.json` file such that the `scripts` property looks like this (simply prefixing **node** to the `start` sub-property's value):
+```json
+  "scripts": {
+    "start": "node server.js",
+    "install-windows-service": "winser -i -a",
+    "uninstall-windows-service": "winser -r -a"
+  },
+```
+* Type `npm install winser` to install the [WinSer](https://www.npmjs.org/package/winser) node package.
+* Finally, type `npm run-script install-windows-service` to install the Requestor as a Windows server. 
+* Open a web browser and you should now be able to access the Requestor at [http://localhost:5000/index.html](http://localhost:5000/index.html)!
+
+
+### How to Deploy Requestor to Heroku for Free via a single click
+
+[We've documented this process in this guide](HowTo-DeployInHeroku.md).
 
 **If you figure out another option for how to deploy it, please send us a pull request with a file named like: *HowTo-DeployIn&lt;provider&gt;.md***
 
@@ -64,14 +87,14 @@ First, modify the `config.js`, and possibly the `fields.js` file as described by
 
 There are two configuration files:
 
-1. config.js (or config.coffee) -- specifies the URL for VersionOne and a few other options
-2. fields.js (or fields.coffee) -- specifies the projects and fields you want to display on the request form for each project
+1. config.js -- specifies the URL for VersionOne and a few other options
+2. fields.js -- specifies the projects and fields you want to display on the request form for each project
 
 ## config.js
 
 Most importantly, change the `host`, `service`, and `versionOneAuth` variables to point to your own VersionOne instance. By default, the settings expect that you are running the sever.js process from Node.js and are proxying through it to the public VersionOne test instance. That's what the `/pt/https://www.v1host.com` default means.
 
-**Note:** If you deployed the code into the `Custom` folder of your On-Premise VersionOne instance as mention [above](https://github.com/versionone/VersionOne.Client.Requestor/blob/master/READMETOO.md#how-to-use-with-your-own-on-premise-versionone), then you should just set `host = ''`, because it is running on the same server as the `service` itself.
+**Note:** If you deployed the code into the `Custom` folder of your On-Premise VersionOne instance as [mentioned above](https://github.com/versionone/VersionOne.Client.Requestor/blob/master/READMETOO.md#how-to-use-with-your-own-on-premise-versionone), then you should just set `host = ''`, because it is running on the same server as the `service` itself.
 
 ```javascript
 host = '/pt/https://www.v1host.com';
@@ -81,6 +104,8 @@ service = host + '/v1instance/rest-1.v1/Data/';
 The odd looking path, `/pt/`, is simply the "pass through" route that the Node.js based server.js file uses to handle [CORS proxying](http://enable-cors.org/) since the VersionOne system does not support CORS inherently. The second part, for example `https://www.v1host.com`, is the actual server base address where your VersionOne instance is installed.
 
 The `service` variable simply tacks on the instance and REST api endpoint pathing to the `host` variable.
+
+**Note:** We have an issue open for modifying the code to allow configuring the remote server and authentication on the server side, instead of passing it from the client. We welcome a pull request for this solution, as we're not able to do it at this time.
 
 ### host
 
