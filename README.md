@@ -6,7 +6,7 @@ Requestor lets stakeholders submit and edit Requests in VersionOne via its REST 
 
 You can configure it to use custom fields that you've added to your own VersionOne instance.
 
-The source code is free and open source, and we encourage you to improve it and submit pull requests!
+The source code is free and open source, and we encourage you to improve it and [submit pull requests](https://help.github.com/articles/using-pull-requests)!
 
 ## Background
 
@@ -36,9 +36,9 @@ It's designed to be easily customizable for different custom fields and server l
 
 We also welcome contributions! [Please send pull requests](https://help.github.com/articles/using-pull-requests)! If you figure out specific instructions for using the Node.JS based installation option under different OS or cloud-hosted configurations, please create a how-to document and submit a pull request. **See the [HowTo-DeployInHeroku.md](HowTo-DeployInHeroku.md) doc for an example.**
 
-## Community supported code (not VersionOne ZenDesk supported)
+## Community supported code (not VersionOne supported)
 
-Since this is an open source, community supported project, VersionOne does not support installing this code into its On-Demand / Hosted environment. Instead, see the various methods for running this code below. Also, please use GitHub issues for documenting your questions and ideas, as VersionOne will not answer questions via ZenDesk about this code.
+Since this is an open source, community supported project, VersionOne does not support installing this code into its On-Demand / Hosted environment. Instead, see the various methods for running this code below. Also, please use GitHub issues for documenting your questions and ideas, as VersionOne will not answer questions via its helpdesk about this code.
 
 ## How to use with your own On-Premise VersionOne
 
@@ -132,8 +132,6 @@ If you log in to your instance at `https://www11.v1host.com/TeamAwesome`, then y
 Authentication credentials for a user that can submit a feature request into the projects you specify in `fields.js`. You should take care to give this user only the permissions you want, perhaps only to add requests for those projects. 
 
 This must be in the form of `username:password`. This value gets [Base64-encoded](http://en.wikipedia.org/wiki/Base64) and sent as an HTTP `Authorization` header.
-
-*Note:* we have some code for an alternative way of authenticating, but we're not finished with it. If you're interested in that, let us know.
 
 ### projectListClickTarget
 
