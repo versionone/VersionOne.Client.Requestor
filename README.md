@@ -36,6 +36,10 @@ It's designed to be easily customizable for different custom fields and server l
 
 We also welcome contributions! Please send pull requests! If you figure out specific instructions for using the Node.JS based installation option under different OS or cloud-hosted configurations, please create a how-to document and submit a pull request. **See the [HowTo-DeployInHeroku.md](HowTo-DeployInHeroku.md) doc for an example.**
 
+## Unsupported by VersionOne support
+
+Since this is an open source, community supported project, VersionOne does not support installing this code into our On-Demand / Hosted environment. Instead, see the various methods for running this code below. We do welcome and encourage pull requests for improving this project! Please use GitHub issues for documenting your questions and ideas.
+
 ## How to use with your own On-Premise VersionOne
 
 If you have your own instance of VersionOne installed on premise, and have full access to the IIS server, then the easiest thing to do is this:
