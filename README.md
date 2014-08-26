@@ -36,10 +36,9 @@ It's designed to be easily customizable for different custom fields and server l
 
 We also welcome contributions! [Please send pull requests](https://help.github.com/articles/using-pull-requests)! If you figure out specific instructions for using the Node.JS based installation option under different OS or cloud-hosted configurations, please create a how-to document and submit a pull request. **See the [HowTo-DeployInHeroku.md](HowTo-DeployInHeroku.md) doc for an example.**
 
-## Unsupported by VersionOne support
+## Community supported code (not VersionOne ZenDesk supported)
 
-Since this is an open source, community-supported project, VersionOne does not support installing this code into our On-Demand / Hosted environment. Instead, see the various methods for running this code below.  Please use GitHub issues for documenting your
-questions and ideas, as we will not answer questions via ZenDesk about this code.
+Since this is an open source, community supported project, VersionOne does not support installing this code into its On-Demand / Hosted environment. Instead, see the various methods for running this code below. Also, please use GitHub issues for documenting your questions and ideas, as VersionONe will not answer questions via ZenDesk about this code.
 
 ## How to use with your own On-Premise VersionOne
 
