@@ -38,7 +38,7 @@ We also welcome contributions! [Please send pull requests](https://help.github.c
 
 ## Community supported code (not VersionOne ZenDesk supported)
 
-Since this is an open source, community supported project, VersionOne does not support installing this code into its On-Demand / Hosted environment. Instead, see the various methods for running this code below. Also, please use GitHub issues for documenting your questions and ideas, as VersionONe will not answer questions via ZenDesk about this code.
+Since this is an open source, community supported project, VersionOne does not support installing this code into its On-Demand / Hosted environment. Instead, see the various methods for running this code below. Also, please use GitHub issues for documenting your questions and ideas, as VersionOne will not answer questions via ZenDesk about this code.
 
 ## How to use with your own On-Premise VersionOne
 
