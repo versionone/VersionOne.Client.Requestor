@@ -38,7 +38,10 @@ We also welcome contributions! Please send pull requests! If you figure out spec
 
 ## Unsupported by VersionOne support
 
-Since this is an open source, community supported project, VersionOne does not support installing this code into our On-Demand / Hosted environment. Instead, see the various methods for running this code below. We do welcome and encourage pull requests for improving this project! Please use GitHub issues for documenting your questions and ideas.
+Since this is an open source, community-supported project, VersionOne does not support installing this code into our On-Demand / Hosted environment. Instead, see the various methods for running this code below.  Please use GitHub issues for documenting your
+questions and ideas, as we will not answer questions via ZenDesk about this code.
+
+We do welcome and encourage pull requests for improving this project!
 
 ## How to use with your own On-Premise VersionOne
 
