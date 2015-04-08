@@ -6,7 +6,7 @@ var exec = require('child_process').exec;
 var nodemon = require('gulp-nodemon');
 
 gulp.task('coffeeWatch', function() {
-	var coffeeWatcher = gulp.watch('./client/*.coffee', ['cleanjs','coffee']);
+	var coffeeWatcher = gulp.watch('./client/*.coffee', ['coffee']);
 	coffeeWatcher.on('change', function(event) {
 		console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
 	});
