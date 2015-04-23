@@ -1,12 +1,19 @@
 ![Powered by VersionOne](client/images/poweredbyv1.png)
 
-## VersionOne Requestor Client
+## VersionOne Requestor
 
-Requestor lets stakeholders submit and edit Requests in VersionOne via its REST API, without requiring each stakeholder to have a VersionOne login.
+The VersionOne Requestor is an open-source and community supported application that lets stakeholders submit and edit Requests in VersionOne via its REST API, without requiring each stakeholder to have a VersionOne login, and you can configure it to use custom fields that you've added to your own VersionOne instance.
 
-You can configure it to use custom fields that you've added to your own VersionOne instance.
+As an open-sourced and community supported project, the Requestor is not formally supported by VersionOne.
 
-The source code is free and open source, and we encourage you to improve it and [submit pull requests](https://help.github.com/articles/using-pull-requests)!
+That said, there are a number of options for getting your questions addressed:
+
+* [StackOverflow](http://stackoverflow.com/questions/tagged/versionone): For asking questions of the VersionOne Development Community.
+* [GitHub Issues](https://github.com/versionone/VersionOne.Client.Requestor/issues): For submitting issues that others may try to address.
+
+In general, StackOverflow is your best option for getting support for the Requestor.
+
+The source code for the Requestor is free and open-source, and we encourage you to improve it by [submitting pull requests](https://help.github.com/articles/using-pull-requests)!
 
 ## Background
 
