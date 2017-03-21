@@ -4,6 +4,7 @@ var express = require('express');
 var app = express();
 var cors = require('cors');
 
+app.use(bodyParser.text({ type : 'application/json' }));
 app.use(bodyParser.text({ type : 'application/xml' }));
 app.use(cors());
 
@@ -78,5 +79,5 @@ var port = Number(process.env.PORT || 5000);
 app.use(express.static(__dirname + '/client'));
 
 app.listen(port, function () {
-    console.log('CORS Proxy listening on port ' + port);
+    console.log('MetaTrain with CORD Proxy listening on port ' + port);
 });
