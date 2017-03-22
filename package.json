@@ -1,18 +1,29 @@
 {
-  "name": "VersionOne.Client.Requestor",
+  "name": "VersionOne.MetaTrain",
   "version": "0.0.1",
-  "description": "A web application for collecting VersionOne Requests from stakeholders without VersionOne logins",
+  "description": "Become awesome at VersionOne's query API with Meta",
   "main": "server.js",
-  "repository": "https://github.com/versionone/VersionOne.Client.Requestor",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VersionOne/VersionOne.MetaTrain.git"
+  },
   "dependencies": {
     "body-parser": "^1.6.3",
     "cors": "^2.4.1",
     "express": "^4.8.3",
     "request": "^2.40.0"
   },
-  "devDependencies": {},
+  "bugs": {
+    "url": "https://github.com/VersionOne/VersionOne.MetaTrain/issues"
+  },
+  "homepage": "https://github.com/VersionOne/VersionOne.MetaTrain#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2"
+  },  
   "scripts": {
-    "start": "server.js"
+    "start": "node server.js"
   },
   "author": "VersionOne, Inc.",
   "license": "MIT"

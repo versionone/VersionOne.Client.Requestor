@@ -1,5 +1,6 @@
-# VersionOne Requestor.NET License
-Copyright (c) 2008-2013 VersionOne, Inc.
+# VersionOne.MetaTrain
+Copyright (c) 2016-2017 VersionOne, Inc.
+
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without 

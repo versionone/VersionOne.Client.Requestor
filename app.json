@@ -1,7 +1,0 @@
-{
-  "name": "VersionOne-Client-Requestor",
-  "description": "A web application for collecting VersionOne Requests from stakeholders without VersionOne logins",
-  "repository": "https://github.com/versionone/VersionOne.Client.Requestor",
-  "logo": "https://raw.github.com/versionone/VersionOne.Client.Requestor/master/client/images/poweredbyv1.png",
-  "keywords": ["node", "cors", "proxy", "VersionOne"]
-}
